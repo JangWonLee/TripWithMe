@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+
+   
+   
+   <ImageView 
+       android:id="@+id/gpsicon"
+      android:layout_height="wrap_content" 
+      android:layout_width="wrap_content"
+      android:onClick="mOnClick"
+      android:maxHeight="40px"
+      android:maxWidth="40px" 
+      android:layout_alignParentLeft="true"
+      android:src="@drawable/gpsicon4"/>
+   
+
+
+    <Button 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/search"
+        android:id="@+id/m_btn"
+        android:layout_alignParentRight="true"
+    />
+    
+   <RelativeLayout    
+      android:layout_height="wrap_content" 
+      android:layout_width="wrap_content" 
+      android:layout_below="@id/gpsicon"
+      android:id="@+id/mapLayout"
+  	/>
+    <EditText
+       android:id="@+id/desSearch"
+       android:layout_width="270dip"
+       android:layout_height="40dip"
+       android:layout_centerHorizontal="true"
+       android:background="#ff000000"
+       android:ems="10"
+       android:textColor="#ffffffff"
+       android:textSize="20sp" >
+   
+
+       <requestFocus />
+   </EditText>
+  
+</RelativeLayout>
