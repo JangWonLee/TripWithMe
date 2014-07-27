@@ -1,34 +1,43 @@
 package com.example.tripwithme;
 
-import java.io.*;
-import java.util.*;
-
 import idv.hondadai.offlinemap.views.OfflineMapView;
 
-import org.osmdroid.*;
+import java.util.List;
+
+import org.osmdroid.DefaultResourceProxyImpl;
+import org.osmdroid.ResourceProxy;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.*;
+import org.osmdroid.views.overlay.ItemizedOverlay;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.OverlayItem;
 
-
-
+import android.app.Activity;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 //import com.google.android.maps.GeoPoint;
 //import com.google.android.maps.MapActivity;
 //import com.google.android.maps.MapController;
 //import com.google.android.maps.MapView;
 //import com.google.android.maps.Overlay;
 //import com.google.android.maps.Projection;
-
-import android.*;
-import android.app.Activity;
-import android.content.*;
-import android.graphics.*;
-import android.graphics.drawable.*;
-import android.location.*;
-import android.os.*;
-import android.view.*;
-import android.widget.*;
 
 
 public class map extends Activity {
@@ -42,13 +51,17 @@ public class map extends Activity {
 	private ResourceProxy proxy;
 	LocationManager mLocMan;
 	String mProvider;
-	TextView mResult;
 	double mlatitude;
 	double mlongitude;
 	ImageView dest;
+	EditText mtext;
+	Button mbtn;
+	SQLiteDatabase db;
+	
 	List<Overlay> overlayss; 
 
 	Location lastlocation;
+	String geonameDatabaseFile = "TripWithMe/DATA.sqlite";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -114,14 +127,54 @@ public class map extends Activity {
 		Tour tour = new Tour(mTour,this);
 		List<Overlay> overlays2 = mapView.getOverlays();
 		overlays2.add(tour);
+		
+		mbtn = (Button)findViewById(R.id.m_btn);
+		mtext = (EditText)findViewById(R.id.desSearch);
 	}
 
 
 	public void mOnClick(View v) {
 		GeoPoint tgeopoint = new GeoPoint(mlatitude, mlongitude);
 		mapView.getController().animateTo(tgeopoint);
+	}
+	
+	public void mOnBtnClick(View v) {
+		String geonameDatabaseFile = "/sdcard/TripWithMe/DATA.sqlite";
+		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
+		
+		
+		String aSQL = "select ID, NAME, LATITUDE, LONGITUDE "
+				+ " from DATA"
+				+ " where NAME like ?";
+
+		String[] args = {""};
+		args[0] = mtext.getText() + "%";
+
+		Cursor outCursor = db.rawQuery(aSQL, args);
+		
+		int recordCount = outCursor.getCount();
+		Toast.makeText(this,"cursor count : " + recordCount, Toast.LENGTH_SHORT).show();
+		
+		
+		startManagingCursor(outCursor);
+		ListView list = new ListView(map.this);
+		
+		String[] columns = new String[] {"name", "latitude", "longitude"};
+		int[] to = new int[] { R.id.name_entry, R.id.latitude_entry, R.id.longitud_entry };
+		
+//		SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, R.layout.items, outCursor, columns, to);
+		
+	
+   //     list.setAdapter(mAdapter);
+    
+    //    mapView.addView(list);
+		
+
+		outCursor.close();
+		db.close();
 
 	}
+
 
 	public void onResume() {
 
@@ -130,8 +183,6 @@ public class map extends Activity {
 		lastlocation = mLocMan.getLastKnownLocation(mProvider);
 		mlatitude = lastlocation.getLatitude();
 		mlongitude = lastlocation.getLongitude();
-
-		Toast.makeText(map.this, "�뼚�씪�뼚�씪�뼚�씪", Toast.LENGTH_LONG).show();
 
 		MyPosition myposition = new MyPosition(mNow, map.this);
 		//List<Overlay> overlayss = mapView.getOverlays();
@@ -154,11 +205,9 @@ public class map extends Activity {
 	LocationListener mListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
 
-			String sloc = "�쐞�룄: " + location.getLatitude() + "\n寃쎈룄: " + location.getLongitude();
-			Toast.makeText(map.this, "由ъ뒪�꼫�샇異�", Toast.LENGTH_LONG).show();
+			Toast.makeText(map.this, "리스너호출", Toast.LENGTH_LONG).show();
 			//mNow = getResources().getDrawable(R.drawable.currentpositionicon);
 			//mNow.setBounds(mNow.getIntrinsicWidth(), mNow.getIntrinsicHeight(),0,0);
-			mResult.setText(sloc);
 
 			MyPosition myposition = new MyPosition(mNow, map.this);
 			//List<Overlay> overlayss = mapView.getOverlays();
@@ -199,60 +248,60 @@ public class map extends Activity {
 
 			switch (i) {
 			case 0:
-				item = new OverlayItem("諛붿��씫 �쟾臾�", 
-						"�븷留� 移쇨뎅�닔", new GeoPoint(37.522815, 127.054492));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.522815, 127.054492));
 				break;
 			case 1:
-				item = new OverlayItem("臾쇱� ���봽", 
-						"媛뺣궓 �뼞蹂띠씠", new GeoPoint(37.582500, 127.000577));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.582500, 127.000577));
 				break;
 			case 2:
-				item = new OverlayItem("源�移� 臾댁젣�븳", 
-						"�꽌珥� �씪硫�", new GeoPoint(37.494534, 127.046081));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.494534, 127.046081));
 				break;
 			case 3:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.562832, 126.992598));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.562832, 126.992598));
 				break;
 			case 4:        
-				item = new OverlayItem("移쒖젅 遊됱궗", 
-						"誘몄쁺 遺꾩떇", new GeoPoint(37.506996, 127.036646));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.506996, 127.036646));
 				break;
 			case 5:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.568381, 126.978270));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.568381, 126.978270));
 				break;
 			case 6:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.558232, 126.934877));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.558232, 126.934877));
 				break;
 			case 7:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.518842, 127.022655));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.518842, 127.022655));
 				break;
 			case 8:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.564315, 126.986183));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.564315, 126.986183));
 				break;
 			case 9:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.520769, 126.926904));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.520769, 126.926904));
 				break;
 			case 10:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.567325, 126.981330));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.567325, 126.981330));
 				break;
 			case 11:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.524367, 127.037646));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.524367, 127.037646));
 				break;
 			case 12:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.485187, 127044877));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.485187, 127044877));
 				break;
 			case 13:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.563394, 126.982901));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.563394, 126.982901));
 				break;
 
 			}
@@ -263,7 +312,7 @@ public class map extends Activity {
 			String msg;
 			OverlayItem item = getItem(index);
 			msg = "�긽�샇 = " + item.getTitle() + ",�꽕紐� = " + item.getSnippet();
-			Toast.makeText(map.this, "tappppmsg", Toast.LENGTH_LONG).show();
+			Toast.makeText(map.this, msg,Toast.LENGTH_LONG).show();
 			return true;
 		}
 
@@ -273,6 +322,7 @@ public class map extends Activity {
 			return false;
 		}
 	}
+	
 
 	class Tour extends ItemizedOverlay<OverlayItem> {
 
@@ -280,7 +330,7 @@ public class map extends Activity {
 			super(defaultMarker, new DefaultResourceProxyImpl(pContext) );
 			boundCenterBottom(defaultMarker);
 			boundCenter(mTour);
-			populate();        
+			populate();        	
 		}
 		public int size() {
 			return 14;
@@ -290,60 +340,60 @@ public class map extends Activity {
 
 			switch (i) {
 			case 0:
-				item = new OverlayItem("諛붿��씫 �쟾臾�", 
-						"�븷留� 移쇨뎅�닔", new GeoPoint(37.579455, 126.977030));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.579455, 126.977030));
 				break;
 			case 1:
-				item = new OverlayItem("臾쇱� ���봽", 
-						"媛뺣궓 �뼞蹂띠씠", new GeoPoint(37.579393, 126.991166));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.579393, 126.991166));
 				break;
 			case 2:
-				item = new OverlayItem("源�移� 臾댁젣�븳", 
-						"�꽌珥� �씪硫�", new GeoPoint(37.536944, 126.977394));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.536944, 126.977394));
 				break;
 			case 3:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.550871, 126.987669));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.550871, 126.987669));
 				break;
 			case 4:
-				item = new OverlayItem("移쒖젅 遊됱궗", 
-						"誘몄쁺 遺꾩떇", new GeoPoint(37.515243, 127.057377));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.515243, 127.057377));
 				break;
 			case 5:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.567053, 126.979288));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.567053, 126.979288));
 				break;
 			case 6:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.553442, 126.921685));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.553442, 126.921685));
 				break;
 			case 7:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.478588, 127.011285));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.478588, 127.011285));
 				break;
 			case 8:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.533245, 126.997541));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.533245, 126.997541));
 				break;
 			case 9:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.593085, 127.043650));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.593085, 127.043650));
 				break;
 			case 10:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.521759, 127.116616));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.521759, 127.116616));
 				break;
 			case 11:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.580758, 127.006397));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.580758, 127.006397));
 				break;
 			case 12:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.572294, 126.985897));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.572294, 126.985897));
 				break;
 			case 13:
-				item = new OverlayItem("���졃�븳 媛�寃�", 
-						"�븳鍮� 留뚮몢", new GeoPoint(37.571182, 126.968792));
+				item = new OverlayItem("상호", 
+						"설명", new GeoPoint(37.571182, 126.968792));
 				break;
 
 			}
