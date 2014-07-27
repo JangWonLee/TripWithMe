@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/main_background"
+    android:background="@drawable/background"
     tools:context="com.example.tripwithme.MainActivity$PlaceholderFragment" >
     
     <TextView
@@ -16,42 +16,46 @@
         android:id="@+id/name"
         android:textSize="45sp"
         android:textColor="#00000000"
-        android:layout_marginTop = "90dip"
+        android:layout_marginTop = "45dip"
         android:gravity="center"
         android:text="Trip With Me" />
-    <TextView 
-        android:layout_width="fill_parent"
-        android:layout_height="80dip"/>
+    
     <Button 
         android:layout_width="fill_parent"
         android:layout_height="60dip"
         android:background="#00FF0000"
         android:textColor="#ffffffff"
+        android:layout_margin="10dip"
         android:id="@+id/eng"
         android:onClick="mOnClick"
-        android:text="English"
-        android:textSize = "25sp"/>
+        android:text="# English"
+        android:textSize = "30sp"/>
     <Button 
         android:layout_width="fill_parent"
         android:layout_height="60dip"
         android:background="#00FF0000"
         android:textColor="#ffffffff"
+        android:layout_margin="10dip"
         android:id="@+id/chi"
-        android:text="中國語"
-        android:textSize = "25sp"/>
+        android:text="# 中國語"
+        android:textSize = "30sp"/>
      <Button 
         android:layout_width="fill_parent"
         android:layout_height="60dip"
         android:background="#00FF0000"
         android:textColor="#ffffffff"
         android:id="@+id/jap"
-        android:text="日本語"
-        android:textSize = "25sp"/>
+        android:layout_margin="10dip"
+        android:text="# 日本語"
+        android:textSize = "30sp"/>
      <TextView
         android:layout_width="fill_parent"
         android:layout_height="80dip"
-        android:textSize="15sp"
+        android:textSize="20sp"
+        android:background="#00ff0000"
         android:textColor="#ffffffff"
+        android:layout_margin="20dip"
+        android:layout_marginTop="35dip"
         android:gravity="center"
         android:text="Select Language" />
     

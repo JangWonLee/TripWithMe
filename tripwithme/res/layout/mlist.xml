@@ -3,7 +3,7 @@
 	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@drawable/background"
+	android:background="@drawable/background_3"
 	>
 <TextView
     android:id="@+id/listTitle"
@@ -11,9 +11,9 @@
     android:layout_height="wrap_content"
     android:text="list"
     android:textColor="#ffffffff"
-    android:textSize="50sp"
-    android:layout_marginBottom="30sp"
-    android:layout_marginTop="20sp"
+    android:textSize="35sp"
+    android:layout_marginBottom="20sp"
+    android:layout_marginTop="50sp"
     android:gravity="center"
     
 />
@@ -21,7 +21,7 @@
 <ListView
 	android:id="@+id/list"  
 	android:layout_width="match_parent" 
-	android:layout_height="match_parent" 
+	android:layout_height="match_parent"
 	android:background="#00099ade"
 	/>
 </LinearLayout>

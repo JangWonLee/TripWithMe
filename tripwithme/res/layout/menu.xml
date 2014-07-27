@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/menu_background"
+    android:background="@drawable/background_2"
     tools:context="com.example.tripwithme.MainActivity$PlaceholderFragment" >
 
  	<TextView
@@ -20,43 +20,38 @@
         android:gravity="center"
         android:textColor="#ffffffff"
         android:text="Select Menu" />
-         
-	<Button 
-        android:layout_width="fill_parent"
-        android:layout_height="60dip"
-        android:background="#00FF0000"
-        android:textColor="#ffffffff"
-        android:textSize="30sp"
-        android:layout_above="@id/selectmenu2"
-        android:id="@+id/TOUR"
-        android:onClick="mOnClick"
-        android:text="TOUR"/>
-	
-
-           
-	<Button 
-        android:layout_width="fill_parent"
-        android:layout_height="60dip"
-        android:background="#00FF0000"
-        android:textColor="#ffffffff"
-        android:layout_above="@id/TOUR"
-        android:layout_marginBottom="25sp"
-        android:textSize="30sp"        
+ 	
+ 	<Button 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/restaurenticon"
+        android:layout_centerVertical="true"  
+        android:layout_alignParentRight="true"    
         android:id="@+id/RESTAURENT"
         android:onClick="mOnClick"
-        android:text="RESTAURENT"/>
-
-	
-    <Button 
-        android:layout_width="fill_parent"
-        android:layout_height="60dip"
-        android:background="#00FF0000"
+    />
+ 	
+ 	
+ 	<Button 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tourmenuicon"
+        android:layout_below="@id/RESTAURENT"  
+        android:layout_alignParentLeft="true"
+        android:layout_margin="5dip"
+        android:id="@+id/TOUR"
+        android:onClick="mOnClick"
+    />
+ 	
+ 	<Button 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/mapicon"
         android:layout_above="@id/RESTAURENT"
-        android:textSize="30sp"
-        android:textColor="#ffffffff"
-        android:layout_marginBottom="25dp"
+        android:layout_margin="5dip"
+        android:layout_alignParentLeft="true" 
         android:id="@+id/MAP"
         android:onClick="mOnClick"
-        android:text="MAP"/>  
+    />        
 
 </RelativeLayout>
