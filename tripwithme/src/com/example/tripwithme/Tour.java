@@ -16,56 +16,58 @@ import android.widget.*;
 import android.os.Build;
 
 public class Tour extends Activity {
-   TourDBHelper mHelper;
-   Typeface mFont;
-   
-   @SuppressWarnings("deprecation")
-   public void onCreate(Bundle savedInstanceState) {
-      super.onCreate(savedInstanceState);
-      setContentView(R.layout.restaurant);
-      
-      mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
-      
-      TextView listname = (TextView)findViewById(R.id.listTitle);
-      listname.setText("Tour List");
-      listname.setTypeface(mFont);
-      
-      mHelper = new TourDBHelper(this);
-      final Cursor cursor;
-      SQLiteDatabase db = mHelper.getWritableDatabase();
+	private Cursor cursor;
+	private TourDBHelper mHelper;
+	private Typeface mFont;
+	
+	private ListView listView;
+	
+	private TextView titleText;
 
-      cursor = db.rawQuery("SELECT * FROM tou", null);
-      startManagingCursor(cursor);
+	@SuppressWarnings("deprecation")
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.list);
 
-      SimpleCursorAdapter Adapter = null;
-      Adapter = new SimpleCursorAdapter(this, 
-            android.R.layout.simple_list_item_2,
-            cursor, new String[] { "name", "address" }, 
-            new int[] { android.R.id.text1, android.R.id.text2});
-      ListView list = (ListView)findViewById(R.id.list);
-      list.setAdapter(Adapter);
-      
-      list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-    	  public void onItemClick(AdapterView<?> parent, View v, int position, long id){
-    		  Intent intent = new Intent(Tour.this, tourDetail.class);
-    		  intent.putExtra("name", cursor.getString(cursor.getColumnIndex("name")));
-    		  intent.putExtra("intro", cursor.getString(cursor.getColumnIndex("intro")));
-    		  intent.putExtra("tel", cursor.getString(cursor.getColumnIndex("tel")));
-    		  intent.putExtra("menu", cursor.getString(cursor.getColumnIndex("menu")));
-    		  startActivity(intent);
-    	  }
-	});
-   }
+		mFont = Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+
+		titleText = (TextView)findViewById(R.id.titletext);
+		titleText.setText("Tour List");
+		titleText.setTypeface(mFont);
+
+		mHelper = new TourDBHelper(this);
+		SQLiteDatabase db = mHelper.getWritableDatabase();
+
+		cursor = db.rawQuery("SELECT * FROM tou", null);
+		startManagingCursor(cursor);
+
+		SimpleCursorAdapter Adapter = null;
+		Adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, cursor, new String[] { "name", "address" }, 
+				new int[] { android.R.id.text1, android.R.id.text2});
+		
+		listView = (ListView)findViewById(R.id.listview);
+		listView.setAdapter(Adapter);
+
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id){
+				Intent intent = new Intent(Tour.this, TourDetail.class);
+				intent.putExtra("name", cursor.getString(cursor.getColumnIndex("name")));
+				intent.putExtra("intro", cursor.getString(cursor.getColumnIndex("intro")));
+				intent.putExtra("tel", cursor.getString(cursor.getColumnIndex("tel")));
+				intent.putExtra("menu", cursor.getString(cursor.getColumnIndex("menu")));
+				startActivity(intent);
+			}
+		});
+	}
 }
 
 class TourDBHelper extends SQLiteOpenHelper {
-   public TourDBHelper(Context context) {
-      super(context, "tou.db", null, 1);
-   }
+	public TourDBHelper(Context context) {
+		super(context, "tou.db", null, 1);
+	}
 
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL("CREATE TABLE tou ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-			"name TEXT, address TEXT, intro TEXT, time TEXT, tel TEXT, menu TEXT);");
+		db.execSQL("CREATE TABLE tou ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " + "name TEXT, address TEXT, intro TEXT, time TEXT, tel TEXT, menu TEXT);");
 		db.execSQL("INSERT INTO tou VALUES (null, 'Gyeongbokgung', 'jongrogu sejongro 1-1', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
 		db.execSQL("INSERT INTO tou VALUES (null, 'Changdeokgung', 'jongrogu waryongdong 2-71', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
 		db.execSQL("INSERT INTO tou VALUES (null, 'The War Memorial of Korea', 'yongsango yongsandong 1-8', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
@@ -80,10 +82,10 @@ class TourDBHelper extends SQLiteOpenHelper {
 		db.execSQL("INSERT INTO tou VALUES (null, 'Naksan Public Art Project', '7-9, Naksan 3-gil, Jongno-gu, Seoul', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
 		db.execSQL("INSERT INTO tou VALUES (null, 'Beautiful Tea Museum', '19-11, Insadong-gil, Jongno-gu, Seoul', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
 		db.execSQL("INSERT INTO tou VALUES (null, 'Gyeonghuigung Palace', '45, Saemunan-ro, Jongno-gu, Seoul', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-}
+	}
 
-   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-      db.execSQL("DROP TABLE IF EXISTS product");
-      onCreate(db);
-   }
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		db.execSQL("DROP TABLE IF EXISTS product");
+		onCreate(db);
+	}
 }
