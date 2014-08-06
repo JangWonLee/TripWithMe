@@ -22,7 +22,7 @@ public class Tour extends Activity {
    @SuppressWarnings("deprecation")
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      setContentView(R.layout.mlist);
+      setContentView(R.layout.restaurant);
       
       mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
       

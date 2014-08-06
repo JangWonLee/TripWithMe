@@ -22,12 +22,11 @@ public class Restaurant extends Activity {
    @SuppressWarnings("deprecation")
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      setContentView(R.layout.mlist);
+      setContentView(R.layout.restaurant);
       
       mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
       
       TextView listname = (TextView)findViewById(R.id.listTitle);
-      listname.setText("Restaurent List");
       listname.setTypeface(mFont);
       
       mHelper = new RestaurantDBHelper(this);
