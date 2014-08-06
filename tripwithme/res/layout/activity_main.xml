@@ -55,7 +55,7 @@
         android:background="#00ff0000"
         android:textColor="#ffffffff"
         android:layout_margin="20dip"
-        android:layout_marginTop="35dip"
+        android:layout_marginTop="60dip"
         android:gravity="center"
         android:text="Select Language" />
     

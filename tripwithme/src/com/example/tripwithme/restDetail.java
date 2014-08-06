@@ -27,11 +27,13 @@ public class restDetail extends Activity {
 	   TextView timeText;
 	   TextView telText;
 	   TextView menuText;
+	   Button btn;
 	   
 	   public void onCreate(Bundle savedInstanceState) {
 		   super.onCreate(savedInstanceState);
-		   setContentView(R.layout.restdetail);		      
-		      
+		   setContentView(R.layout.restdetail);	
+		   
+		      btn = (Button)findViewById(R.id.locationbutton);
 		      name = getIntent().getExtras().getString("name");
 		      intro = getIntent().getExtras().getString("intro");
 		      time = getIntent().getExtras().getString("time");
@@ -52,6 +54,12 @@ public class restDetail extends Activity {
 		      menuText.setText(menu);
 		      
 
+	   }
+	   
+	   public void mOnClick(View v){
+		   Intent intent = new Intent(this, map.class);
+	    	startActivity(intent);
+	
 	   }
 
 }

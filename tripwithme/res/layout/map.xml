@@ -14,7 +14,13 @@
       android:maxWidth="40px" 
       android:layout_alignParentLeft="true"
       android:src="@drawable/gpsicon4"/>
-   
+   <ListView 
+       android:layout_height="270dip"
+       android:layout_width="match_parent" 
+       android:id="@+id/list"
+       android:layout_below="@id/gpsicon"
+
+     />   
 
 
     <Button 
