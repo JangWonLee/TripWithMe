@@ -11,8 +11,14 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-	Typeface mFont;
-	Typeface jFont;
+	private Typeface mFont;
+	private Typeface jFont;
+	
+	private Button englishButton;
+	private Button chinaButton;
+	private Button japanButton;
+	
+	private Intent intent;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,37 +27,28 @@ public class MainActivity extends Activity {
         
         jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
         mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
-        TextView jname = (TextView)findViewById(R.id.name);
-        Button engbtn = (Button)findViewById(R.id.eng);
-        Button chibtn = (Button)findViewById(R.id.chi);
-        Button japbtn = (Button)findViewById(R.id.jap);
-        jname.setTypeface(jFont);
-        engbtn.setTypeface(mFont);
-        chibtn.setTypeface(mFont);
-        japbtn.setTypeface(mFont);
+        englishButton = (Button)findViewById(R.id.englishbutton);
+        chinaButton = (Button)findViewById(R.id.chinabutton);
+        japanButton = (Button)findViewById(R.id.japanbutton);
+        englishButton.setTypeface(mFont);
+        chinaButton.setTypeface(mFont);
+        japanButton.setTypeface(mFont);
         
-     //   mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProRegularItalic.ttf");
     }
     
     public void mOnClick(View v) {
-    	Intent intent = new Intent(this, search.class);
+    	intent = new Intent(this, SearchActivity.class);
     	startActivity(intent);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
     
-    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;

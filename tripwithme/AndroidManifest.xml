@@ -18,7 +18,7 @@
         android:theme="@android:style/Theme.NoTitleBar"
     >
     	<activity 
-    	    android:name=".introActivity" android:label="@string/app_name">
+    	    android:name=".IntroActivity" android:label="@string/app_name">
     	    	<intent-filter>
     	    	    <action android:name="android.intent.action.MAIN"/>
     	    	    <category android:name="android.intent.category.LAUNCHER" />
@@ -28,9 +28,9 @@
             android:name="com.example.tripwithme.MainActivity"
             android:label="@string/app_name" >
         </activity>
-        <activity android:name=".search" android:label="@string/app_name"/>
-        <activity android:name=".map" android:label="@string/app_name"/>
-        <activity android:name=".menu" android:label="@string/app_name"/>
+        <activity android:name=".SearchActivity" android:label="@string/app_name"/>
+        <activity android:name=".Map" android:label="@string/app_name"/>
+        <activity android:name=".MenuActivity" android:label="@string/app_name"/>
         <activity android:name=".Restaurant" android:label="@string/app_name"/>
         <activity android:name=".Tour" android:label="@string/app_name"/>
         <activity android:name=".restDetail" android:label="@string/app_name"/>

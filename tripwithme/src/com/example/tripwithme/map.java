@@ -40,28 +40,28 @@ import android.widget.Toast;
 //import com.google.android.maps.Projection;
 
 
-public class map extends Activity {
+public class Map extends Activity {
 	// layout
 	private RelativeLayout mapLayout;
 
 	// MapView
 	private MapView mapView;
-	Drawable mRest, mTour, mNow;
+	private Drawable mRest, mTour, mNow;
 	private MapController mapController;
 	private ResourceProxy proxy;
-	LocationManager mLocMan;
-	String mProvider;
-	double mlatitude;
-	double mlongitude;
-	ImageView dest;
-	EditText mtext;
-	Button mbtn;
-	SQLiteDatabase db;
+	private LocationManager mLocMan;
+	private String mProvider;
+	private double mlatitude;
+	private double mlongitude;
+	private ImageView dest;
+	private EditText mtext;
+	private Button mbtn;
+	private SQLiteDatabase db;
 	
-	List<Overlay> overlayss; 
+	private List<Overlay> overlayss; 
 
-	Location lastlocation;
-	String geonameDatabaseFile = "TripWithMe/DATA.sqlite";
+	private Location lastlocation;
+	private String geonameDatabaseFile = "TripWithMe/DATA.sqlite";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -157,7 +157,7 @@ public class map extends Activity {
 		
 		
 		startManagingCursor(outCursor);
-		ListView list = new ListView(map.this);
+		ListView list = new ListView(Map.this);
 		
 		String[] columns = new String[] {"name", "latitude", "longitude"};
 		int[] to = new int[] { R.id.name_entry, R.id.latitude_entry, R.id.longitud_entry };
@@ -184,7 +184,7 @@ public class map extends Activity {
 		mlatitude = lastlocation.getLatitude();
 		mlongitude = lastlocation.getLongitude();
 
-		MyPosition myposition = new MyPosition(mNow, map.this);
+		MyPosition myposition = new MyPosition(mNow, Map.this);
 		//List<Overlay> overlayss = mapView.getOverlays();
 		//overlayss.add(myposition);
 
@@ -205,11 +205,11 @@ public class map extends Activity {
 	LocationListener mListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
 
-			Toast.makeText(map.this, "리스너호출", Toast.LENGTH_LONG).show();
+			Toast.makeText(Map.this, "리스너호출", Toast.LENGTH_LONG).show();
 			//mNow = getResources().getDrawable(R.drawable.currentpositionicon);
 			//mNow.setBounds(mNow.getIntrinsicWidth(), mNow.getIntrinsicHeight(),0,0);
 
-			MyPosition myposition = new MyPosition(mNow, map.this);
+			MyPosition myposition = new MyPosition(mNow, Map.this);
 			//List<Overlay> overlayss = mapView.getOverlays();
 			//overlayss.add(myposition);
 
@@ -312,7 +312,7 @@ public class map extends Activity {
 			String msg;
 			OverlayItem item = getItem(index);
 			msg = "�긽�샇 = " + item.getTitle() + ",�꽕紐� = " + item.getSnippet();
-			Toast.makeText(map.this, msg,Toast.LENGTH_LONG).show();
+			Toast.makeText(Map.this, msg,Toast.LENGTH_LONG).show();
 			return true;
 		}
 
@@ -404,7 +404,7 @@ public class map extends Activity {
 			String msg;
 			OverlayItem item = getItem(index);
 			msg = "�긽�샇 = " + item.getTitle() + ",�꽕紐� = " + item.getSnippet();
-			Toast.makeText(map.this, "tappppmsg", Toast.LENGTH_LONG).show();
+			Toast.makeText(Map.this, "tappppmsg", Toast.LENGTH_LONG).show();
 			return true;
 		}
 
@@ -449,7 +449,7 @@ public class map extends Activity {
 			String msg;
 			OverlayItem item = getItem(index);
 			msg = "�긽�샇 = " + item.getTitle() + ",�꽕紐� = " + item.getSnippet();
-			Toast.makeText(map.this, msg, Toast.LENGTH_LONG).show();
+			Toast.makeText(Map.this, msg, Toast.LENGTH_LONG).show();
 			return true;
 		}
 

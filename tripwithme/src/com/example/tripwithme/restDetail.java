@@ -57,7 +57,7 @@ public class restDetail extends Activity {
 	   }
 	   
 	   public void mOnClick(View v){
-		   Intent intent = new Intent(this, map.class);
+		   Intent intent = new Intent(this, Map.class);
 	    	startActivity(intent);
 	
 	   }

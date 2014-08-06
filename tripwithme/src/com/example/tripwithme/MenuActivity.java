@@ -14,36 +14,34 @@ import android.view.ViewGroup;
 import android.widget.*;
 import android.os.Build;
 
-public class menu extends Activity{
+public class MenuActivity extends Activity{
+	private Button mapButton;
+	private Button restaurantButton;
+	private Button tourButton;
     
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
 
-        Button mapbtn = (Button)findViewById(R.id.MAP);
-        Button resbtn = (Button)findViewById(R.id.RESTAURENT);
-        Button tourbtn = (Button)findViewById(R.id.TOUR);
-        
-        
+        mapButton = (Button)findViewById(R.id.mapbutton);
+        restaurantButton = (Button)findViewById(R.id.restaurantbutton);
+        tourButton = (Button)findViewById(R.id.tourbutton);
     }
-	
 	
 	public void mOnClick(View v) {
 		switch(v.getId()) {
-		case R.id.MAP :
-			Intent intent = new Intent(this, map.class);
+		case R.id.mapbutton :
+			Intent intent = new Intent(this, Map.class);
 			startActivity(intent);
 			break;
-		case R.id.RESTAURENT :
+		case R.id.restaurantbutton :
 			Intent intent2 = new Intent(this, Restaurant.class);
 			startActivity(intent2);
 			break;
-		case R.id.TOUR :
+		case R.id.tourbutton :
 			Intent intent3 = new Intent(this, Tour.class);
 			startActivity(intent3);
 			break;
 		}
 	}
 }
-	
-

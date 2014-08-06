@@ -12,7 +12,7 @@
     tools:context="com.example.tripwithme.MainActivity$PlaceholderFragment" >
 
     <EditText
-        android:id="@+id/editsearch"
+        android:id="@+id/searchedit"
         android:layout_width="match_parent"
         android:layout_height="40dip"
         android:layout_alignParentTop="true"
@@ -28,11 +28,11 @@
     </EditText>
     
     <Button 
-        android:id="@+id/seoul"
+        android:id="@+id/seoulbutton"
         android:layout_width="fill_parent"
         android:layout_height="90dip"
         android:background="#00ff0000"
-        android:layout_below="@id/editsearch"
+        android:layout_below="@id/searchedit"
         android:onClick="mOnClick"
         android:padding ="30dip"
         android:textColor="#ffffffff"
@@ -40,7 +40,7 @@
         android:textSize="25sp" />
 
 	<TextView
-        android:id="@+id/textsearch"
+        android:id="@+id/searchcitytext"
         android:layout_width="fill_parent"
         android:layout_height="30dip"
         android:layout_alignParentBottom="true"
@@ -51,20 +51,20 @@
         android:layout_marginBottom="15sp"/>
 	
     <TextView
-        android:id="@+id/textor"
+        android:id="@+id/ortext"
         android:layout_width="fill_parent"
         android:layout_height="30dip"
-        android:layout_above="@id/textsearch"
+        android:layout_above="@id/searchcitytext"
         android:gravity="center"
         android:textColor="#ffffffff"
         android:text="Or"
         android:textSize="15sp" />
     
      <TextView
-        android:id="@+id/textselect"
+        android:id="@+id/selectcitytext"
         android:layout_width="fill_parent"
         android:layout_height="30dip"
-        android:layout_above="@id/textor"
+        android:layout_above="@id/ortext"
         android:textSize="20sp"
         android:textColor="#ffffffff"
         android:gravity="center"

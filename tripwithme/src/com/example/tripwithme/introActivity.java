@@ -12,24 +12,25 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class introActivity extends Activity {
-	Handler handler_intro;
+public class IntroActivity extends Activity {
+	private Handler handler_intro;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.introactivity);
-		
+
 		handler_intro=new Handler();
 		handler_intro.postDelayed(run_intro, 2500);
-}
+	}
+	
 	Runnable run_intro = new Runnable(){
 		public void run(){
-			Intent intent = new Intent(introActivity.this, MainActivity.class);
+			Intent intent = new Intent(IntroActivity.this, MainActivity.class);
 			startActivity(intent);
 			finish();
-			
+
 			overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 		}
 	};
-	
+
 }

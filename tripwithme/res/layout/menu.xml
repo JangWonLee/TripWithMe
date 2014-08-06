@@ -27,7 +27,7 @@
         android:background="@drawable/restaurenticon"
         android:layout_centerVertical="true"  
         android:layout_alignParentRight="true"    
-        android:id="@+id/RESTAURENT"
+        android:id="@+id/restaurantbutton"
         android:onClick="mOnClick"
     />
  	
@@ -36,10 +36,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/tourmenuicon"
-        android:layout_below="@id/RESTAURENT"  
+        android:layout_below="@id/restaurantbutton"  
         android:layout_alignParentLeft="true"
         android:layout_margin="5dip"
-        android:id="@+id/TOUR"
+        android:id="@+id/tourbutton"
         android:onClick="mOnClick"
     />
  	
@@ -47,10 +47,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/mapicon"
-        android:layout_above="@id/RESTAURENT"
+        android:layout_above="@id/restaurantbutton"
         android:layout_margin="5dip"
         android:layout_alignParentLeft="true" 
-        android:id="@+id/MAP"
+        android:id="@+id/mapbutton"
         android:onClick="mOnClick"
     />        
 
