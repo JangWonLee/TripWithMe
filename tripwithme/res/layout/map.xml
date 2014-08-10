@@ -4,7 +4,6 @@
     android:layout_height="fill_parent" >
 
 
-
    <ImageView 
        android:id="@+id/gpsicon"
       android:layout_height="wrap_content" 
@@ -13,14 +12,13 @@
       android:maxHeight="40px"
       android:maxWidth="40px" 
       android:layout_alignParentLeft="true"
-      android:src="@drawable/gpsicon4"/>
+      android:src="@drawable/gpsicon4" />
+   
    <ListView 
        android:layout_height="270dip"
        android:layout_width="match_parent" 
        android:id="@+id/list"
-       android:layout_below="@id/gpsicon"
-
-     />   
+       android:layout_below="@id/gpsicon" />   
 
 
     <Button 
@@ -28,16 +26,15 @@
         android:layout_height="wrap_content"
         android:background="@drawable/search"
         android:id="@+id/m_btn"
-        android:onClick="mOnBtnClick"
-        android:layout_alignParentRight="true"
-    />
+        android:onClick="mOnClick"
+        android:layout_alignParentRight="true" />
     
    <RelativeLayout    
       android:layout_height="wrap_content" 
       android:layout_width="wrap_content" 
       android:layout_below="@id/gpsicon"
-      android:id="@+id/mapLayout"
-  	/>
+      android:id="@+id/mapLayout" />
+   
     <EditText
        android:id="@+id/desSearch"
        android:layout_width="270dip"
@@ -47,9 +44,9 @@
        android:ems="10"
        android:textColor="#ffffffff"
        android:textSize="20sp" >
-   
 
        <requestFocus />
+       
    </EditText>
   
 </RelativeLayout>

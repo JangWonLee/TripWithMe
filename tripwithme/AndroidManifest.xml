@@ -24,17 +24,34 @@
     	    	    <category android:name="android.intent.category.LAUNCHER" />
     	    	</intent-filter>
     	</activity>
+    	
         <activity
             android:name="com.example.tripwithme.MainActivity"
             android:label="@string/app_name" >
         </activity>
-        <activity android:name=".SearchActivity" android:label="@string/app_name"/>
-        <activity android:name=".Map" android:label="@string/app_name"/>
-        <activity android:name=".MenuActivity" android:label="@string/app_name"/>
-        <activity android:name=".Restaurant" android:label="@string/app_name"/>
-        <activity android:name=".Tour" android:label="@string/app_name"/>
-        <activity android:name=".RestaurantDetail" android:label="@string/app_name"/>
-        <activity android:name=".TourDetail" android:label="@string/app_name"/>
+        
+        <activity android:name=".SearchActivity" 
+            android:label="@string/app_name" />
+        
+        <activity android:name=".Map" 
+            android:label="@string/app_name"
+            android:windowSoftInputMode="stateHidden" />
+        
+        <activity android:name=".MenuActivity" 
+            android:label="@string/app_name" />
+        
+        <activity android:name=".Restaurant" 
+            android:label="@string/app_name"/>
+        
+        <activity android:name=".Tour" 
+            android:label="@string/app_name" />
+        
+        <activity android:name=".RestaurantDetail" 
+            android:label="@string/app_name" />
+        
+        <activity android:name=".TourDetail" 
+            android:label="@string/app_name" />
+        
     </application>
 
 </manifest>
