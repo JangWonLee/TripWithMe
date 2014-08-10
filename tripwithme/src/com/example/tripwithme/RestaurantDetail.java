@@ -16,47 +16,56 @@ import android.widget.*;
 import android.os.Build;
 
 public class RestaurantDetail extends Activity {
-	private RestaurantDBHelper mHelper;
 	
 	private String name;
 	private String intro;
 	private String time;
 	private String tel;
-	private String menu;
+	private String menu1;
+	private String menu2;
+	private String menu3;
 	
 	private TextView listDetailTitleText;
 	private TextView introText;
 	private TextView timeText;
 	private TextView telephoneText;
-	private TextView listDetailMenuText;
+	private TextView listDetailMenuText1;
+	private TextView listDetailMenuText2;
+	private TextView listDetailMenuText3;
 	
 	private Button locationButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.listdetail);	
+		setContentView(R.layout.restourantlistdetail);	
 
-		locationButton = (Button)findViewById(R.id.locationbutton);
+		locationButton = (Button)findViewById(R.id.restourantlocationbutton);
 		
 		name = getIntent().getExtras().getString("name");
 		intro = getIntent().getExtras().getString("intro");
 		time = getIntent().getExtras().getString("time");
 		tel = getIntent().getExtras().getString("tel");
-		menu = getIntent().getExtras().getString("menu");
+		menu1 = getIntent().getExtras().getString("menu1");
+		menu2 = getIntent().getExtras().getString("menu2");
+		menu3 = getIntent().getExtras().getString("menu3");
 
 
-		listDetailTitleText = (TextView)findViewById(R.id.listdetailtitletext);
-		introText=(TextView)findViewById(R.id.introtext);
-		timeText=(TextView)findViewById(R.id.timetext);
-		telephoneText=(TextView)findViewById(R.id.telephonetext);
-		listDetailMenuText=(TextView)findViewById(R.id.listdetailmenutext);
+		listDetailTitleText = (TextView)findViewById(R.id.restourantlistdetailtitletext);
+		introText=(TextView)findViewById(R.id.restourantintrotext);
+		timeText=(TextView)findViewById(R.id.restouranttimetext);
+		telephoneText=(TextView)findViewById(R.id.restouranttelephonetext);
+		listDetailMenuText1=(TextView)findViewById(R.id.restourantlistdetailmenu1text);
+		listDetailMenuText2=(TextView)findViewById(R.id.restourantlistdetailmenu2text);
+		listDetailMenuText3=(TextView)findViewById(R.id.restourantlistdetailmenu3text);
 
 		listDetailTitleText.setText(name);
 		introText.setText(intro);
 		timeText.setText(time);
 		telephoneText.setText(tel);
-		listDetailMenuText.setText(menu);
+		listDetailMenuText1.setText(menu1);
+		listDetailMenuText2.setText(menu2);
+		listDetailMenuText3.setText(menu3);
 	}
 
 	public void mOnClick(View v){

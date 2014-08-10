@@ -16,44 +16,41 @@ import android.widget.*;
 import android.os.Build;
 
 public class TourDetail extends Activity {
-	private TourDBHelper mHelper;
 
 	private String name;
 	private String intro;
 	private String time;
 	private String tel;
-	private String menu;
 
 	private TextView listDetailTitleText;
 	private TextView introText;
 	private TextView timeText;
 	private TextView telephoneText;
-	private TextView listDetailMenuText;
 
 	private Button locationButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.listdetail);		      
+		setContentView(R.layout.tourlistlistdetail);		      
 
 		locationButton = (Button)findViewById(R.id.locationbutton);
 		
 		name = getIntent().getExtras().getString("name");
 		intro = getIntent().getExtras().getString("intro");
+		time = getIntent().getExtras().getString("time");
 		tel = getIntent().getExtras().getString("tel");
-		menu = getIntent().getExtras().getString("menu");
 
 
-		listDetailTitleText = (TextView)findViewById(R.id.listdetailtitletext);
-		introText=(TextView)findViewById(R.id.introtext);
-		telephoneText=(TextView)findViewById(R.id.telephonetext);
-		listDetailMenuText=(TextView)findViewById(R.id.listdetailmenutext);
+		listDetailTitleText = (TextView)findViewById(R.id.tourlistlistdetailtitletext);
+		introText=(TextView)findViewById(R.id.tourlistintrotext);
+		timeText=(TextView)findViewById(R.id.tourlisttimetext);
+		telephoneText=(TextView)findViewById(R.id.tourlisttelephonetext);
 
 		listDetailTitleText.setText(name);
 		introText.setText(intro);
+		timeText.setText(time);
 		telephoneText.setText(tel);
-		listDetailMenuText.setText(menu);
 	}
 	
 	public void mOnClick(View v){

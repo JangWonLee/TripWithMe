@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="UTF-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"    
@@ -20,7 +19,7 @@
     
     <TextView
         android:padding="100dip"
-        android:id="@+id/listdetailtitletext"
+        android:id="@+id/tourlistlistdetailtitletext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="30sp"
@@ -29,48 +28,39 @@
     />
     
     <TextView 
-        android:id="@+id/introtext"
+        android:id="@+id/tourlistintrotext"
         android:padding="15dip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/listdetailtitletext"
+        android:layout_below="@id/tourlistlistdetailtitletext"
         android:textSize="25sp"
         android:textColor="#ffffffff"
         android:gravity="center"
     />
     
     <TextView
-        android:id="@+id/telephonetext"
+        android:id="@+id/tourlisttelephonetext"
         android:padding="15dip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-		android:layout_below="@id/introtext"
+		android:layout_below="@id/tourlistintrotext"
 		android:textSize="25sp"
         android:textColor="#ffffffff"
         android:gravity="center"
     />
     
     <TextView
-        android:id="@+id/timetext"
+        android:id="@+id/tourlisttimetext"
         android:padding="15dip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/telephonetext"
+        android:layout_below="@id/tourlisttelephonetext"
         android:textSize="25sp"
         android:textColor="#ffffffff"
         android:gravity="center"
      />
     
-    <TextView
-        android:id="@+id/listdetailmenutext"
-        android:padding="15dip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/timetext"
-        android:textSize="25sp"
-        android:textColor="#ffffffff"
-        android:gravity="center"
-     />
+
 
 </RelativeLayout>
 
