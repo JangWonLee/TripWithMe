@@ -7,11 +7,14 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class DownloadActivity extends Activity {
 	
 	private Button downloadButton;
+	private TextView regionText;
+	private String msg;
 
 	ProgressBar downloadProgress;
 	
@@ -21,14 +24,20 @@ public class DownloadActivity extends Activity {
 
         
         downloadButton = (Button)findViewById(R.id.downloadbutton);
-        
         downloadProgress = (ProgressBar)findViewById(R.id.downloadprogress);
+        regionText = (TextView)findViewById(R.id.regiontext);
+        msg = getIntent().getExtras().getString("msg");
+        
+        
+        regionText.setText(msg);
+        regionText.setVisibility(View.VISIBLE);
+        
                 
 	}
 	
 	public void mOnClick(View v) {
 		downloadProgress.setVisibility(View.VISIBLE);
-		setProgressBarIndeterminateVisibility(true);
+//		setProgressBarIndeterminateVisibility(true);
 	}
 
 }

@@ -5,15 +5,26 @@
     android:orientation="vertical"
     android:background="@drawable/background_2" >
     
+    <TextView
+        android:id="@+id/regiontext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:text="22"
+		android:textColor="#ffffffff"
+		android:textSize="25dip"
+		android:layout_gravity="center_horizontal"
+        android:layout_marginTop="120dip"
+    />
+		    
     <Button
         android:id="@+id/downloadbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#dda9533a"
+        android:background="#ddA0A0A0"
         android:text="download"
         android:textColor="#ffffffff"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="120dip"
+        android:layout_marginTop="50dip"
         android:textSize="30dip"
         android:onClick="mOnClick"
     />
@@ -27,8 +38,9 @@
         android:progress="10"
         android:secondaryProgress="30"
         android:visibility="invisible"
-        android:layout_marginTop="500dip"
+        android:layout_marginTop="150dip"
     />
+    
             
     
 

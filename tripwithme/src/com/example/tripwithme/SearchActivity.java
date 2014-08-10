@@ -57,6 +57,8 @@ public class SearchActivity extends Activity{
         list.add("Busan");
         list.add("Jeonju");
         list.add("Jeju");
+        list.add("Incheon");
+        list.add("Naju");
         
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, list);
         
@@ -71,6 +73,7 @@ public class SearchActivity extends Activity{
 		case R.id.searchbutton:
 			String msg = autoEdit.getText().toString();
 			intent = new Intent(this, DownloadActivity.class);
+			intent.putExtra("msg", msg);
 			startActivity(intent);
 			break;
 			
