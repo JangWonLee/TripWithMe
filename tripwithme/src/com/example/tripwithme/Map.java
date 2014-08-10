@@ -27,6 +27,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -99,15 +100,17 @@ public class Map extends Activity {
 
 
 		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		Log.i("locationManager", locationManager + "");
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
 		criteria.setPowerRequirement(Criteria.POWER_HIGH);
 		mProvider = locationManager.getBestProvider(criteria, true);
+		Log.i("mProvider", mProvider + "");
 
 		// 초기 위치 지정
 		getLocation();
-		GeoPoint geoPoint = new GeoPoint(currentLatitude, currentLongitude);
-		this.mapController.setCenter(geoPoint);
+//		GeoPoint geoPoint = new GeoPoint(currentLatitude, currentLongitude);
+//		this.mapController.setCenter(geoPoint);
 		
 		mRest = getResources().getDrawable(R.drawable.bluemarker);
 		mRest.setBounds(0, 0, mRest.getIntrinsicWidth(),mRest.getIntrinsicHeight());
@@ -165,7 +168,9 @@ public class Map extends Activity {
 	private void getLocation() {
 //		if(mProvider != null) {
 			locationManager.requestLocationUpdates(mProvider, 3000, 5, mListener);
+			Log.i("locationManager", locationManager.toString());
 			lastLocation = locationManager.getLastKnownLocation(mProvider);
+			Toast.makeText(this, lastLocation + "", Toast.LENGTH_SHORT).show();
 			mlatitude = lastLocation.getLatitude();
 			mlongitude = lastLocation.getLongitude();
 		
