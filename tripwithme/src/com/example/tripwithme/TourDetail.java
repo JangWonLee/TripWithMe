@@ -26,6 +26,8 @@ public class TourDetail extends Activity {
 	private TextView introText;
 	private TextView timeText;
 	private TextView telephoneText;
+	private Double latitude;
+	private Double longitude;
 
 	private Button locationButton;
 
@@ -40,6 +42,8 @@ public class TourDetail extends Activity {
 		intro = getIntent().getExtras().getString("intro");
 		time = getIntent().getExtras().getString("time");
 		tel = getIntent().getExtras().getString("tel");
+		latitude = getIntent().getExtras().getDouble("latitude");
+		longitude = getIntent().getExtras().getDouble("longitude");
 
 
 		listDetailTitleText = (TextView)findViewById(R.id.tourlistlistdetailtitletext);
@@ -55,6 +59,8 @@ public class TourDetail extends Activity {
 	
 	public void mOnClick(View v){
 		Intent intent = new Intent(this, Map.class);
+		intent.putExtra("latitude", latitude);
+		intent.putExtra("longitude", longitude);
 		startActivity(intent);
 
 	}

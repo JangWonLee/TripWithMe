@@ -24,6 +24,8 @@ public class RestaurantDetail extends Activity {
 	private String menu1;
 	private String menu2;
 	private String menu3;
+	private Double latitude;
+	private Double longitude;
 	
 	private TextView listDetailTitleText;
 	private TextView introText;
@@ -49,6 +51,8 @@ public class RestaurantDetail extends Activity {
 		menu1 = getIntent().getExtras().getString("menu1");
 		menu2 = getIntent().getExtras().getString("menu2");
 		menu3 = getIntent().getExtras().getString("menu3");
+		latitude = getIntent().getExtras().getDouble("latitude");
+		longitude = getIntent().getExtras().getDouble("longitude");
 
 
 		listDetailTitleText = (TextView)findViewById(R.id.restourantlistdetailtitletext);
@@ -70,6 +74,8 @@ public class RestaurantDetail extends Activity {
 
 	public void mOnClick(View v){
 		Intent intent = new Intent(this, Map.class);
+		intent.putExtra("latitude", latitude);
+		intent.putExtra("longitude", longitude);
 		startActivity(intent);
 
 	}

@@ -18,11 +18,11 @@ import org.osmdroid.views.overlay.OverlayItem;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -59,6 +60,8 @@ public class Map extends Activity {
 	private EditText mtext;
 	private EditText desSearchEdit;
 	private Button mbtn;
+	private TextView departuretext;
+	private TextView arrivaltext;
 	
 	private SQLiteDatabase db;
 	
@@ -97,17 +100,29 @@ public class Map extends Activity {
 
 
 
-
+/*
 		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
 		criteria.setPowerRequirement(Criteria.POWER_HIGH);
 		mProvider = locationManager.getBestProvider(criteria, true);
-
+*/
 		// 초기 위치 지정
-		getLocation();
-		GeoPoint geoPoint = new GeoPoint(currentLatitude, currentLongitude);
-		this.mapController.setCenter(geoPoint);
+		
+		mlatitude = getIntent().getExtras().getDouble("latitude");
+		mlongitude = getIntent().getExtras().getDouble("longitude");
+		
+		if(mlatitude == (double)0){
+//			getLocation();
+//			GeoPoint geoPoint = new GeoPoint(currentLatitude, currentLongitude);
+//			this.mapController.setCenter(geoPoint);
+		}
+		else {
+			GeoPoint geoPoint = new GeoPoint(mlatitude, mlongitude);
+			this.mapController.setCenter(geoPoint);
+		}
+		
+		
 		
 		mRest = getResources().getDrawable(R.drawable.bluemarker);
 		mRest.setBounds(0, 0, mRest.getIntrinsicWidth(),mRest.getIntrinsicHeight());
@@ -117,60 +132,80 @@ public class Map extends Activity {
 		mNow.setBounds(0, 0, mNow.getIntrinsicWidth(),mNow.getIntrinsicHeight());
 
 
-		mOverlay = mapView.getOverlays();
+//		mOverlay = mapView.getOverlays();
 		
 		
 		
 		
 
-		MyOwnItemizedOverlay itemizedoverlay = new MyOwnItemizedOverlay(mRest, this);
+		MyOwnItemizedOverlay itemizedoverlay1 = new MyOwnItemizedOverlay(mRest, this);
 
 		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
 		
 		Cursor cursor = db.rawQuery("SELECT * FROM restaurant", null);
 		OverlayItem item = null;
+
+		for(int i=0; i < cursor.getCount(); i++) {
+			cursor.moveToNext();
+			item = new OverlayItem(cursor.getString(1), cursor.getString(2),
+			new GeoPoint(cursor.getDouble(11), cursor.getDouble(12)));
+			if(mlatitude == (double)0)
+				itemizedoverlay1.addItem(item);
+			else
+				if(mlatitude == cursor.getDouble(11))
+					itemizedoverlay1.addItem(item);
+		}
+		mapView.getOverlays().add(itemizedoverlay1.getOverlay());
+		
+
+		
+		
+		MyOwnItemizedOverlay itemizedoverlay2 = new MyOwnItemizedOverlay(mTour, this);
+
+		
+		cursor = db.rawQuery("SELECT * FROM tourlist", null);
 		for(int i=0; i < cursor.getCount(); i++)
 		{
 			cursor.moveToNext();
 			item = new OverlayItem(cursor.getString(1), cursor.getString(2),
-			new GeoPoint(Double.valueOf(cursor.getInt(11)), Double.valueOf(cursor.getInt(12))));
-			itemizedoverlay.addItem(item);
+			new GeoPoint(cursor.getDouble(6), cursor.getDouble(7)));
+			if(mlatitude == (double)0)
+				itemizedoverlay2.addItem(item);
+			else
+				if(mlatitude == cursor.getDouble(6))
+					itemizedoverlay1.addItem(item);
 		}
 		
 		
+
+		
+		mapView.getOverlays().add(itemizedoverlay2.getOverlay());
+		
 		db.close();
-		
-		mapView.getOverlays().add(itemizedoverlay.getOverlay());
-		
-		
 		
 		
 
-		Tour tour = new Tour(mTour,this);
-		List<Overlay> overlays2 = mapView.getOverlays();
-		overlays2.add(tour);
-		
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		getLocation();
+/*		getLocation();
 
 		MyPosition myPosition = new MyPosition(mNow, Map.this);
 		//mOverlay.clear();
-		mOverlay.add(myPosition);
+		mOverlay.add(myPosition);*/
 	}
 
 	private void getLocation() {
 //		if(mProvider != null) {
-			locationManager.requestLocationUpdates(mProvider, 3000, 5, mListener);
+/*			locationManager.requestLocationUpdates(mProvider, 3000, 5, mListener);
 			lastLocation = locationManager.getLastKnownLocation(mProvider);
 			mlatitude = lastLocation.getLatitude();
 			mlongitude = lastLocation.getLongitude();
 		
 			currentLatitude = mlatitude;
-			currentLongitude = mlongitude;
+			currentLongitude = mlongitude;*/
 //		}
 	} 
 
@@ -178,7 +213,7 @@ public class Map extends Activity {
 	public void onPause() {     
 
 		super.onPause();
-		locationManager.removeUpdates(mListener);
+//		locationManager.removeUpdates(mListener);
 
 	}
 
@@ -281,11 +316,28 @@ public class Map extends Activity {
 
 		}
 		
-		public boolean onSingleTapUpHelper(int i, OverlayItem item) {
+		public boolean onSingleTapUpHelper(int i, final OverlayItem item) {
 			Toast.makeText(mContext, "Item " + i + " has been tapped!", Toast.LENGTH_SHORT).show();
 			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 			dialog.setTitle(item.getTitle());
 			dialog.setMessage(item.getSnippet());
+			dialog.setNegativeButton("close", null);
+			dialog.setPositiveButton("departure", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					departuretext = (TextView)findViewById(R.id.departuretext);
+					departuretext.setText(item.getTitle());
+				}
+			});
+			dialog.setNeutralButton("arrival", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					arrivaltext = (TextView)findViewById(R.id.arrivaltext);
+					arrivaltext.setText(item.getTitle());
+				}
+			});
 			dialog.show();
 			return true;
 		}
@@ -298,98 +350,7 @@ public class Map extends Activity {
 			return mOverlay;
 		}
 	}
-	
 
-	class Tour extends ItemizedOverlay<OverlayItem> {
-
-		public Tour(Drawable defaultMarker, Context pContext) {
-			super(defaultMarker, new DefaultResourceProxyImpl(pContext) );
-			boundCenterBottom(defaultMarker);
-			boundCenter(mTour);
-			populate();        	
-		}
-		public int size() {
-			return 14;
-		}
-		protected OverlayItem createItem(int i) {
-			OverlayItem item = null;
-
-			switch (i) {
-			case 0:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.579455, 126.977030));
-				break;
-			case 1:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.579393, 126.991166));
-				break;
-			case 2:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.536944, 126.977394));
-				break;
-			case 3:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.550871, 126.987669));
-				break;
-			case 4:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.515243, 127.057377));
-				break;
-			case 5:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.567053, 126.979288));
-				break;
-			case 6:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.553442, 126.921685));
-				break;
-			case 7:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.478588, 127.011285));
-				break;
-			case 8:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.533245, 126.997541));
-				break;
-			case 9:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.593085, 127.043650));
-				break;
-			case 10:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.521759, 127.116616));
-				break;
-			case 11:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.580758, 127.006397));
-				break;
-			case 12:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.572294, 126.985897));
-				break;
-			case 13:
-				item = new OverlayItem("상호", 
-						"설명", new GeoPoint(37.571182, 126.968792));
-				break;
-
-			}
-			return  item;
-		}
-
-		public boolean onTap(int index) {
-			String msg;
-			OverlayItem item = getItem(index);
-			msg = "�긽�샇 = " + item.getTitle() + ",�꽕紐� = " + item.getSnippet();
-			Toast.makeText(Map.this, "tappppmsg", Toast.LENGTH_LONG).show();
-			return true;
-		}
-
-		@Override
-		public boolean onSnapToItem(int arg0, int arg1, Point arg2, MapView arg3) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-	}
 
 	class MyPosition extends ItemizedOverlay<OverlayItem> {
 		//LocationManager locationManager;
@@ -423,7 +384,7 @@ public class Map extends Activity {
 		public boolean onTap(int index) {
 			String msg;
 			OverlayItem item = getItem(index);
-			msg = "�긽�샇 = " + item.getTitle() + ",�꽕紐� = " + item.getSnippet();
+			msg = "?긽?샇 = " + item.getTitle() + ",?꽕紐? = " + item.getSnippet();
 			Toast.makeText(Map.this, msg, Toast.LENGTH_LONG).show();
 			return true;
 		}
