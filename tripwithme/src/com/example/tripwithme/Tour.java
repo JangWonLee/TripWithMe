@@ -17,12 +17,15 @@ import android.os.Build;
 
 public class Tour extends Activity {
 	private Cursor cursor;
-	private TourDBHelper mHelper;
 	private Typeface mFont;
 	
 	private ListView listView;
 	
 	private TextView titleText;
+	
+	private String geonameDatabaseFile = "/sdcard/TripWithMe/DATA.sqlite";
+	
+	private SQLiteDatabase db;
 
 	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,10 +38,9 @@ public class Tour extends Activity {
 		titleText.setText("Tour List");
 		titleText.setTypeface(mFont);
 
-		mHelper = new TourDBHelper(this);
-		SQLiteDatabase db = mHelper.getWritableDatabase();
+		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
 
-		cursor = db.rawQuery("SELECT * FROM tou", null);
+		cursor = db.rawQuery("SELECT * FROM tourlist", null);
 		startManagingCursor(cursor);
 
 		SimpleCursorAdapter Adapter = null;
@@ -53,39 +55,10 @@ public class Tour extends Activity {
 				Intent intent = new Intent(Tour.this, TourDetail.class);
 				intent.putExtra("name", cursor.getString(cursor.getColumnIndex("name")));
 				intent.putExtra("intro", cursor.getString(cursor.getColumnIndex("intro")));
+				intent.putExtra("time", cursor.getString(cursor.getColumnIndex("time")));
 				intent.putExtra("tel", cursor.getString(cursor.getColumnIndex("tel")));
-				intent.putExtra("menu", cursor.getString(cursor.getColumnIndex("menu")));
 				startActivity(intent);
 			}
 		});
-	}
-}
-
-class TourDBHelper extends SQLiteOpenHelper {
-	public TourDBHelper(Context context) {
-		super(context, "tou.db", null, 1);
-	}
-
-	public void onCreate(SQLiteDatabase db) {
-		db.execSQL("CREATE TABLE tou ( _id INTEGER PRIMARY KEY AUTOINCREMENT, " + "name TEXT, address TEXT, intro TEXT, time TEXT, tel TEXT, menu TEXT);");
-		db.execSQL("INSERT INTO tou VALUES (null, 'Gyeongbokgung', 'jongrogu sejongro 1-1', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'Changdeokgung', 'jongrogu waryongdong 2-71', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'The War Memorial of Korea', 'yongsango yongsandong 1-8', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'N Seoul Tower', 'yongsango yongsandong san1-3', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'Bongeunsa', 'gangnamgu samsungdong 73', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'Seoul Kimchi Academy House', 'Jung-gu Myeongdong 21-7', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'Trick Eye Museum', '20, Hongik-ro 3-gil, Mapo-gu', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'Hangaram Art Museum', '2406, Nambusunhwan-ro, Seocho-gu', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'Seoul Central Mosque', '39, Usadan-ro 10-gil, Yongsan-gu', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'Hongneung Forest', '57, Hoegi-ro, Dongdaemun-gu, Seoul ', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'Olympic Park', '424, Olympic-ro, Songpa-gu, Seoul', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'Naksan Public Art Project', '7-9, Naksan 3-gil, Jongno-gu, Seoul', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'Beautiful Tea Museum', '19-11, Insadong-gil, Jongno-gu, Seoul', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-		db.execSQL("INSERT INTO tou VALUES (null, 'Gyeonghuigung Palace', '45, Saemunan-ro, Jongno-gu, Seoul', '(Family Restaurant)', 'Open 11:00 ~ Close 23:00', '02-123-4567', 'Steak & Pasta');");
-	}
-
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE IF EXISTS product");
-		onCreate(db);
 	}
 }
