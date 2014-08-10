@@ -76,7 +76,7 @@
             android:text="departure" />
         
         <TextView
-            android:id="@+id/arrivaledit"
+            android:id="@+id/arrivaltext"
             android:layout_width="0dip"
             android:layout_weight="1"
             android:layout_height="30dip"

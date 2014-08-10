@@ -61,6 +61,7 @@ public class Map extends Activity {
 	private EditText desSearchEdit;
 	private Button mbtn;
 	private TextView departuretext;
+	private TextView arrivaltext;
 	
 	private SQLiteDatabase db;
 	
@@ -320,13 +321,21 @@ public class Map extends Activity {
 			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 			dialog.setTitle(item.getTitle());
 			dialog.setMessage(item.getSnippet());
-			dialog.setNegativeButton("닫기", null);
-			dialog.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+			dialog.setNegativeButton("close", null);
+			dialog.setPositiveButton("departure", new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					departuretext = (TextView)findViewById(R.id.departuretext);
 					departuretext.setText(item.getTitle());
+				}
+			});
+			dialog.setNeutralButton("arrival", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					arrivaltext = (TextView)findViewById(R.id.arrivaltext);
+					arrivaltext.setText(item.getTitle());
 				}
 			});
 			dialog.show();
