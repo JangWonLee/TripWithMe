@@ -23,6 +23,10 @@ public class Restaurant extends Activity {
 	private ListView listView;
 
 	private TextView titleText;
+	
+	private String geonameDatabaseFile = "/sdcard/TripWithMe/DATA.sqlite";
+	
+	SQLiteDatabase db;
 
 	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,19 +39,20 @@ public class Restaurant extends Activity {
 		titleText.setText("Restaurant List");
 		titleText.setTypeface(mFont);
 
-		mHelper = new RestaurantDBHelper(this);
-		SQLiteDatabase db = mHelper.getWritableDatabase();
+		//mHelper = new RestaurantDBHelper(this);
+		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
+		
 
-		cursor = db.rawQuery("SELECT * FROM res2", null);
-		startManagingCursor(cursor);
-
-		SimpleCursorAdapter Adapter = null;
-		Adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, cursor, new String[] { "name", "address" }, 
-				new int[] { android.R.id.text1, android.R.id.text2});
-
-
-		listView = (ListView)findViewById(R.id.listview);
-		listView.setAdapter(Adapter);
+//		cursor = db.rawQuery("SELECT * FROM restaurant", null);
+//		startManagingCursor(cursor);
+//
+//		SimpleCursorAdapter Adapter = null;
+//		Adapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, cursor, new String[] { "name", "address" }, 
+//				new int[] { android.R.id.text1, android.R.id.text2});
+//
+//
+//		listView = (ListView)findViewById(R.id.listview);
+//		listView.setAdapter(Adapter);
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
