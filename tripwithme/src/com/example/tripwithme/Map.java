@@ -18,11 +18,11 @@ import org.osmdroid.views.overlay.OverlayItem;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -59,6 +60,7 @@ public class Map extends Activity {
 	private EditText mtext;
 	private EditText desSearchEdit;
 	private Button mbtn;
+	private TextView departuretext;
 	
 	private SQLiteDatabase db;
 	
@@ -110,14 +112,12 @@ public class Map extends Activity {
 		mlongitude = getIntent().getExtras().getDouble("longitude");
 		
 		if(mlatitude == (double)0){
-			Toast.makeText(Map.this, "더블은 0", Toast.LENGTH_LONG).show();
 //			getLocation();
 //			GeoPoint geoPoint = new GeoPoint(currentLatitude, currentLongitude);
 //			this.mapController.setCenter(geoPoint);
 		}
 		else {
 			GeoPoint geoPoint = new GeoPoint(mlatitude, mlongitude);
-			Toast.makeText(Map.this, Double.toString(mlatitude) + "    " +Double.toString(mlongitude), Toast.LENGTH_LONG).show();
 			this.mapController.setCenter(geoPoint);
 		}
 		
@@ -143,14 +143,17 @@ public class Map extends Activity {
 		
 		Cursor cursor = db.rawQuery("SELECT * FROM restaurant", null);
 		OverlayItem item = null;
-		for(int i=0; i < cursor.getCount(); i++)
-		{
+
+		for(int i=0; i < cursor.getCount(); i++) {
 			cursor.moveToNext();
 			item = new OverlayItem(cursor.getString(1), cursor.getString(2),
 			new GeoPoint(cursor.getDouble(11), cursor.getDouble(12)));
-			itemizedoverlay1.addItem(item);
+			if(mlatitude == (double)0)
+				itemizedoverlay1.addItem(item);
+			else
+				if(mlatitude == cursor.getDouble(11))
+					itemizedoverlay1.addItem(item);
 		}
-		
 		mapView.getOverlays().add(itemizedoverlay1.getOverlay());
 		
 
@@ -165,7 +168,11 @@ public class Map extends Activity {
 			cursor.moveToNext();
 			item = new OverlayItem(cursor.getString(1), cursor.getString(2),
 			new GeoPoint(cursor.getDouble(6), cursor.getDouble(7)));
-			itemizedoverlay2.addItem(item);
+			if(mlatitude == (double)0)
+				itemizedoverlay2.addItem(item);
+			else
+				if(mlatitude == cursor.getDouble(6))
+					itemizedoverlay1.addItem(item);
 		}
 		
 		
@@ -308,11 +315,20 @@ public class Map extends Activity {
 
 		}
 		
-		public boolean onSingleTapUpHelper(int i, OverlayItem item) {
+		public boolean onSingleTapUpHelper(int i, final OverlayItem item) {
 			Toast.makeText(mContext, "Item " + i + " has been tapped!", Toast.LENGTH_SHORT).show();
 			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 			dialog.setTitle(item.getTitle());
 			dialog.setMessage(item.getSnippet());
+			dialog.setNegativeButton("닫기", null);
+			dialog.setPositiveButton("Start", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					departuretext = (TextView)findViewById(R.id.departuretext);
+					departuretext.setText(item.getTitle());
+				}
+			});
 			dialog.show();
 			return true;
 		}

@@ -65,7 +65,7 @@
         android:layout_alignParentBottom="true">
         
         <TextView 
-            android:id="@+id/departureedit"
+            android:id="@+id/departuretext"
             android:layout_width="0dip"
             android:layout_weight="1"
             android:layout_height="30dip"
