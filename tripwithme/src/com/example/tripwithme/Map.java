@@ -345,7 +345,7 @@ public class Map extends Activity {
 		public boolean onTap(int index) {
 			String msg;
 			OverlayItem item = getItem(index);
-			msg = "�긽�샇 = " + item.getTitle() + ",�꽕紐� = " + item.getSnippet();
+			msg = "?긽?샇 = " + item.getTitle() + ",?꽕紐? = " + item.getSnippet();
 			Toast.makeText(Map.this, msg, Toast.LENGTH_LONG).show();
 			return true;
 		}

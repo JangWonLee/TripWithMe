@@ -24,12 +24,13 @@ import android.widget.*;
 public class SearchActivity extends Activity{
 	
 	private Typeface mFont;
-//	private EditText searchEdit;
 	private TextView autoText;
 	private TextView selectCityText;
 	private TextView orText;
 	private TextView searchCityText;
 	private Intent intent;
+	private Button searchButton;
+	private Button seoulButton;
 	
 	private AutoCompleteTextView autoEdit;
 	private ArrayList<String> list;
@@ -44,6 +45,8 @@ public class SearchActivity extends Activity{
         orText = (TextView)findViewById(R.id.ortext);
         searchCityText = (TextView)findViewById(R.id.searchcitytext);
         autoEdit = (AutoCompleteTextView)findViewById(R.id.autoedit);
+        searchButton = (Button)findViewById(R.id.searchbutton);
+        seoulButton = (Button)findViewById(R.id.seoulbutton);
         
         selectCityText.setTypeface(mFont);
         orText.setTypeface(mFont);
@@ -58,15 +61,25 @@ public class SearchActivity extends Activity{
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, list);
         
         autoEdit.setAdapter(adapter);
+             
         
    	}
 	
-
 	
 	public void mOnClick(View v) {
-    	intent = new Intent(this, MenuActivity.class);
-    	startActivity(intent);
-    }	
+		switch(v.getId()) {
+		case R.id.searchbutton:
+			String msg = autoEdit.getText().toString();
+			intent = new Intent(this, DownloadActivity.class);
+			startActivity(intent);
+			break;
+			
+		case R.id.seoulbutton:
+			intent = new Intent(this, MenuActivity.class);
+			startActivity(intent);
+			break;
+		}	
+	}
 }
 	
 
