@@ -62,6 +62,7 @@ public class Map extends Activity {
 	
 	private ImageView dest;
 	private EditText mtext;
+	private EditText desSearchEdit;
 	private Button mbtn;
 	
 	private SQLiteDatabase db;
@@ -77,11 +78,11 @@ public class Map extends Activity {
 		// init Layout
 		setContentView(R.layout.map);
 
-		mbtn = (Button)findViewById(R.id.m_btn);
-		mtext = (EditText)findViewById(R.id.desSearch);
+		mbtn = (Button)findViewById(R.id.dessearchbutton);
+		mtext = (EditText)findViewById(R.id.dessearchedit);
 		
-		EditText dessearch = (EditText)findViewById(R.id.desSearch);
-		dessearch.setHint("Search");
+		desSearchEdit = (EditText)findViewById(R.id.dessearchedit);
+		desSearchEdit.setHint("Search");
 
 		this.mapLayout = (RelativeLayout)findViewById(R.id.mapLayout);
 
@@ -166,7 +167,7 @@ public class Map extends Activity {
 			mapView.getController().animateTo(tgeopoint);
 			break;
 			
-		case R.id.m_btn:
+		case R.id.dessearchbutton:
 			String geonameDatabaseFile = "/sdcard/TripWithMe/DATA.sqlite";
 			db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
 			
