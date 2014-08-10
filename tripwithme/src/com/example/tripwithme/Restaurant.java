@@ -60,6 +60,8 @@ public class Restaurant extends Activity {
 				intent.putExtra("menu2", cursor.getString(cursor.getColumnIndex("menu2")));
 				intent.putExtra("menu3", cursor.getString(cursor.getColumnIndex("menu3")));
 				intent.putExtra("time", cursor.getString(cursor.getColumnIndex("time")));
+				intent.putExtra("latitude", cursor.getDouble(cursor.getColumnIndex("latitude")));
+				intent.putExtra("longitude", cursor.getDouble(cursor.getColumnIndex("longitude")));
 				startActivity(intent);
 			}
 		});

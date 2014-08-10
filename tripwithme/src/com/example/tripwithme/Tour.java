@@ -57,6 +57,8 @@ public class Tour extends Activity {
 				intent.putExtra("intro", cursor.getString(cursor.getColumnIndex("intro")));
 				intent.putExtra("time", cursor.getString(cursor.getColumnIndex("time")));
 				intent.putExtra("tel", cursor.getString(cursor.getColumnIndex("tel")));
+				intent.putExtra("latitude", cursor.getDouble(cursor.getColumnIndex("latitude")));
+				intent.putExtra("longitude", cursor.getDouble(cursor.getColumnIndex("longitude")));
 				startActivity(intent);
 			}
 		});

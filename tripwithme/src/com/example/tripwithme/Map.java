@@ -105,9 +105,23 @@ public class Map extends Activity {
 		mProvider = locationManager.getBestProvider(criteria, true);
 */
 		// 초기 위치 지정
-//		getLocation();
-//		GeoPoint geoPoint = new GeoPoint(currentLatitude, currentLongitude);
-//		this.mapController.setCenter(geoPoint);
+		
+		mlatitude = getIntent().getExtras().getDouble("latitude");
+		mlongitude = getIntent().getExtras().getDouble("longitude");
+		
+		if(mlatitude == (double)0){
+			Toast.makeText(Map.this, "더블은 0", Toast.LENGTH_LONG).show();
+//			getLocation();
+//			GeoPoint geoPoint = new GeoPoint(currentLatitude, currentLongitude);
+//			this.mapController.setCenter(geoPoint);
+		}
+		else {
+			GeoPoint geoPoint = new GeoPoint(mlatitude, mlongitude);
+			Toast.makeText(Map.this, Double.toString(mlatitude) + "    " +Double.toString(mlongitude), Toast.LENGTH_LONG).show();
+			this.mapController.setCenter(geoPoint);
+		}
+		
+		
 		
 		mRest = getResources().getDrawable(R.drawable.bluemarker);
 		mRest.setBounds(0, 0, mRest.getIntrinsicWidth(),mRest.getIntrinsicHeight());
