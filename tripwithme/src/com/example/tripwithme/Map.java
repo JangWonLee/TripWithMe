@@ -34,12 +34,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-//import com.google.android.maps.GeoPoint;
-//import com.google.android.maps.MapActivity;
-//import com.google.android.maps.MapController;
-//import com.google.android.maps.MapView;
-//import com.google.android.maps.Overlay;
-//import com.google.android.maps.Projection;
 
 
 public class Map extends Activity {
