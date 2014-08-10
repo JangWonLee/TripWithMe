@@ -24,6 +24,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,20 +48,27 @@ public class Map extends Activity {
 	// MapView
 	private MapView mapView;
 	private Drawable mRest, mTour, mNow;
+	
 	private MapController mapController;
 	private ResourceProxy proxy;
-	private LocationManager mLocMan;
+	
+	private LocationManager locationManager;
 	private String mProvider;
+	
 	private double mlatitude;
 	private double mlongitude;
+	private double currentLatitude;
+	private double currentLongitude;
+	
 	private ImageView dest;
 	private EditText mtext;
 	private Button mbtn;
+	
 	private SQLiteDatabase db;
 	
-	private List<Overlay> overlayss; 
+	private List<Overlay> mOverlay; 
 
-	private Location lastlocation;
+	private Location lastLocation;
 	private String geonameDatabaseFile = "TripWithMe/DATA.sqlite";
 
 	@Override
@@ -69,47 +77,42 @@ public class Map extends Activity {
 		// init Layout
 		setContentView(R.layout.map);
 
+		mbtn = (Button)findViewById(R.id.m_btn);
+		mtext = (EditText)findViewById(R.id.desSearch);
+		
 		EditText dessearch = (EditText)findViewById(R.id.desSearch);
 		dessearch.setHint("Search");
-
 
 		this.mapLayout = (RelativeLayout)findViewById(R.id.mapLayout);
 
 		// init Offline Map
-		
-		
-		
 		this.mapView = new OfflineMapView(this, "TripWithMe/Seoul.sqlitedb");
 		this.mapController = mapView.getController();
 
 		// set Zoom Countrol
-		this.mapView.setBuiltInZoomControls(true);      // set Touch Control
+		this.mapView.setBuiltInZoomControls(false);      // 돋보기 모양 false
 		this.mapView.setMultiTouchControls(true);
 
 		// zoom to 15
 		this.mapController.setZoom(15);
 
 		// add mapview
-		this.mapLayout.addView(this.mapView, new RelativeLayout.LayoutParams(
-				android.view.ViewGroup.LayoutParams.FILL_PARENT,
-				android.view.ViewGroup.LayoutParams.FILL_PARENT));
+		this.mapLayout.addView(this.mapView, new RelativeLayout.LayoutParams (android.view.ViewGroup.LayoutParams.FILL_PARENT, android.view.ViewGroup.LayoutParams.FILL_PARENT));
 
-		// scroll to 24082456, 120558472
-		GeoPoint geoPoint = new GeoPoint(37.550120, 126.924606);
+
+
+
+		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+		criteria.setPowerRequirement(Criteria.POWER_HIGH);
+		mProvider = locationManager.getBestProvider(criteria, true);
+
+		// 초기 위치 지정
+		getLocation();
+		GeoPoint geoPoint = new GeoPoint(currentLatitude, currentLongitude);
 		this.mapController.setCenter(geoPoint);
-
-
-
-		// �쐞移� 愿�由ъ옄 援ы븿
-		mLocMan = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		Criteria cri = new Criteria();
-		cri.setAccuracy(Criteria.ACCURACY_FINE);
-		cri.setPowerRequirement(Criteria.POWER_HIGH);
-		mProvider = mLocMan.getBestProvider(cri, true);
-
-
-		List<Overlay> overlays = mapView.getOverlays();
-
+		
 		mRest = getResources().getDrawable(R.drawable.bluemarker);
 		mRest.setBounds(0, 0, mRest.getIntrinsicWidth(),mRest.getIntrinsicHeight());
 		mTour = getResources().getDrawable(R.drawable.touricon);
@@ -118,7 +121,7 @@ public class Map extends Activity {
 		mNow.setBounds(0, 0, mNow.getIntrinsicWidth(),mNow.getIntrinsicHeight());
 
 
-		overlayss = mapView.getOverlays();
+		mOverlay = mapView.getOverlays();
 
 		Restaurant rest = new Restaurant(mRest,this);
 		List<Overlay> overlays1 = mapView.getOverlays();
@@ -128,81 +131,83 @@ public class Map extends Activity {
 		List<Overlay> overlays2 = mapView.getOverlays();
 		overlays2.add(tour);
 		
-		mbtn = (Button)findViewById(R.id.m_btn);
-		mtext = (EditText)findViewById(R.id.desSearch);
 	}
 
-
-	public void mOnClick(View v) {
-		GeoPoint tgeopoint = new GeoPoint(mlatitude, mlongitude);
-		mapView.getController().animateTo(tgeopoint);
-	}
-	
-	public void mOnBtnClick(View v) {
-		String geonameDatabaseFile = "/sdcard/TripWithMe/DATA.sqlite";
-		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
-		
-		
-		String aSQL = "select ID, NAME, LATITUDE, LONGITUDE "
-				+ " from DATA"
-				+ " where NAME like ?";
-
-		String[] args = {""};
-		args[0] = mtext.getText() + "%";
-
-		Cursor outCursor = db.rawQuery(aSQL, args);
-		
-		int recordCount = outCursor.getCount();
-		Toast.makeText(this,"cursor count : " + recordCount, Toast.LENGTH_SHORT).show();
-		
-		
-		startManagingCursor(outCursor);
-		ListView list = new ListView(Map.this);
-		
-		String[] columns = new String[] {"name", "latitude", "longitude"};
-		int[] to = new int[] { R.id.name_entry, R.id.latitude_entry, R.id.longitud_entry };
-		
-//		SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, R.layout.items, outCursor, columns, to);
-		
-	
-   //     list.setAdapter(mAdapter);
-    
-    //    mapView.addView(list);
-		
-
-		outCursor.close();
-		db.close();
-
-	}
-
-
+	@Override
 	public void onResume() {
-
 		super.onResume();
-		mLocMan.requestLocationUpdates(mProvider, 3000, 5, mListener);
-		lastlocation = mLocMan.getLastKnownLocation(mProvider);
-		mlatitude = lastlocation.getLatitude();
-		mlongitude = lastlocation.getLongitude();
+		getLocation();
 
-		MyPosition myposition = new MyPosition(mNow, Map.this);
-		//List<Overlay> overlayss = mapView.getOverlays();
-		//overlayss.add(myposition);
+		MyPosition myPosition = new MyPosition(mNow, Map.this);
+		//mOverlay.clear();
+		mOverlay.add(myPosition);
+	}
 
-		//overlayss.clear();
-		overlayss.add(myposition);
-		///
-
-
+	private void getLocation() {
+		locationManager.requestLocationUpdates(mProvider, 3000, 5, mListener);
+		lastLocation = locationManager.getLastKnownLocation(mProvider);
+		mlatitude = lastLocation.getLatitude();
+		mlongitude = lastLocation.getLongitude();
+		
+		currentLatitude = mlatitude;
+		currentLongitude = mlongitude;
 	} 
 
-
+	@Override
 	public void onPause() {      
 		super.onPause();
-		mLocMan.removeUpdates(mListener);
+		locationManager.removeUpdates(mListener);
 	}
 
+	public void mOnClick (View v) {
+		switch (v.getId()) {
+		case R.id.gpsicon:
+			GeoPoint tgeopoint = new GeoPoint(mlatitude, mlongitude);
+			mapView.getController().animateTo(tgeopoint);
+			break;
+			
+		case R.id.m_btn:
+			String geonameDatabaseFile = "/sdcard/TripWithMe/DATA.sqlite";
+			db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
+			
+			String aSQL = "select ID, NAME, LATITUDE, LONGITUDE "
+					+ " from DATA"
+					+ " where NAME like ?";
 
+			String[] args = {""};
+			args[0] = mtext.getText() + "%";
+
+			Cursor outCursor = db.rawQuery(aSQL, args);
+			
+			int recordCount = outCursor.getCount();
+			Toast.makeText(this,"cursor count : " + recordCount, Toast.LENGTH_SHORT).show();
+			
+			
+			startManagingCursor(outCursor);
+			ListView list = new ListView(Map.this);
+			
+			String[] columns = new String[] {"name", "latitude", "longitude"};
+			int[] to = new int[] { R.id.name_entry, R.id.latitude_entry, R.id.longitud_entry };
+			
+//			SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, R.layout.items, outCursor, columns, to);
+			
+		
+	   //     list.setAdapter(mAdapter);
+	    
+	    //    mapView.addView(list);
+			
+
+			outCursor.close();
+			db.close();
+			break;
+
+		default:
+			break;
+		}
+	}
+	
 	LocationListener mListener = new LocationListener() {
+		@Override
 		public void onLocationChanged(Location location) {
 
 			Toast.makeText(Map.this, "리스너호출", Toast.LENGTH_LONG).show();
@@ -210,24 +215,20 @@ public class Map extends Activity {
 			//mNow.setBounds(mNow.getIntrinsicWidth(), mNow.getIntrinsicHeight(),0,0);
 
 			MyPosition myposition = new MyPosition(mNow, Map.this);
-			//List<Overlay> overlayss = mapView.getOverlays();
-			//overlayss.add(myposition);
+			//List<Overlay> mOverlay = mapView.getOverlays();
+			//mOverlay.add(myposition);
 
-			overlayss.clear();
-			overlayss.add(myposition);
-
+			mOverlay.clear();
+			mOverlay.add(myposition);
 		}
 		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
-			// TODO Auto-generated method stub	
 		}
 		@Override
 		public void onProviderEnabled(String provider) {
-			// TODO Auto-generated method stub	
 		}
 		@Override
 		public void onProviderDisabled(String provider) {
-			// TODO Auto-generated method stub	
 		}
 	};
 
@@ -416,11 +417,11 @@ public class Map extends Activity {
 	}
 
 	class MyPosition extends ItemizedOverlay<OverlayItem> {
-		//LocationManager mLocMan;
+		//LocationManager locationManager;
 		//String mProvider;
 
-		public MyPosition(Drawable defaultMarker, Context pContext) {
-			super(defaultMarker, new DefaultResourceProxyImpl(pContext) );
+		public MyPosition(Drawable defaultMarker, Context context) {
+			super(defaultMarker, new DefaultResourceProxyImpl(context) );
 			boundCenterBottom(defaultMarker);
 			boundCenter(mNow);
 			populate();
@@ -434,11 +435,10 @@ public class Map extends Activity {
 			switch (i) {
 
 			case 0:
-				Location lastlocation = mLocMan.getLastKnownLocation(mProvider);
-				mlatitude = lastlocation.getLatitude();
-				mlongitude = lastlocation.getLongitude();
-				item = new OverlayItem(" ", 
-						" ", new GeoPoint(mlatitude, mlongitude));
+				Location lastLocation = locationManager.getLastKnownLocation(mProvider);
+				mlatitude = lastLocation.getLatitude();
+				mlongitude = lastLocation.getLongitude();
+				item = new OverlayItem(" ", " ", new GeoPoint(mlatitude, mlongitude));
 				item.setMarker(mNow);
 				break;
 			}
@@ -455,18 +455,13 @@ public class Map extends Activity {
 
 		@Override
 		public boolean onSnapToItem(int arg0, int arg1, Point arg2, MapView arg3) {
-			// TODO Auto-generated method stub
 			return false;
 		}
 	}
 
 	public void boundCenterBottom(Drawable defaultMarker) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void boundCenter(Drawable mRed2) {
-		// TODO Auto-generated method stub
-
 	}
 }
