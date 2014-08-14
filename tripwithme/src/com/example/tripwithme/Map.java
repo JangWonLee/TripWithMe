@@ -23,10 +23,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,8 +55,11 @@ public class Map extends Activity {
 	
 	private double mlatitude;
 	private double mlongitude;
-	private double currentLatitude;
-	private double currentLongitude;
+	private double currentlatitude;
+	private double currentlongitude;
+	private double startlatitude;
+	private double startlongitude;
+
 	
 	private ImageView dest;
 	private EditText mtext;
@@ -65,10 +70,11 @@ public class Map extends Activity {
 	
 	private SQLiteDatabase db;
 	
-	private List<Overlay> mOverlay; 
+	private MyOwnItemizedOverlay itemizedoverlay3;
 
 	private Location lastLocation;
 	private String geonameDatabaseFile = "/sdcard/TripWithMe/DATA.sqlite";
+	private OverlayItem item = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -100,66 +106,64 @@ public class Map extends Activity {
 
 
 
-/*
+
 		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
 		criteria.setPowerRequirement(Criteria.POWER_HIGH);
 		mProvider = locationManager.getBestProvider(criteria, true);
-*/
+		
+		if(!mProvider.equals(locationManager.GPS_PROVIDER)) {
+			Toast.makeText(this,"Please Check Your GPS and Resart Your Map !!", Toast.LENGTH_LONG).show();
+		}
+
+
 		// 초기 위치 지정
 		
-		mlatitude = getIntent().getExtras().getDouble("latitude");
-		mlongitude = getIntent().getExtras().getDouble("longitude");
+		startlatitude = getIntent().getExtras().getDouble("latitude");
+		startlongitude = getIntent().getExtras().getDouble("longitude");
 		
-		if(mlatitude == (double)0){
-//			getLocation();
-//			GeoPoint geoPoint = new GeoPoint(currentLatitude, currentLongitude);
-//			this.mapController.setCenter(geoPoint);
-		}
-		else {
-			GeoPoint geoPoint = new GeoPoint(mlatitude, mlongitude);
+		if(startlatitude == (double)0){
+			if(mProvider.equals(locationManager.GPS_PROVIDER)) {
+				getLocation();
+				GeoPoint geoPoint = new GeoPoint(currentlatitude, currentlongitude);
+				this.mapController.setCenter(geoPoint);
+			} else {
+				this.mapController.setCenter(new GeoPoint(37.566352, 126.978103));
+			}
+		} else {
+			GeoPoint geoPoint = new GeoPoint(startlatitude, startlongitude);
 			this.mapController.setCenter(geoPoint);
 		}
-		
-		
-		
+	
 		mRest = getResources().getDrawable(R.drawable.bluemarker);
 		mRest.setBounds(0, 0, mRest.getIntrinsicWidth(),mRest.getIntrinsicHeight());
+			mRest.setFilterBitmap(true);
 		mTour = getResources().getDrawable(R.drawable.touricon);
 		mTour.setBounds(0, 0, mTour.getIntrinsicWidth(), mTour.getIntrinsicHeight());
 		mNow = getResources().getDrawable(R.drawable.currentpositionicon);
 		mNow.setBounds(0, 0, mNow.getIntrinsicWidth(),mNow.getIntrinsicHeight());
-
-
-//		mOverlay = mapView.getOverlays();
 		
-		
-		
-		
-
 		MyOwnItemizedOverlay itemizedoverlay1 = new MyOwnItemizedOverlay(mRest, this);
 
 		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
 		
 		Cursor cursor = db.rawQuery("SELECT * FROM restaurant", null);
-		OverlayItem item = null;
 
 		for(int i=0; i < cursor.getCount(); i++) {
 			cursor.moveToNext();
 			item = new OverlayItem(cursor.getString(1), cursor.getString(2),
 			new GeoPoint(cursor.getDouble(11), cursor.getDouble(12)));
-			if(mlatitude == (double)0)
+			Log.i("aa", cursor.getString(1));
+			if(startlatitude == (double)0)
 				itemizedoverlay1.addItem(item);
 			else
-				if(mlatitude == cursor.getDouble(11))
+				if(startlatitude == cursor.getDouble(11))
 					itemizedoverlay1.addItem(item);
 		}
 		mapView.getOverlays().add(itemizedoverlay1.getOverlay());
 		
 
-		
-		
 		MyOwnItemizedOverlay itemizedoverlay2 = new MyOwnItemizedOverlay(mTour, this);
 
 		
@@ -169,59 +173,88 @@ public class Map extends Activity {
 			cursor.moveToNext();
 			item = new OverlayItem(cursor.getString(1), cursor.getString(2),
 			new GeoPoint(cursor.getDouble(6), cursor.getDouble(7)));
-			if(mlatitude == (double)0)
+			if(startlatitude == (double)0)
 				itemizedoverlay2.addItem(item);
 			else
-				if(mlatitude == cursor.getDouble(6))
-					itemizedoverlay1.addItem(item);
+				if(startlatitude == cursor.getDouble(6))
+					itemizedoverlay2.addItem(item);
 		}
 		
-		
-
-		
 		mapView.getOverlays().add(itemizedoverlay2.getOverlay());
-		
 		db.close();
 		
-		
-
+		itemizedoverlay3 = new MyOwnItemizedOverlay(mNow, this);
+		if(startlatitude == (double)0 && currentlatitude != 37.566352) {
+			item = new OverlayItem("Current Location"," ",
+					new GeoPoint(currentlatitude, currentlongitude));
+			itemizedoverlay3.addItem(item);
+		}
+		mapView.getOverlays().add(itemizedoverlay3.getOverlay());
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-/*		getLocation();
-
-		MyPosition myPosition = new MyPosition(mNow, Map.this);
-		//mOverlay.clear();
-		mOverlay.add(myPosition);*/
+		if(mProvider.equals(locationManager.GPS_PROVIDER)) {
+			
+			if(mProvider.equals(locationManager.GPS_PROVIDER)) {
+				getLocation();
+				Location lastLocation = locationManager.getLastKnownLocation(mProvider);
+				if(startlatitude == (double)0 && lastLocation != null) {
+					mlatitude = lastLocation.getLatitude();
+					mlongitude = lastLocation.getLongitude();
+					item = new OverlayItem("Current Location"," ",
+							new GeoPoint(mlatitude, mlongitude));
+	//				itemizedoverlay3.clean();
+					itemizedoverlay3.addItem(item);
+				}
+			}
+		}
 	}
 
 	private void getLocation() {
-//		if(mProvider != null) {
-/*			locationManager.requestLocationUpdates(mProvider, 3000, 5, mListener);
+		if(mProvider.equals(locationManager.GPS_PROVIDER)) {
+			locationManager.requestLocationUpdates(mProvider, 3000, 5, mListener);
 			lastLocation = locationManager.getLastKnownLocation(mProvider);
-			mlatitude = lastLocation.getLatitude();
-			mlongitude = lastLocation.getLongitude();
-		
-			currentLatitude = mlatitude;
-			currentLongitude = mlongitude;*/
-//		}
+			if(lastLocation == null) {
+				Toast.makeText(Map.this,"failed to find current location", Toast.LENGTH_LONG).show();
+				mlatitude = 37.566352;
+				mlongitude = 126.978103;
+			}
+			else {
+				mlatitude = lastLocation.getLatitude();
+				mlongitude = lastLocation.getLongitude();
+			}	
+			currentlatitude = mlatitude;
+			currentlongitude = mlongitude;
+			
+		}
 	} 
 
 	@Override
 	public void onPause() {     
 
 		super.onPause();
-//		locationManager.removeUpdates(mListener);
+		if(mProvider == locationManager.GPS_PROVIDER)
+			locationManager.removeUpdates(mListener);
 
 	}
 
 	public void mOnClick (View v) {
 		switch (v.getId()) {
 		case R.id.gpsicon:
-			GeoPoint tgeopoint = new GeoPoint(mlatitude, mlongitude);
-			mapView.getController().animateTo(tgeopoint);
+			if(mProvider.equals(locationManager.GPS_PROVIDER)) {
+				if(mlatitude == 37.566352) {
+					Toast.makeText(Map.this,"failed to find current location", Toast.LENGTH_SHORT).show();
+				}
+				else {	
+					GeoPoint tgeopoint = new GeoPoint(mlatitude, mlongitude);
+					mapView.getController().animateTo(tgeopoint);
+				}
+			}
+			else {
+				Toast.makeText(this,"Please Check Your GPS and Resart Your Map !!", Toast.LENGTH_SHORT).show();
+			}
 			break;
 			
 		case R.id.dessearchbutton:
@@ -269,15 +302,22 @@ public class Map extends Activity {
 		public void onLocationChanged(Location location) {
 
 			Toast.makeText(Map.this, "리스너호출", Toast.LENGTH_LONG).show();
-			//mNow = getResources().getDrawable(R.drawable.currentpositionicon);
-			//mNow.setBounds(mNow.getIntrinsicWidth(), mNow.getIntrinsicHeight(),0,0);
 
-			MyPosition myposition = new MyPosition(mNow, Map.this);
-			//List<Overlay> mOverlay = mapView.getOverlays();
-			//mOverlay.add(myposition);
-
-			mOverlay.clear();
-			mOverlay.add(myposition);
+			lastLocation = locationManager.getLastKnownLocation(mProvider);
+			if(lastLocation == null) {
+				Toast.makeText(Map.this,"failed to find current location", Toast.LENGTH_LONG).show();
+				mlatitude = 37.566352;
+				mlongitude = 126.978103;
+			}
+			else {
+				mlatitude = lastLocation.getLatitude();
+				mlongitude = lastLocation.getLongitude();
+				
+				item = new OverlayItem("Current Location"," ",
+						new GeoPoint(mlatitude, mlongitude));
+		//		itemizedoverlay3.clean();
+				itemizedoverlay3.addItem(item);
+			}
 		}
 		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -346,52 +386,12 @@ public class Map extends Activity {
 			mOverlay.addItem(item);
 		}
 		
+		public void clean(){
+			mOverlay.removeAllItems();
+		}
+		
 		public ItemizedIconOverlay<OverlayItem> getOverlay(){
 			return mOverlay;
-		}
-	}
-
-
-	class MyPosition extends ItemizedOverlay<OverlayItem> {
-		//LocationManager locationManager;
-		//String mProvider;
-
-		public MyPosition(Drawable defaultMarker, Context context) {
-			super(defaultMarker, new DefaultResourceProxyImpl(context) );
-			boundCenterBottom(defaultMarker);
-			boundCenter(mNow);
-			populate();
-		}
-		public int size() {
-			return 1;
-		}
-		protected OverlayItem createItem(int i) {
-			OverlayItem item = null;
-
-			switch (i) {
-
-			case 0:
-				Location lastLocation = locationManager.getLastKnownLocation(mProvider);
-				mlatitude = lastLocation.getLatitude();
-				mlongitude = lastLocation.getLongitude();
-				item = new OverlayItem(" ", " ", new GeoPoint(mlatitude, mlongitude));
-				item.setMarker(mNow);
-				break;
-			}
-			return  item;
-		}
-
-		public boolean onTap(int index) {
-			String msg;
-			OverlayItem item = getItem(index);
-			msg = "?긽?샇 = " + item.getTitle() + ",?꽕紐? = " + item.getSnippet();
-			Toast.makeText(Map.this, msg, Toast.LENGTH_LONG).show();
-			return true;
-		}
-
-		@Override
-		public boolean onSnapToItem(int arg0, int arg1, Point arg2, MapView arg3) {
-			return false;
 		}
 	}
 

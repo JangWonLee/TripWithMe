@@ -14,7 +14,7 @@ public class IntroActivity extends Activity {
 		setContentView(R.layout.introactivity);
 
 		handler_intro=new Handler();
-		handler_intro.postDelayed(run_intro, 2500);
+		handler_intro.postDelayed(run_intro, 500);
 	}
 	
 	Runnable run_intro = new Runnable(){
