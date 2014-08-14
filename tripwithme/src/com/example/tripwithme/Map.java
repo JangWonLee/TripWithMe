@@ -3,7 +3,6 @@ package com.example.tripwithme;
 import idv.hondadai.offlinemap.views.OfflineMapView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
@@ -11,8 +10,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlay;
-import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import android.app.Activity;
@@ -21,7 +18,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Point;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
@@ -136,13 +134,22 @@ public class Map extends Activity {
 			this.mapController.setCenter(geoPoint);
 		}
 	
-		mRest = getResources().getDrawable(R.drawable.bluemarker);
-		mRest.setBounds(0, 0, mRest.getIntrinsicWidth(),mRest.getIntrinsicHeight());
-			mRest.setFilterBitmap(true);
-		mTour = getResources().getDrawable(R.drawable.touricon);
-		mTour.setBounds(0, 0, mTour.getIntrinsicWidth(), mTour.getIntrinsicHeight());
-		mNow = getResources().getDrawable(R.drawable.currentpositionicon);
-		mNow.setBounds(0, 0, mNow.getIntrinsicWidth(),mNow.getIntrinsicHeight());
+		Drawable d;
+		Bitmap bitmap;
+		d = getResources().getDrawable(R.drawable.bluemarker);
+		d.setBounds(0, 0,d.getIntrinsicWidth(),d.getIntrinsicHeight());
+		bitmap = ((BitmapDrawable) d).getBitmap();
+		mRest = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap,23,32,true));
+		
+		d = getResources().getDrawable(R.drawable.touricon);
+		d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+		bitmap = ((BitmapDrawable) d).getBitmap();
+		mTour = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap,20,27,true));
+		
+		d = getResources().getDrawable(R.drawable.currentpositionicon);
+		d.setBounds(0, 0, d.getIntrinsicWidth(),d.getIntrinsicHeight());
+		bitmap = ((BitmapDrawable) d).getBitmap();
+		mNow = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap,100,100,true));
 		
 		MyOwnItemizedOverlay itemizedoverlay1 = new MyOwnItemizedOverlay(mRest, this);
 
@@ -301,7 +308,7 @@ public class Map extends Activity {
 		@Override
 		public void onLocationChanged(Location location) {
 
-			Toast.makeText(Map.this, "리스너호출", Toast.LENGTH_LONG).show();
+			Toast.makeText(Map.this, "리스너호출", Toast.LENGTH_SHORT).show();
 
 			lastLocation = locationManager.getLastKnownLocation(mProvider);
 			if(lastLocation == null) {
@@ -357,7 +364,6 @@ public class Map extends Activity {
 		}
 		
 		public boolean onSingleTapUpHelper(int i, final OverlayItem item) {
-			Toast.makeText(mContext, "Item " + i + " has been tapped!", Toast.LENGTH_SHORT).show();
 			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 			dialog.setTitle(item.getTitle());
 			dialog.setMessage(item.getSnippet());
