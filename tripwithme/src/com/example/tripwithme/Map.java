@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -33,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,6 +75,8 @@ public class Map extends Activity {
 	private Location lastLocation;
 	private String geonameDatabaseFile = "/sdcard/TripWithMe/DATA.sqlite";
 	private OverlayItem item = null;
+	
+	private int GPSstate; // 0=Not GPS	1=GPS
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -112,7 +116,9 @@ public class Map extends Activity {
 		mProvider = locationManager.getBestProvider(criteria, true);
 		
 		if(!mProvider.equals(locationManager.GPS_PROVIDER)) {
-			Toast.makeText(this,"Please Check Your GPS and Resart Your Map !!", Toast.LENGTH_LONG).show();
+			GPSstate = 0;
+			Toast.makeText(this,"Please Check Your GPS !!", Toast.LENGTH_LONG).show();
+			startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
 		}
 
 
@@ -250,6 +256,19 @@ public class Map extends Activity {
 	public void mOnClick (View v) {
 		switch (v.getId()) {
 		case R.id.gpsicon:
+			if(GPSstate == 0)
+			{
+				locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+				Criteria criteria = new Criteria();
+				criteria.setAccuracy(Criteria.ACCURACY_FINE);
+				criteria.setPowerRequirement(Criteria.POWER_HIGH);
+				mProvider = locationManager.getBestProvider(criteria, true);
+				if(mProvider.equals(locationManager.GPS_PROVIDER)) {
+					GPSstate = 1;
+					getLocation();
+				}
+			}
+			
 			if(mProvider.equals(locationManager.GPS_PROVIDER)) {
 				if(mlatitude == 37.566352) {
 					Toast.makeText(Map.this,"failed to find current location", Toast.LENGTH_SHORT).show();
@@ -260,7 +279,9 @@ public class Map extends Activity {
 				}
 			}
 			else {
-				Toast.makeText(this,"Please Check Your GPS and Resart Your Map !!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this,"Please Check Your GPS !!", Toast.LENGTH_SHORT).show();
+				startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+
 			}
 			break;
 			
@@ -284,10 +305,10 @@ public class Map extends Activity {
 			startManagingCursor(outCursor);
 			ListView list = new ListView(Map.this);
 			
-			String[] columns = new String[] {"name", "latitude", "longitude"};
-			int[] to = new int[] { R.id.name_entry, R.id.latitude_entry, R.id.longitud_entry };
+			String[] columns = new String[] {"name"};
+			int[] to = new int[] { R.id.name_entry };
 			
-//			SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, R.layout.items, outCursor, columns, to);
+			SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, R.layout.items, outCursor, columns, to);
 			
 		
 	   //     list.setAdapter(mAdapter);

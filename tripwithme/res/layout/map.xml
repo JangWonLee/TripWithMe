@@ -30,6 +30,17 @@
             android:layout_toRightOf="@+id/dessearchedit"
             android:background="@drawable/search"
             android:onClick="mOnClick" />
+        
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/listLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top" >
+            <ListView
+            android:id="@+id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -38,10 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/top" >
 
-        <ListView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="270dip" />
+
 
         <RelativeLayout
             android:id="@+id/mapLayout"
