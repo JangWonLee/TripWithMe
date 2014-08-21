@@ -29,6 +29,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -227,10 +228,10 @@ public class Map extends Activity {
 
 	private void getLocation() {
 		if(mProvider.equals(locationManager.GPS_PROVIDER)) {
-			locationManager.requestLocationUpdates(mProvider, 3000, 5, mListener);
+//			locationManager.requestLocationUpdates(mProvider, 3000, 5, mListener);
 			lastLocation = locationManager.getLastKnownLocation(mProvider);
 			if(lastLocation == null) {
-				Toast.makeText(Map.this,"failed to find current location", Toast.LENGTH_LONG).show();
+				Toast.makeText(Map.this,"failed to find current location", Toast.LENGTH_SHORT).show();
 				mlatitude = 37.566352;
 				mlongitude = 126.978103;
 			}
@@ -271,7 +272,7 @@ public class Map extends Activity {
 			
 			if(mProvider.equals(locationManager.GPS_PROVIDER)) {
 				if(mlatitude == 37.566352) {
-					Toast.makeText(Map.this,"failed to find current location", Toast.LENGTH_SHORT).show();
+					Toast.makeText(Map.this,mProvider + "  "+"failed to find current location", Toast.LENGTH_SHORT).show();
 				}
 				else {	
 					GeoPoint tgeopoint = new GeoPoint(mlatitude, mlongitude);
@@ -289,7 +290,7 @@ public class Map extends Activity {
 			String geonameDatabaseFile = "/sdcard/TripWithMe/DATA.sqlite";
 			db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
 			
-			String aSQL = "select ID, NAME, LATITUDE, LONGITUDE "
+			String aSQL = "select *"
 					+ " from DATA"
 					+ " where NAME like ?";
 
@@ -303,21 +304,20 @@ public class Map extends Activity {
 			
 			
 			startManagingCursor(outCursor);
-			ListView list = new ListView(Map.this);
+			ListView list = (ListView) findViewById(R.id.list);
 			
-			String[] columns = new String[] {"name"};
+			String[] columns = new String[] {"NAME"};
 			int[] to = new int[] { R.id.name_entry };
 			
-			SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(this, R.layout.items, outCursor, columns, to);
+			SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(Map.this, R.layout.items, outCursor, columns, to);
 			
-		
-	   //     list.setAdapter(mAdapter);
-	    
-	    //    mapView.addView(list);
-			
-
-			outCursor.close();
-			db.close();
+	        list.setAdapter(mAdapter);
+	        
+	        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mtext.getWindowToken(),0);
+	   			
+			//outCursor.close();
+			//db.close();
 			break;
 
 		default:
@@ -333,7 +333,7 @@ public class Map extends Activity {
 
 			lastLocation = locationManager.getLastKnownLocation(mProvider);
 			if(lastLocation == null) {
-				Toast.makeText(Map.this,"failed to find current location", Toast.LENGTH_LONG).show();
+				Toast.makeText(Map.this,"failed to find current location", Toast.LENGTH_SHORT).show();
 				mlatitude = 37.566352;
 				mlongitude = 126.978103;
 			}
