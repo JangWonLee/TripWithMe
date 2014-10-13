@@ -38,6 +38,10 @@ public class DownloadActivity extends Activity {
 	public void mOnClick(View v) {
 		downloadProgress.setVisibility(View.VISIBLE);
 //		setProgressBarIndeterminateVisibility(true);
+
+		Intent intent = new Intent(this, WebViews.class);
+		startActivity(intent);
+				
 	}
 
 }
