@@ -9,6 +9,11 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.EditText;
+
 
 public class DownloadActivity extends Activity {
 	
@@ -36,8 +41,14 @@ public class DownloadActivity extends Activity {
 	}
 	
 	public void mOnClick(View v) {
-		downloadProgress.setVisibility(View.VISIBLE);
+//		downloadProgress.setVisibility(View.VISIBLE);
 //		setProgressBarIndeterminateVisibility(true);
+		Intent intent = new Intent(this, WebViews.class);
+		startActivity(intent);
+		
+
+		
+		
 	}
 
 }
