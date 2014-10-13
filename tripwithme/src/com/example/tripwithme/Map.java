@@ -143,7 +143,7 @@ public class Map extends Activity {
 	
 		Drawable d;
 		Bitmap bitmap;
-		d = getResources().getDrawable(R.drawable.bluemarker);
+		d = getResources().getDrawable(R.drawable.restaurenticon);
 		d.setBounds(0, 0,d.getIntrinsicWidth(),d.getIntrinsicHeight());
 		bitmap = ((BitmapDrawable) d).getBitmap();
 		mRest = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap,23,32,true));
