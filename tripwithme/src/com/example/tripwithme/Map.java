@@ -379,44 +379,53 @@ public class Map extends Activity {
 	{
 		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
 		
-		
+
 		String aSQL = "select *"
 				+ " from seoulgeoname"
 				+ " where name = ?";  // 여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.
 		
 		String[] args = {""};
-		args[0] = start;
-
-		cursor = db.rawQuery(aSQL, args);
-	
-		
 		
 		double startLa;
 		double startLo;
-	
-		cursor.moveToNext();
+		
+		if(start.equals("Current Location"))
+		{
+			startLa = currentlatitude;
+			startLo = currentlongitude;
+		}
+		else
+		{
+			args[0] = start;
 			
-		startLa = cursor.getDouble(2);
-		startLo = cursor.getDouble(3);
-
+			cursor = db.rawQuery(aSQL, args);
 		
-		args[0] = end;
-		
-		cursor = db.rawQuery(aSQL, args);
-		
-		String mes;
-		mes = "Select Item = " + cursor.getCount();
-		Toast.makeText(Map.this,mes,Toast.LENGTH_SHORT).show();
+			cursor.moveToNext();
+				
+			startLa = cursor.getDouble(2);
+			startLo = cursor.getDouble(3);
+		}
 		
 		double endLa;
 		double endLo;
-
-		cursor.moveToNext();
-			
-		endLa = cursor.getDouble(2);
-		endLo = cursor.getDouble(3);
-
 		
+		if(end.equals("Current Location"))
+		{
+			endLa = currentlatitude;
+			endLo = currentlongitude;
+		}
+		else
+		{
+			args[0] = end;
+			
+			cursor = db.rawQuery(aSQL, args);
+			
+	
+			cursor.moveToNext();
+				
+			endLa = cursor.getDouble(2);
+			endLo = cursor.getDouble(3);
+		}
 	
 		int startSubway = 0;
 		int endSubway = 0;
