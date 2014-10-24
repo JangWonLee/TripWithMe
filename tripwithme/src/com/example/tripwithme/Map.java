@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
@@ -337,6 +338,7 @@ public class Map extends Activity {
 			
 			startManagingCursor(cursor);
 			ListView list = (ListView) findViewById(R.id.list);
+			list.setBackgroundColor(Color.rgb(0, 0, 0));
 			
 			String[] columns = new String[] {"name"};
 			int[] to = new int[] { R.id.name_entry };
