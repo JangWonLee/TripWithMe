@@ -30,6 +30,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -63,21 +66,29 @@ public class Map extends Activity {
 
 	
 	private ImageView dest;
-	private EditText mtext;
-	private EditText desSearchEdit;
+	private AutoCompleteTextView desSearchEdit;
 	private Button mbtn;
 	private TextView departuretext;
 	private TextView arrivaltext;
 	
+	private ArrayList<String> geoList;
+	private ArrayAdapter<String> adapter;
+	
 	private SQLiteDatabase db;
+	private Cursor cursor;
+
 	
 	private MyOwnItemizedOverlay itemizedoverlay3;
+	private MyOwnItemizedOverlay geoSearchLocation;
 
 	private Location lastLocation;
-	private String geonameDatabaseFile = "/sdcard/TripWithMe/DATA.sqlite";
+	private String geonameDatabaseFile = "/sdcard/Download/mapmapkorea.sqlite";
 	private OverlayItem item = null;
 	
 	private int GPSstate; // 0=Not GPS	1=GPS
+	
+	private Subway subway;
+	private Shortest shortest;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -85,11 +96,30 @@ public class Map extends Activity {
 		// init Layout
 		setContentView(R.layout.map);
 
-		mbtn = (Button)findViewById(R.id.dessearchbutton);
-		mtext = (EditText)findViewById(R.id.dessearchedit);
-		
-		desSearchEdit = (EditText)findViewById(R.id.dessearchedit);
+		subway = new Subway();
+		shortest = new Shortest();
+		desSearchEdit = (AutoCompleteTextView)findViewById(R.id.dessearchedit);
 		desSearchEdit.setHint("Search");
+		departuretext = (TextView)findViewById(R.id.departuretext);
+		arrivaltext = (TextView)findViewById(R.id.arrivaltext);
+		
+		geoList = new ArrayList<String>();
+		mbtn = (Button)findViewById(R.id.dessearchbutton);
+		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
+		
+		cursor = db.rawQuery("SELECT * FROM seoulgeoname ", null);
+		
+		int recordCount = cursor.getCount();
+		Toast.makeText(this,"cursor count : " + recordCount, Toast.LENGTH_SHORT).show();
+		
+		for(int i=0; i < cursor.getCount(); i++) {
+			cursor.moveToNext();
+			geoList.add(cursor.getString(1));
+		}
+		
+		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, geoList);
+        
+		desSearchEdit.setAdapter(adapter);
 
 		this.mapLayout = (RelativeLayout)findViewById(R.id.mapLayout);
 
@@ -156,13 +186,13 @@ public class Map extends Activity {
 		d = getResources().getDrawable(R.drawable.currentpositionicon);
 		d.setBounds(0, 0, d.getIntrinsicWidth(),d.getIntrinsicHeight());
 		bitmap = ((BitmapDrawable) d).getBitmap();
-		mNow = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap,100,100,true));
+		mNow = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap,20, 27,true));
 		
 		MyOwnItemizedOverlay itemizedoverlay1 = new MyOwnItemizedOverlay(mRest, this);
 
 		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
 		
-		Cursor cursor = db.rawQuery("SELECT * FROM restaurant", null);
+		cursor = db.rawQuery("SELECT * FROM restaurant", null);
 
 		for(int i=0; i < cursor.getCount(); i++) {
 			cursor.moveToNext();
@@ -204,6 +234,9 @@ public class Map extends Activity {
 			itemizedoverlay3.addItem(item);
 		}
 		mapView.getOverlays().add(itemizedoverlay3.getOverlay());
+		
+		geoSearchLocation = new MyOwnItemizedOverlay(mNow, this);
+		mapView.getOverlays().add(geoSearchLocation.getOverlay());
 	}
 
 	@Override
@@ -287,34 +320,35 @@ public class Map extends Activity {
 			break;
 			
 		case R.id.dessearchbutton:
-			String geonameDatabaseFile = "/sdcard/TripWithMe/DATA.sqlite";
 			db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
 			
 			String aSQL = "select *"
-					+ " from DATA"
+					+ " from seoulgeoname"
 					+ " where NAME like ?";
 
 			String[] args = {""};
-			args[0] = mtext.getText() + "%";
+			args[0] = desSearchEdit.getText() + "%";
 
-			Cursor outCursor = db.rawQuery(aSQL, args);
+			cursor = db.rawQuery(aSQL, args);
 			
-			int recordCount = outCursor.getCount();
+			int recordCount = cursor.getCount();
 			Toast.makeText(this,"cursor count : " + recordCount, Toast.LENGTH_SHORT).show();
 			
 			
-			startManagingCursor(outCursor);
+			startManagingCursor(cursor);
 			ListView list = (ListView) findViewById(R.id.list);
 			
-			String[] columns = new String[] {"NAME"};
+			String[] columns = new String[] {"name"};
 			int[] to = new int[] { R.id.name_entry };
 			
-			SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(Map.this, R.layout.items, outCursor, columns, to);
+			SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(Map.this, R.layout.items, cursor, columns, to);
 			
 	        list.setAdapter(mAdapter);
+	        list.setOnItemClickListener(mItemClickListener);
+	        list.setVisibility(View.VISIBLE);
 	        
 	        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(mtext.getWindowToken(),0);
+           imm.hideSoftInputFromWindow(desSearchEdit.getWindowToken(),0);
 	   			
 			//outCursor.close();
 			//db.close();
@@ -323,6 +357,103 @@ public class Map extends Activity {
 		default:
 			break;
 		}
+	}
+	
+	AdapterView.OnItemClickListener mItemClickListener = 
+			new AdapterView.OnItemClickListener() {
+		public void onItemClick(AdapterView<?> parent, View view, 
+				int position, long id) {
+			geoSearchLocation.clean();
+			GeoPoint geoPoint = new GeoPoint(cursor.getDouble(2), cursor.getDouble(3));
+			mapController.setCenter(geoPoint);
+			item = new OverlayItem(cursor.getString(1)," ",geoPoint);
+			geoSearchLocation.addItem(item);
+			String mes;
+			mes = "Select Item = " + cursor.getDouble(2) + "   " + cursor.getDouble(3);
+			Toast.makeText(Map.this,mes,Toast.LENGTH_SHORT).show();
+			parent.setVisibility(View.INVISIBLE);
+		}
+	};
+	
+	public void findShortestSubwayPath(String start, String end)
+	{
+		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null, SQLiteDatabase.OPEN_READWRITE+SQLiteDatabase.CREATE_IF_NECESSARY);
+		
+		
+		String aSQL = "select *"
+				+ " from seoulgeoname"
+				+ " where name = ?";  // 여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.여기 고쳐야함.
+		
+		String[] args = {""};
+		args[0] = start;
+
+		cursor = db.rawQuery(aSQL, args);
+	
+		
+		
+		double startLa;
+		double startLo;
+	
+		cursor.moveToNext();
+			
+		startLa = cursor.getDouble(2);
+		startLo = cursor.getDouble(3);
+
+		
+		args[0] = end;
+		
+		cursor = db.rawQuery(aSQL, args);
+		
+		String mes;
+		mes = "Select Item = " + cursor.getCount();
+		Toast.makeText(Map.this,mes,Toast.LENGTH_SHORT).show();
+		
+		double endLa;
+		double endLo;
+
+		cursor.moveToNext();
+			
+		endLa = cursor.getDouble(2);
+		endLo = cursor.getDouble(3);
+
+		
+	
+		int startSubway = 0;
+		int endSubway = 0;
+		double startDistance = 99999;
+		double endDistance = 99999;
+		double la;
+		double lo;
+		
+		cursor = db.rawQuery("SELECT * FROM seoulStation", null);
+
+		for(int i=0; i < cursor.getCount(); i++) {
+			cursor.moveToNext();
+			
+			la = cursor.getDouble(6);
+			lo = cursor.getDouble(7);
+			
+			if(((startLa-la)*(startLa-la)+(startLo-lo)*(startLo-lo)) < startDistance)
+			{
+				startDistance = ((startLa-la)*(startLa-la)+(startLo-lo)*(startLo-lo));
+				startSubway = cursor.getInt(1);
+			}
+			if(((endLa-la)*(endLa-la)+(endLo-lo)*(endLo-lo)) < endDistance)
+			{
+				endDistance = ((endLa-la)*(endLa-la)+(endLo-lo)*(endLo-lo));
+				endSubway = cursor.getInt(1);
+			}
+		}
+		Log.i("start", " " + startSubway);
+		Log.i("end", " " + endSubway);
+		
+		subway.Path(startSubway, endSubway, shortest);
+		Intent intent = new Intent(this, SubwayActivity.class);
+		intent.putExtra("shortestTime", shortest.time);
+		intent.putExtra("shortestPath", shortest.path);
+		startActivity(intent);
+		
+			
 	}
 	
 	LocationListener mListener = new LocationListener() {
@@ -393,19 +524,49 @@ public class Map extends Activity {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					departuretext = (TextView)findViewById(R.id.departuretext);
 					departuretext.setText(item.getTitle());
+					if(!departuretext.getText().equals("departure") && !arrivaltext.getText().equals("arrival"))
+					{
+						AlertDialog.Builder dialog2 = new AlertDialog.Builder(mContext);
+						dialog2.setTitle("You");
+						dialog2.setMessage("Want to find shortest path?");
+						dialog2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								findShortestSubwayPath(departuretext.getText().toString(),arrivaltext.getText().toString());
+							}
+						});
+						
+						dialog2.setNegativeButton("close", null);
+						dialog2.show();
+					}
 				}
 			});
 			dialog.setNeutralButton("arrival", new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					arrivaltext = (TextView)findViewById(R.id.arrivaltext);
 					arrivaltext.setText(item.getTitle());
+					if(!departuretext.getText().equals("departure") & !arrivaltext.getText().equals("arrival"))
+					{
+						AlertDialog.Builder dialog2 = new AlertDialog.Builder(mContext);
+						dialog2.setTitle("You");
+						dialog2.setMessage("Want to find shortest path?");
+						dialog2.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								findShortestSubwayPath(departuretext.getText().toString(),arrivaltext.getText().toString());
+							}
+						});
+						dialog2.setNegativeButton("close", null);
+						dialog2.show();
+					}
 				}
 			});
 			dialog.show();
+			
 			return true;
 		}
 		

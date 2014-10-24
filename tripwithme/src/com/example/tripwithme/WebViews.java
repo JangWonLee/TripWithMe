@@ -39,7 +39,7 @@ public class WebViews extends Activity {
 
         webview = (WebView)findViewById(R.id.webview);
         webview.getSettings().setJavaScriptEnabled(true);
-        webview.loadUrl("https://www.dropbox.com/s/0db6us9vxg7fdmi/Seoul.sqlitedb?dl=1");
+        webview.loadUrl("https://docs.google.com/file/d/0B0vdbaa0j01ySkl5RzVIV1dtRzA/edit?usp=docslist_api");
         
         webview.setWebViewClient(new WebViewClientClass());
         

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" 
+    android:orientation="vertical"
+    android:background="#ffffffff">
+
+    <TextView
+ 	    android:id="@+id/shortesttime"
+        android:layout_width="fill_parent"
+        android:layout_height="80dip"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textColor="#ff000000"
+        android:text="시간" />
+    <TextView
+ 	    android:id="@+id/shortestpath"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textColor="#ff000000"
+        android:text="경로" />
+ 
+</LinearLayout>

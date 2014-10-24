@@ -23,7 +23,7 @@ public class Tour extends Activity {
 	
 	private TextView titleText;
 	
-	private String geonameDatabaseFile = "/sdcard/TripWithMe/DATA.sqlite";
+	private String geonameDatabaseFile = "/sdcard/Download/mapmapkorea.sqlite";
 	
 	private SQLiteDatabase db;
 

@@ -9,25 +9,24 @@
         android:layout_height="40dip"
         android:background="#ffd2a272" >
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/dessearchedit"
             android:layout_width="270dip"
             android:layout_height="40dip"
             android:layout_centerHorizontal="true"
             android:background="#ffd2a272"
             android:ems="10"
+            android:completionThreshold="1" 
             android:textColor="#ffffffff"
-            android:textSize="20sp" >
+            android:textSize="20sp" 
+            />
 
-            <requestFocus />
-        </EditText>
 
         <Button
             android:id="@+id/dessearchbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_toRightOf="@+id/dessearchedit"
             android:background="@drawable/search"
             android:onClick="mOnClick" />
         
