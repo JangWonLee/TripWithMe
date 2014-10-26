@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tourdetail_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_2"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/locationbutton"
+        android:layout_width="200dip"
+        android:layout_height="70dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/locationbutton2"
+        android:onClick="mOnClick"
+        android:padding="20dip" />
+
+    <TextView
+        android:id="@+id/tourlistlistdetailtitletext"
+        android:layout_width="fill_parent"
+        android:layout_height="200dip"
+        android:gravity="center"
+        android:textColor="#ffffffff"
+        android:textSize="35dip" />
+
+    <TextView
+        android:id="@+id/tourlistintrotext"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip"
+        android:layout_below="@id/tourlistlistdetailtitletext"
+        android:gravity="center"
+        android:padding="15dip"
+        android:textColor="#ffffffff"
+        android:textSize="25dip" />
+
+    <TextView
+        android:id="@+id/tourlisttelephonetext"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip"
+        android:layout_below="@id/tourlistintrotext"
+        android:gravity="center"
+        android:padding="15dip"
+        android:textColor="#ffffffff"
+        android:textSize="25dip" />
+
+    <TextView
+        android:id="@+id/tourlisttimetext"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip"
+        android:layout_below="@id/tourlisttelephonetext"
+        android:gravity="center"
+        android:padding="15dip"
+        android:textColor="#ffffffff"
+        android:textSize="25dip" />
+
+</RelativeLayout>

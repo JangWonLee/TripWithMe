@@ -1,4 +1,8 @@
-package com.example.tripwithme;
+package kr.hi.mapmapkorea;
+
+import kr.hi.mapmapkorea.util.ViewHelper;
+
+import com.example.tripwithme.R;
 
 import android.support.v4.app.Fragment;
 import android.app.*;
@@ -15,7 +19,8 @@ import android.view.ViewGroup;
 import android.widget.*;
 import android.os.Build;
 
-public class TourDetail extends Activity {
+public class TourDetailActivity extends Activity {
+	private ViewHelper mViewHelper;
 
 	private String name;
 	private String intro;
@@ -34,10 +39,14 @@ public class TourDetail extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.tourlistlistdetail);		      
+		setContentView(R.layout.tourlistlistdetail);
 
-		locationButton = (Button)findViewById(R.id.locationbutton);
+		mViewHelper = new ViewHelper(this);
+		View tourdetailLayout = findViewById(R.id.tourdetail_list);
+		mViewHelper.setGlobalSize((ViewGroup) tourdetailLayout);
 		
+		locationButton = (Button) findViewById(R.id.locationbutton);
+
 		name = getIntent().getExtras().getString("name");
 		intro = getIntent().getExtras().getString("intro");
 		time = getIntent().getExtras().getString("time");
@@ -45,24 +54,21 @@ public class TourDetail extends Activity {
 		latitude = getIntent().getExtras().getDouble("latitude");
 		longitude = getIntent().getExtras().getDouble("longitude");
 
-
-		listDetailTitleText = (TextView)findViewById(R.id.tourlistlistdetailtitletext);
-		introText=(TextView)findViewById(R.id.tourlistintrotext);
-		timeText=(TextView)findViewById(R.id.tourlisttimetext);
-		telephoneText=(TextView)findViewById(R.id.tourlisttelephonetext);
+		listDetailTitleText = (TextView) findViewById(R.id.tourlistlistdetailtitletext);
+		introText = (TextView) findViewById(R.id.tourlistintrotext);
+		timeText = (TextView) findViewById(R.id.tourlisttimetext);
+		telephoneText = (TextView) findViewById(R.id.tourlisttelephonetext);
 
 		listDetailTitleText.setText(name);
 		introText.setText(intro);
 		timeText.setText(time);
 		telephoneText.setText(tel);
 	}
-	
-	public void mOnClick(View v){
-		Intent intent = new Intent(this, Map.class);
+
+	public void mOnClick(View v) {
+		Intent intent = new Intent(this, MapActivity.class);
 		intent.putExtra("latitude", latitude);
 		intent.putExtra("longitude", longitude);
 		startActivity(intent);
-
 	}
 }
-

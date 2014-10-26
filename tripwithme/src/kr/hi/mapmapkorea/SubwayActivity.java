@@ -1,4 +1,6 @@
-package com.example.tripwithme;
+package kr.hi.mapmapkorea;
+
+import com.example.tripwithme.R;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,7 +17,7 @@ public class SubwayActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.subway_activity);
+        setContentView(R.layout.activity_subway);
         shortestTimeText = (TextView)findViewById(R.id.shortesttime);
         shortestPathText = (TextView)findViewById(R.id.shortestpath);
         start = getIntent().getExtras().getString("shortestTime");

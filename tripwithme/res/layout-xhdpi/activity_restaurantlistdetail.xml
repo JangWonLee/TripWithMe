@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/retaurantdetail_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background_2"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/restourantlocationbutton"
+        android:layout_width="200dip"
+        android:layout_height="70dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/locationbutton2"
+        android:onClick="mOnClick"
+        android:padding="20dip" />
+
+    <TextView
+        android:id="@+id/restourantlistdetailtitletext"
+        android:layout_width="fill_parent"
+        android:layout_height="200dip"
+        android:gravity="center"
+        
+        android:textColor="#ffffffff"
+        android:textSize="35dip" />
+
+    <TextView
+        android:id="@+id/restourantintrotext"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip"
+        android:layout_below="@id/restourantlistdetailtitletext"
+        android:gravity="center"
+        android:padding="15dip"
+        android:textColor="#ffffffff"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/restouranttelephonetext"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip"
+        android:layout_below="@id/restourantintrotext"
+        android:gravity="center"
+        android:padding="15dip"
+        android:textColor="#ffffffff"
+        android:textSize="25dip" />
+
+    <TextView
+        android:id="@+id/restouranttimetext"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip"
+        android:layout_below="@id/restouranttelephonetext"
+        android:gravity="center"
+        android:padding="15dip"
+        android:textColor="#ffffffff"
+        android:textSize="25dip" />
+
+    <TextView
+        android:id="@+id/restourantlistdetailmenu1text"
+        android:layout_width="fill_parent"
+        android:layout_height="30dip"
+        android:layout_below="@id/restouranttimetext"
+        android:gravity="center"
+        android:padding="2dip"
+        android:textColor="#ffffffff"
+        android:textSize="25dip" />
+
+    <TextView
+        android:id="@+id/restourantlistdetailmenu2text"
+        android:layout_width="fill_parent"
+        android:layout_height="30dip"
+        android:layout_below="@id/restourantlistdetailmenu1text"
+        android:gravity="center"
+        android:padding="2dip"
+        android:textColor="#ffffffff"
+        android:textSize="25dip" />
+
+    <TextView
+        android:id="@+id/restourantlistdetailmenu3text"
+        android:layout_width="fill_parent"
+        android:layout_height="30dip"
+        android:layout_below="@id/restourantlistdetailmenu2text"
+        android:gravity="center"
+        android:padding="2dip"
+        android:textColor="#ffffffff"
+        android:textSize="25dip" />
+
+</RelativeLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/map_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
@@ -15,83 +16,73 @@
             android:layout_height="40dip"
             android:layout_centerHorizontal="true"
             android:background="#ffd2a272"
+            android:completionThreshold="1"
             android:ems="10"
-            android:completionThreshold="1" 
             android:textColor="#ffffffff"
-            android:textSize="20sp" 
-            />
-
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/dessearchbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
             android:layout_alignParentRight="true"
             android:background="@drawable/search"
             android:onClick="mOnClick" />
-        
     </RelativeLayout>
-
 
     <RelativeLayout
         android:id="@+id/middle"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_below="@id/top" >
-
-
 
         <RelativeLayout
             android:id="@+id/mapLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        
-            <ListView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+        <ListView
             android:id="@+id/list"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="40dip" />
 
         <ImageView
             android:id="@+id/gpsicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
             android:layout_alignParentRight="true"
-            android:maxHeight="40px"
-            android:maxWidth="40px"
+            android:maxHeight="40dip"
+            android:maxWidth="40dip"
             android:onClick="mOnClick"
             android:src="@drawable/gpsicon4" />
-
-
     </RelativeLayout>
-    
-    <LinearLayout 
+
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="40dip"
-        android:layout_alignParentBottom="true">
-        
-        <TextView 
+        android:layout_alignParentBottom="true" >
+
+        <TextView
             android:id="@+id/departuretext"
             android:layout_width="0dip"
-            android:layout_weight="1"
             android:layout_height="30dip"
             android:layout_marginRight="2dip"
+            android:layout_weight="1"
             android:background="#ffd2a272"
             android:gravity="center"
-            android:textColor="#ffffff"
-            android:text="departure" />
-        
+            android:text="departure"
+            android:textColor="#ffffff" />
+
         <TextView
             android:id="@+id/arrivaltext"
             android:layout_width="0dip"
-            android:layout_weight="1"
             android:layout_height="30dip"
             android:layout_marginLeft="2dip"
+            android:layout_weight="1"
             android:background="#ffd2a272"
             android:gravity="center"
-            android:textColor="#ffffff"
-            android:text="arrival" />
-        "
-        
+            android:text="arrival"
+            android:textColor="#ffffff" />
     </LinearLayout>
 
 </RelativeLayout>

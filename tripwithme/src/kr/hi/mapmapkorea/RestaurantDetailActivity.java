@@ -1,4 +1,8 @@
-package com.example.tripwithme;
+package kr.hi.mapmapkorea;
+
+import kr.hi.mapmapkorea.util.ViewHelper;
+
+import com.example.tripwithme.R;
 
 import android.support.v4.app.Fragment;
 import android.app.*;
@@ -15,7 +19,8 @@ import android.view.ViewGroup;
 import android.widget.*;
 import android.os.Build;
 
-public class RestaurantDetail extends Activity {
+public class RestaurantDetailActivity extends Activity {
+	private ViewHelper mViewHelper;
 	
 	private String name;
 	private String intro;
@@ -26,7 +31,7 @@ public class RestaurantDetail extends Activity {
 	private String menu3;
 	private Double latitude;
 	private Double longitude;
-	
+
 	private TextView listDetailTitleText;
 	private TextView introText;
 	private TextView timeText;
@@ -34,16 +39,20 @@ public class RestaurantDetail extends Activity {
 	private TextView listDetailMenuText1;
 	private TextView listDetailMenuText2;
 	private TextView listDetailMenuText3;
-	
+
 	private Button locationButton;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.restourantlistdetail);	
-
-		locationButton = (Button)findViewById(R.id.restourantlocationbutton);
+		setContentView(R.layout.activity_restaurantlistdetail);
 		
+		mViewHelper = new ViewHelper(this);
+		View retaurantdetailLayout = findViewById(R.id.retaurantdetail_layout);
+		mViewHelper.setGlobalSize((ViewGroup) retaurantdetailLayout);
+
+		locationButton = (Button) findViewById(R.id.restourantlocationbutton);
+
 		name = getIntent().getExtras().getString("name");
 		intro = getIntent().getExtras().getString("intro");
 		time = getIntent().getExtras().getString("time");
@@ -54,14 +63,13 @@ public class RestaurantDetail extends Activity {
 		latitude = getIntent().getExtras().getDouble("latitude");
 		longitude = getIntent().getExtras().getDouble("longitude");
 
-
-		listDetailTitleText = (TextView)findViewById(R.id.restourantlistdetailtitletext);
-		introText=(TextView)findViewById(R.id.restourantintrotext);
-		timeText=(TextView)findViewById(R.id.restouranttimetext);
-		telephoneText=(TextView)findViewById(R.id.restouranttelephonetext);
-		listDetailMenuText1=(TextView)findViewById(R.id.restourantlistdetailmenu1text);
-		listDetailMenuText2=(TextView)findViewById(R.id.restourantlistdetailmenu2text);
-		listDetailMenuText3=(TextView)findViewById(R.id.restourantlistdetailmenu3text);
+		listDetailTitleText = (TextView) findViewById(R.id.restourantlistdetailtitletext);
+		introText = (TextView) findViewById(R.id.restourantintrotext);
+		timeText = (TextView) findViewById(R.id.restouranttimetext);
+		telephoneText = (TextView) findViewById(R.id.restouranttelephonetext);
+		listDetailMenuText1 = (TextView) findViewById(R.id.restourantlistdetailmenu1text);
+		listDetailMenuText2 = (TextView) findViewById(R.id.restourantlistdetailmenu2text);
+		listDetailMenuText3 = (TextView) findViewById(R.id.restourantlistdetailmenu3text);
 
 		listDetailTitleText.setText(name);
 		introText.setText(intro);
@@ -72,12 +80,11 @@ public class RestaurantDetail extends Activity {
 		listDetailMenuText3.setText(menu3);
 	}
 
-	public void mOnClick(View v){
-		Intent intent = new Intent(this, Map.class);
+	public void mOnClick(View v) {
+		Intent intent = new Intent(this, MapActivity.class);
 		intent.putExtra("latitude", latitude);
 		intent.putExtra("longitude", longitude);
 		startActivity(intent);
 
 	}
 }
-
