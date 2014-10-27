@@ -39,6 +39,9 @@ public class RestaurantDetailActivity extends Activity {
 	private TextView listDetailMenuText1;
 	private TextView listDetailMenuText2;
 	private TextView listDetailMenuText3;
+	
+	private Typeface mFont;
+	private Typeface jFont;
 
 	private Button locationButton;
 
@@ -50,6 +53,11 @@ public class RestaurantDetailActivity extends Activity {
 		mViewHelper = new ViewHelper(this);
 		View retaurantdetailLayout = findViewById(R.id.retaurantdetail_layout);
 		mViewHelper.setGlobalSize((ViewGroup) retaurantdetailLayout);
+		
+		
+	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+
 
 		locationButton = (Button) findViewById(R.id.restourantlocationbutton);
 

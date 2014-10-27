@@ -31,6 +31,7 @@ public class RestaurantActivity extends Activity {
 	private String geonameDatabaseFile = "/sdcard/Download/mapmapkorea.sqlite";
 
 	private SQLiteDatabase db;
+	private Typeface jFont;
 
 	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState) {
@@ -41,8 +42,10 @@ public class RestaurantActivity extends Activity {
 		View listLayout = findViewById(R.id.list_layout);
 		mViewHelper.setGlobalSize((ViewGroup) listLayout);
 
-		mFont = Typeface.createFromAsset(getAssets(),
-				"fonts/FinenessProBlack.otf");
+		
+	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+
 
 		titleText = (TextView) findViewById(R.id.titletext);
 		titleText.setText("Restaurant List");

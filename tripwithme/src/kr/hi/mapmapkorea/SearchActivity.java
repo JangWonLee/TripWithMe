@@ -38,6 +38,8 @@ public class SearchActivity extends Activity {
 	private ArrayList<String> list;
 	private ArrayAdapter<String> adapter;
 
+	private Typeface jFont;
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
@@ -46,8 +48,10 @@ public class SearchActivity extends Activity {
 		View searchLayout = findViewById(R.id.search_layout);
 		mViewHelper.setGlobalSize((ViewGroup) searchLayout);
 
-		mFont = Typeface.createFromAsset(getAssets(),
-				"fonts/FinenessProBlack.otf");
+		
+	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+
 		selectCityText = (TextView) findViewById(R.id.selectcitytext);
 		orText = (TextView) findViewById(R.id.ortext);
 		searchCityText = (TextView) findViewById(R.id.searchcitytext);

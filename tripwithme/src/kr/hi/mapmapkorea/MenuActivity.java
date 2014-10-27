@@ -24,10 +24,16 @@ public class MenuActivity extends Activity {
 	private Button mapButton;
 	private Button restaurantButton;
 	private Button tourButton;
+	private Typeface mFont;
+	private Typeface jFont;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
+		
+		
+	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
 
 		mViewHelper = new ViewHelper(this);
 		View menuLayout = findViewById(R.id.menu_layout);

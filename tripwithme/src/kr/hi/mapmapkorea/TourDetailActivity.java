@@ -35,11 +35,18 @@ public class TourDetailActivity extends Activity {
 	private Double longitude;
 
 	private Button locationButton;
+	
+	private Typeface mFont;
+	private Typeface jFont;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tourlistlistdetail);
+		
+	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
 
 		mViewHelper = new ViewHelper(this);
 		View tourdetailLayout = findViewById(R.id.tourdetail_list);

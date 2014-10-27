@@ -25,6 +25,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
@@ -93,6 +94,8 @@ public class MapActivity extends Activity {
 
 	private Subway subway;
 	private Shortest shortest;
+	private Typeface mFont;
+	private Typeface jFont;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -103,6 +106,11 @@ public class MapActivity extends Activity {
 		mViewHelper = new ViewHelper(this);
 		View mapLayout = findViewById(R.id.map_layout);
 		mViewHelper.setGlobalSize((ViewGroup) mapLayout);
+		
+		
+	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+
 
 		subway = new Subway();
 		shortest = new Shortest();
@@ -110,6 +118,10 @@ public class MapActivity extends Activity {
 		desSearchEdit.setHint("Search");
 		departuretext = (TextView) findViewById(R.id.departuretext);
 		arrivaltext = (TextView) findViewById(R.id.arrivaltext);
+		
+		desSearchEdit.setTypeface(mFont);
+		departuretext.setTypeface(jFont);
+		arrivaltext.setTypeface(jFont);
 
 		geoList = new ArrayList<String>();
 		mbtn = (Button) findViewById(R.id.dessearchbutton);
@@ -118,6 +130,8 @@ public class MapActivity extends Activity {
 						+ SQLiteDatabase.CREATE_IF_NECESSARY);
 
 		cursor = db.rawQuery("SELECT * FROM seoulgeoname ", null);
+		
+		
 
 		int recordCount = cursor.getCount();
 		Toast.makeText(this, "cursor count : " + recordCount,
@@ -132,6 +146,7 @@ public class MapActivity extends Activity {
 				android.R.layout.simple_dropdown_item_1line, geoList);
 
 		desSearchEdit.setAdapter(adapter);
+		desSearchEdit.setTypeface(mFont);
 
 		this.mapLayout = (RelativeLayout) findViewById(R.id.mapLayout);
 

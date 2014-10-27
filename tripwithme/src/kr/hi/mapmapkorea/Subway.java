@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.widget.TextView;
 
 class Shortest {
@@ -19,6 +20,7 @@ class Subway {
 														// ����Ʈ���� ��Ÿ���� �迭
 	private SQLiteDatabase db;
 	private String geonameDatabaseFile = "/sdcard/Download/mapmapkorea.sqlite";
+	
 
 	public Subway() // Subway ����(������� �ʱ�ȭ)
 	{
