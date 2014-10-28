@@ -52,7 +52,7 @@ import com.example.tripwithme.R;
 
 public class MapActivity extends Activity {
 	private static int selectDialog;
-	
+
 	private ViewHelper mViewHelper;
 	// layout
 	private RelativeLayout mapLayout;
@@ -66,6 +66,8 @@ public class MapActivity extends Activity {
 
 	private LocationManager locationManager;
 	private String mProvider;
+	
+	private String strColor;
 
 	private double mlatitude;
 	private double mlongitude;
@@ -73,7 +75,7 @@ public class MapActivity extends Activity {
 	private double currentlongitude;
 	private double startlatitude;
 	private double startlongitude;
-	
+
 	private ListView destSearchlist;
 	private CharSequence desSearchEdittext;
 
@@ -107,20 +109,22 @@ public class MapActivity extends Activity {
 
 	private Typeface mFont;
 	private Typeface jFont;
-	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// init Layout
 		setContentView(R.layout.activity_map);
+		
+		strColor = "#ff291c73"; 
 
 		mViewHelper = new ViewHelper(this);
 		View mapLayout = findViewById(R.id.map_layout);
 		mViewHelper.setGlobalSize((ViewGroup) mapLayout);
 
 		jFont = Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
-		mFont=Typeface.createFromAsset(getAssets(), "fonts/Anysome Italic.otf");
+		mFont = Typeface.createFromAsset(getAssets(),
+				"fonts/Anysome Italic.otf");
 
 		subway = new Subway();
 		shortest = new Shortest();
@@ -128,10 +132,10 @@ public class MapActivity extends Activity {
 		desSearchEdit.setHint("Search");
 		departuretext = (TextView) findViewById(R.id.departuretext);
 		arrivaltext = (TextView) findViewById(R.id.arrivaltext);
-		submenu = (ImageView)findViewById(R.id.submenu);
-		restsubmenu = (ImageView)findViewById(R.id.restsubmenu);
-		stationsubmenu = (ImageView)findViewById(R.id.stationsubmenu);
-		attractionsub = (ImageView)findViewById(R.id.attractionsub);
+		submenu = (ImageView) findViewById(R.id.submenu);
+		restsubmenu = (ImageView) findViewById(R.id.restsubmenu);
+		stationsubmenu = (ImageView) findViewById(R.id.stationsubmenu);
+		attractionsub = (ImageView) findViewById(R.id.attractionsub);
 
 		desSearchEdit.setTypeface(mFont);
 		departuretext.setTypeface(mFont);
@@ -163,18 +167,21 @@ public class MapActivity extends Activity {
 		this.mapLayout = (RelativeLayout) findViewById(R.id.mapLayout);
 
 		// init Offline Map
-		File from      = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download", "0B0vdbaa0j01ySkl5RzVIV1dtRzA.bin");
-        File to        = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download", "Seoul.sqlitedb");	
-		if(from.exists())
+		File from = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download",
+				"0B0vdbaa0j01ySkl5RzVIV1dtRzA.bin");
+		File to = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
+		if (from.exists())
 			from.renameTo(to);
-		File map        = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download", "Seoul.sqlitedb");
-		if(!map.exists())
-		{
-			Toast.makeText(this, "Please download map",
-					Toast.LENGTH_SHORT).show();
+		File map = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
+		if (!map.exists()) {
+			Toast.makeText(this, "Please download map", Toast.LENGTH_SHORT)
+					.show();
 			return;
 		}
-        this.mapView = new OfflineMapView(this, "Download/Seoul.sqlitedb");
+		this.mapView = new OfflineMapView(this, "Download/Seoul.sqlitedb");
 		this.mapController = mapView.getController();
 
 		// set Zoom Countrol
@@ -386,14 +393,20 @@ public class MapActivity extends Activity {
 						0);
 			}
 			break;
-			
+
 		case R.id.submenu:
-			stationsubmenu.setVisibility(View.VISIBLE);
-			restsubmenu.setVisibility(View.VISIBLE);
-			attractionsub.setVisibility(View.VISIBLE);	
-			break;
-			
-			
+			if (stationsubmenu.isShown() == false) {
+				stationsubmenu.setVisibility(View.VISIBLE);
+				restsubmenu.setVisibility(View.VISIBLE);
+				attractionsub.setVisibility(View.VISIBLE);
+				break;
+			} else if (stationsubmenu.isShown() == true) {
+				stationsubmenu.setVisibility(View.INVISIBLE);
+				restsubmenu.setVisibility(View.INVISIBLE);
+				attractionsub.setVisibility(View.INVISIBLE);
+				break;
+
+			}
 
 		case R.id.dessearchbutton:
 			// db OPEN
@@ -408,37 +421,37 @@ public class MapActivity extends Activity {
 			args[0] = desSearchEdit.getText() + "%";
 
 			cursor = db.rawQuery(aSQL, args);
-			
+
 			int cursorCount = cursor.getCount();
 			Log.i("cursorCount", cursorCount + "");
-			
+
 			if (cursorCount > 1) {
 				// 검색결과가 여러개이면 List 만듬
 				startManagingCursor(cursor);
 				destSearchlist = (ListView) findViewById(R.id.list);
 				destSearchlist.setBackgroundColor(Color.rgb(0, 0, 0));
-				
+
 				String[] columns = new String[] { "name" };
 				int[] to = new int[] { R.id.name_entry };
 				Log.i("to", to + "");
-				
-				
+
 				SimpleCursorAdapter mAdapter = new SimpleCursorAdapter(
 						MapActivity.this, R.layout.items, cursor, columns, to);
-				
+
 				destSearchlist.setAdapter(mAdapter);
 				destSearchlist.setOnItemClickListener(mItemClickListener);
 				destSearchlist.setVisibility(View.VISIBLE);
-				
+
 				InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				inputMethodManager.hideSoftInputFromWindow(desSearchEdit.getWindowToken(), 0);
+				inputMethodManager.hideSoftInputFromWindow(
+						desSearchEdit.getWindowToken(), 0);
 			} else if (cursorCount == 1) {
 				// 검색결과가 한개 이면 바로 이동 , List 안만듬
 				cursor.moveToNext();
-				
+
 				desSearchEdittext = desSearchEdit.getText();
 				Log.i("desSearchEdittext", desSearchEdittext + "");
-				
+
 				geoSearchLocation.clean();
 				GeoPoint geoPoint = new GeoPoint(cursor.getDouble(2),
 						cursor.getDouble(3));
@@ -448,14 +461,17 @@ public class MapActivity extends Activity {
 				String mes;
 				mes = "Select Item = " + cursor.getDouble(2) + "   "
 						+ cursor.getDouble(3);
-				Toast.makeText(MapActivity.this, mes, Toast.LENGTH_SHORT).show();
-				
-//				destSearchlist.setVisibility(View.INVISIBLE);
-//				parent.setVisibility(View.INVISIBLE);
-				
+				Toast.makeText(MapActivity.this, mes, Toast.LENGTH_SHORT)
+						.show();
+
+				// destSearchlist.setVisibility(View.INVISIBLE);
+				// parent.setVisibility(View.INVISIBLE);
+
 			} else {
-				Toast.makeText(MapActivity.this, "Did not match any place.\nTry different keywords", Toast.LENGTH_SHORT).show();
-//				destSearchlist.setVisibility(View.INVISIBLE);
+				Toast.makeText(MapActivity.this,
+						"Did not match any place.\nTry different keywords",
+						Toast.LENGTH_SHORT).show();
+				// destSearchlist.setVisibility(View.INVISIBLE);
 			}
 
 			// outCursor.close();
@@ -574,31 +590,35 @@ public class MapActivity extends Activity {
 		Log.i("end", " " + endSubway);
 
 		subway.Path(startSubway, endSubway, shortest);
-		
+
 		setDialogBrief();
 	}
 
 	private void setDialogTotal() {
 		AlertDialog.Builder ab2 = new AlertDialog.Builder(MapActivity.this);
-		ab2.setTitle(" All Path").setMessage("시간" + shortest.time + "\n\n\n\n" + "경로" + shortest.path);
-		ab2.setPositiveButton("Brief Path", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				setDialogBrief();
-				dialog.cancel();
-			}
-		}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
-			}
-		});
-		ab2.show(); 
+		ab2.setTitle(" All Path").setMessage(
+				"시간" + shortest.time + "\n\n\n\n" + "경로" + shortest.path);
+		ab2.setPositiveButton("Brief Path",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						setDialogBrief();
+						dialog.cancel();
+					}
+				}).setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+		ab2.show();
 	}
 
 	private void setDialogBrief() {
 		AlertDialog.Builder ab = new AlertDialog.Builder(MapActivity.this);
-		ab.setTitle(" You need to go..").setMessage("시간" + shortest.time + "\n\n\n\n" + "경로" + shortest.path);
+		ab.setTitle(" You need to go..").setMessage(
+				"시간" + shortest.time + "\n\n\n\n" + "경로" + shortest.path);
 		ab.setPositiveButton("All Path", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -694,7 +714,7 @@ public class MapActivity extends Activity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							departuretext.setText(item.getTitle());
-							departuretext.setTextColor(Color.RED);
+							departuretext.setTextColor(Color.parseColor(strColor));
 							if (!departuretext.getText().equals("departure")
 									&& !arrivaltext.getText().equals("arrival")) {
 								AlertDialog.Builder dialog2 = new AlertDialog.Builder(
@@ -727,7 +747,7 @@ public class MapActivity extends Activity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							arrivaltext.setText(item.getTitle());
-							arrivaltext.setTextColor(Color.RED);
+							arrivaltext.setTextColor(Color.parseColor(strColor));
 							if (!departuretext.getText().equals("departure")
 									& !arrivaltext.getText().equals("arrival")) {
 								AlertDialog.Builder dialog2 = new AlertDialog.Builder(
