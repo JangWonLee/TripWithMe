@@ -179,7 +179,7 @@ public class MapActivity extends Activity {
 		if (!map.exists()) {
 			Toast.makeText(this, "Please download map", Toast.LENGTH_SHORT)
 					.show();
-			return;
+			this.finish();
 		}
 		this.mapView = new OfflineMapView(this, "Download/Seoul.sqlitedb");
 		this.mapController = mapView.getController();
@@ -597,7 +597,7 @@ public class MapActivity extends Activity {
 	private void setDialogTotal() {
 		AlertDialog.Builder ab2 = new AlertDialog.Builder(MapActivity.this);
 		ab2.setTitle(" All Path").setMessage(
-				"시간" + shortest.time + "\n\n\n\n" + "경로" + shortest.path);
+				"시간" + shortest.time + "\n\n\n\n" + "경로" + shortest.totalPath);
 		ab2.setPositiveButton("Brief Path",
 				new DialogInterface.OnClickListener() {
 					@Override
@@ -618,7 +618,7 @@ public class MapActivity extends Activity {
 	private void setDialogBrief() {
 		AlertDialog.Builder ab = new AlertDialog.Builder(MapActivity.this);
 		ab.setTitle(" You need to go..").setMessage(
-				"시간" + shortest.time + "\n\n\n\n" + "경로" + shortest.path);
+				"시간" + shortest.time + "\n\n\n\n" + "경로" + shortest.briefPath);
 		ab.setPositiveButton("All Path", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

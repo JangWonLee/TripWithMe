@@ -9,7 +9,8 @@ import android.widget.TextView;
 
 class Shortest {
 	public String time;
-	public String path;
+	public String briefPath;
+	public String totalPath;
 }
 
 class Subway {
@@ -212,8 +213,9 @@ class Subway {
 
 		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
 				SQLiteDatabase.OPEN_READWRITE
-				+ SQLiteDatabase.CREATE_IF_NECESSARY);
+						+ SQLiteDatabase.CREATE_IF_NECESSARY);
 		Cursor cursor;
+		Cursor cursor2;
 
 		Stack<Integer> s = new Stack<Integer>();
 		s.push(y);
@@ -232,65 +234,86 @@ class Subway {
 				break;
 		}
 
-		shortest.path = "최단경로: ";
+		shortest.briefPath = "";
+		shortest.totalPath = "";
 
 		int count = 0;
+		int pathAry[] = new int[100];
 		while (!s.empty()) {
-			u = s.pop();
-			if (s.empty()) // 마지막역이고 환승역이 아닌 경우
+			pathAry[count] = s.pop();
+			count++;
+		}
+
+		for (int i = 0; i < count; i++) {
+			if (i == count - 1) // 마지막역이고 환승역이 아닌 경우
 			{
 				cursor = db.rawQuery("select * FROM seoulStation Where num = "
-						+ u, null);
+						+ pathAry[i], null);
 				cursor.moveToNext();
-				shortest.path += " " + cursor.getString(2);
+				shortest.briefPath += "Line " + cursor.getInt(3) + " : "
+						+ cursor.getString(2);
+				shortest.totalPath += "Line " + cursor.getInt(3) + " : "
+						+ cursor.getString(2);
+				;
+
 				// shortest.path += " " + cursor.getCount() ;
 				// shortest.path += " " + (u+1) ;
 				break;
 			}
-			v = s.pop();
 
-			if (length[u][v] == 5) // 환승역인경우
+			if (length[pathAry[i]][pathAry[i + 1]] == 5) // 환승역인경우
 			{
 				cursor = db.rawQuery("select * FROM seoulStation Where num = "
-						+ u, null);
+						+ pathAry[i], null);
 				cursor.moveToNext();
-				shortest.path += " " + cursor.getString(2) + "[["
-						+ cursor.getInt(3) + "]]";
+				cursor2 = db.rawQuery("select * FROM seoulStation Where num = "
+						+ pathAry[i + 1], null);
+				cursor2.moveToNext();
+
+				shortest.briefPath += cursor.getInt(3) + " -> "
+						+ cursor2.getInt(3) + " : " + cursor.getString(2)
+						+ "\n";
+				shortest.totalPath += "Line " + cursor.getInt(3) + " : "
+						+ cursor.getString(2) + "\n";
+
 				// shortest.path += " " + (u+1) ;
 
-				shortest.path += " (환승)";
-				cursor = db.rawQuery("select * FROM seoulStation Where num = "
-						+ v, null);
-				cursor.moveToNext();
-				shortest.path += " " + cursor.getString(2) + "[["
-						+ cursor.getInt(3) + "]]";
 				// shortest.path += " " + (v+1);
 
-				if (s.empty())
+				if (i == 0)
 					break; // 마지막역이고 환승역인 경우
-				shortest.path += " ->";
+				// shortest.briefPath += " ->";
 			} else // 환승역이 아닌 경우
 			{
 
-				s.push(v);
-				if (count == 1) {
-					cursor = db
-							.rawQuery("select * FROM seoulStation Where num = "
-									+ u, null);
+				if (i == 0) {
+					cursor = db.rawQuery(
+							"select * FROM seoulStation Where num = "
+									+ pathAry[i], null);
 					cursor.moveToNext();
-					shortest.path += " " + cursor.getString(2) + "[["
-							+ cursor.getInt(3) + "]]" + " -> ";
+					shortest.briefPath += "Line " + cursor.getInt(3) + " : "
+							+ cursor.getString(2)
+							+ "\n            [ Direction : ";
+					cursor = db.rawQuery(
+							"select * FROM seoulStation Where num = "
+									+ pathAry[i + 1], null);
+					cursor.moveToNext();
+
+					shortest.briefPath += cursor.getString(2) + " ]" + "\n";
 					// shortest.path += " " + (u+1) + " -> ";
 				}
-				count++;
-
+				cursor = db.rawQuery("select * FROM seoulStation Where num = "
+						+ pathAry[i], null);
+				cursor.moveToNext();
+				shortest.totalPath += "Line " + cursor.getInt(3) + " : "
+						+ cursor.getString(2) + "\n";
 			}
 		}
 
 		// String S = new String();
 		// distText.setText(dist[y]+" ");
 		// distText.setText("??????????");
-		shortest.time = "최단시간 = " + dist[y] + "분";
+		shortest.time = "Shortest Time = " + dist[y] + "분";
 	}
 
 	private TextView findViewById(int top) {
