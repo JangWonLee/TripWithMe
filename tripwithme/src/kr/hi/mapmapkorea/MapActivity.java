@@ -22,6 +22,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources.Theme;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -668,6 +669,7 @@ public class MapActivity extends Activity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							departuretext.setText(item.getTitle());
+							departuretext.setTextColor(Color.RED);
 							if (!departuretext.getText().equals("departure")
 									&& !arrivaltext.getText().equals("arrival")) {
 								AlertDialog.Builder dialog2 = new AlertDialog.Builder(
@@ -700,6 +702,7 @@ public class MapActivity extends Activity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							arrivaltext.setText(item.getTitle());
+							arrivaltext.setTextColor(Color.RED);
 							if (!departuretext.getText().equals("departure")
 									& !arrivaltext.getText().equals("arrival")) {
 								AlertDialog.Builder dialog2 = new AlertDialog.Builder(
