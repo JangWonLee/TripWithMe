@@ -424,12 +424,12 @@ public class MapActivity extends Activity {
 						+ cursor.getDouble(3);
 				Toast.makeText(MapActivity.this, mes, Toast.LENGTH_SHORT).show();
 				
-				destSearchlist.setVisibility(View.INVISIBLE);
+//				destSearchlist.setVisibility(View.INVISIBLE);
 //				parent.setVisibility(View.INVISIBLE);
 				
 			} else {
 				Toast.makeText(MapActivity.this, "Did not match any place.\nTry different keywords", Toast.LENGTH_SHORT).show();
-				destSearchlist.setVisibility(View.INVISIBLE);
+//				destSearchlist.setVisibility(View.INVISIBLE);
 			}
 
 			// outCursor.close();
