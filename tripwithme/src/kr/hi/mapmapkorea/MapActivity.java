@@ -2,8 +2,8 @@ package kr.hi.mapmapkorea;
 
 import idv.hondadai.offlinemap.views.OfflineMapView;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import kr.hi.mapmapkorea.util.ViewHelper;
 
@@ -15,14 +15,11 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
-import com.example.tripwithme.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources.Theme;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -35,7 +32,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.text.Editable;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,13 +41,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.tripwithme.R;
 
 public class MapActivity extends Activity {
 	private static int selectDialog;
@@ -84,6 +82,10 @@ public class MapActivity extends Activity {
 	private Button mbtn;
 	private TextView departuretext;
 	private TextView arrivaltext;
+	private ImageView submenu;
+	private ImageView restsubmenu;
+	private ImageView stationsubmenu;
+	private ImageView attractionsub;
 
 	private ArrayList<String> geoList;
 	private ArrayAdapter<String> adapter;
@@ -105,6 +107,7 @@ public class MapActivity extends Activity {
 
 	private Typeface mFont;
 	private Typeface jFont;
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -117,8 +120,7 @@ public class MapActivity extends Activity {
 		mViewHelper.setGlobalSize((ViewGroup) mapLayout);
 
 		jFont = Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
-		mFont = Typeface.createFromAsset(getAssets(),
-				"fonts/FinenessProBlack.otf");
+		mFont=Typeface.createFromAsset(getAssets(), "fonts/Anysome Italic.otf");
 
 		subway = new Subway();
 		shortest = new Shortest();
@@ -126,10 +128,14 @@ public class MapActivity extends Activity {
 		desSearchEdit.setHint("Search");
 		departuretext = (TextView) findViewById(R.id.departuretext);
 		arrivaltext = (TextView) findViewById(R.id.arrivaltext);
+		submenu = (ImageView)findViewById(R.id.submenu);
+		restsubmenu = (ImageView)findViewById(R.id.restsubmenu);
+		stationsubmenu = (ImageView)findViewById(R.id.stationsubmenu);
+		attractionsub = (ImageView)findViewById(R.id.attractionsub);
 
 		desSearchEdit.setTypeface(mFont);
-		departuretext.setTypeface(jFont);
-		arrivaltext.setTypeface(jFont);
+		departuretext.setTypeface(mFont);
+		arrivaltext.setTypeface(mFont);
 
 		geoList = new ArrayList<String>();
 		mbtn = (Button) findViewById(R.id.dessearchbutton);
@@ -157,7 +163,18 @@ public class MapActivity extends Activity {
 		this.mapLayout = (RelativeLayout) findViewById(R.id.mapLayout);
 
 		// init Offline Map
-		this.mapView = new OfflineMapView(this, "TripWithMe/Seoul.sqlitedb");
+		File from      = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download", "0B0vdbaa0j01ySkl5RzVIV1dtRzA.bin");
+        File to        = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download", "Seoul.sqlitedb");	
+		if(from.exists())
+			from.renameTo(to);
+		File map        = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download", "Seoul.sqlitedb");
+		if(!map.exists())
+		{
+			Toast.makeText(this, "Please download map",
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+        this.mapView = new OfflineMapView(this, "Download/Seoul.sqlitedb");
 		this.mapController = mapView.getController();
 
 		// set Zoom Countrol
@@ -369,6 +386,14 @@ public class MapActivity extends Activity {
 						0);
 			}
 			break;
+			
+		case R.id.submenu:
+			stationsubmenu.setVisibility(View.VISIBLE);
+			restsubmenu.setVisibility(View.VISIBLE);
+			attractionsub.setVisibility(View.VISIBLE);	
+			break;
+			
+			
 
 		case R.id.dessearchbutton:
 			// db OPEN

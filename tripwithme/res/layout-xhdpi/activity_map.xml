@@ -53,8 +53,67 @@
             android:layout_alignParentRight="true"
             android:maxHeight="40dip"
             android:maxWidth="40dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginRight="2dip"
             android:onClick="mOnClick"
             android:src="@drawable/gpsicon4" />
+        
+        <ImageView
+            android:id="@+id/submenu"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:maxHeight="40dip"
+            android:maxWidth="40dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginRight="2dip"
+            android:onClick="mOnClick"
+            android:src="@drawable/submenu"
+            android:layout_below="@id/gpsicon"
+            android:visibility="visible"/>
+        
+         <ImageView
+            android:id="@+id/stationsubmenu"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:maxHeight="40dip"
+            android:maxWidth="40dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginRight="2dip"
+            android:onClick="mOnClick"
+            android:src="@drawable/stationsubmenu"
+            android:layout_below="@id/submenu"
+            android:visibility="invisible"/>
+         
+        <ImageView
+            android:id="@+id/restsubmenu"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:maxHeight="40dip"
+            android:maxWidth="40dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginRight="2dip"
+            android:onClick="mOnClick"
+            android:src="@drawable/restsubmenu"
+            android:layout_below="@id/stationsubmenu"
+            android:visibility="invisible"/>
+                
+        <ImageView
+            android:id="@+id/attractionsub"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_alignParentRight="true"
+            android:maxHeight="40dip"
+            android:maxWidth="40dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginRight="2dip"
+            android:onClick="mOnClick"
+            android:src="@drawable/attractionsub"
+            android:layout_below="@id/restsubmenu"
+            android:visibility="invisible"/>
+        
     </RelativeLayout>
 
     <LinearLayout
