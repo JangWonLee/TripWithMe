@@ -19,6 +19,7 @@ public class IntroActivity extends Activity {
 	private Handler handler_intro;
 	private Typeface mFont;
 	private Typeface jFont;
+	private Typeface kFont;
 
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class IntroActivity extends Activity {
 		
 	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
 	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+	    kFont=Typeface.createFromAsset(getAssets(), "fonts/YoureInvited.otf");
 		
 		mViewHelper = new ViewHelper(this);
 		View introLayout = findViewById(R.id.intro_layout);

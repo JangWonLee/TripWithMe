@@ -39,6 +39,7 @@ public class SearchActivity extends Activity {
 	private ArrayAdapter<String> adapter;
 
 	private Typeface jFont;
+	private Typeface kFont;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,8 +50,9 @@ public class SearchActivity extends Activity {
 		mViewHelper.setGlobalSize((ViewGroup) searchLayout);
 
 		
-	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
-	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+        jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+        mFont=Typeface.createFromAsset(getAssets(), "fonts/Anysome Italic.otf");
+        kFont=Typeface.createFromAsset(getAssets(), "fonts/dearJoe 6 TRIAL.otf");
 
 		selectCityText = (TextView) findViewById(R.id.selectcitytext);
 		orText = (TextView) findViewById(R.id.ortext);
@@ -59,9 +61,9 @@ public class SearchActivity extends Activity {
 		searchButton = (Button) findViewById(R.id.searchbutton);
 		seoulButton = (Button) findViewById(R.id.seoulbutton);
 
-		selectCityText.setTypeface(mFont);
-		orText.setTypeface(mFont);
-		searchCityText.setTypeface(mFont);
+		selectCityText.setTypeface(kFont);
+		orText.setTypeface(kFont);
+		searchCityText.setTypeface(kFont);
 
 		list = new ArrayList<String>();
 		list.add("Seoul");
@@ -70,6 +72,11 @@ public class SearchActivity extends Activity {
 		list.add("Jeju");
 		list.add("Incheon");
 		list.add("Naju");
+		
+		autoEdit.setTypeface(kFont);
+		searchButton.setTypeface(jFont);
+		seoulButton.setTypeface(mFont);
+		
 
 		adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, list);

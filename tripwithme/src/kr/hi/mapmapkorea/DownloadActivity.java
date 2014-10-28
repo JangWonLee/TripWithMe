@@ -21,6 +21,7 @@ public class DownloadActivity extends Activity {
 	
 	private Typeface mFont;
 	private Typeface jFont;
+	private Typeface kFont;
 
 	ProgressBar downloadProgress;
 
@@ -29,25 +30,26 @@ public class DownloadActivity extends Activity {
 		setContentView(R.layout.activity_download);
 
 		downloadButton = (Button) findViewById(R.id.downloadbutton);
-		downloadProgress = (ProgressBar) findViewById(R.id.downloadprogress);
+//		downloadProgress = (ProgressBar) findViewById(R.id.downloadprogress);
 		regionText = (TextView) findViewById(R.id.regiontext);
 		msg = getIntent().getExtras().getString("msg");
 		
 		
 	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
 	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+	    kFont=Typeface.createFromAsset(getAssets(), "fonts/YoureInvited.otf");
 
 
 		regionText.setText(msg);
 		regionText.setVisibility(View.VISIBLE);
 		
-		downloadButton.setTypeface(jFont);
+		downloadButton.setTypeface(mFont);
 		
 
 	}
 
 	public void mOnClick(View v) {
-		downloadProgress.setVisibility(View.VISIBLE);
+//		downloadProgress.setVisibility(View.VISIBLE);
 		// setProgressBarIndeterminateVisibility(true);
 
 		Intent intent = new Intent(this, WebViews.class);

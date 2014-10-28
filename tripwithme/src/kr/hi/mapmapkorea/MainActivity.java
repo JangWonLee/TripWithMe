@@ -18,6 +18,7 @@ public class MainActivity extends Activity {
 	
 	private Typeface mFont;
 	private Typeface jFont;
+	private Typeface kFont;
 	
 	private Button englishButton;
 	private Button chinaButton;
@@ -36,7 +37,8 @@ public class MainActivity extends Activity {
 		mViewHelper.setGlobalSize((ViewGroup) mainLayout);
         
         jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
-        mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+        mFont=Typeface.createFromAsset(getAssets(), "fonts/Anysome Italic.otf");
+        kFont=Typeface.createFromAsset(getAssets(), "fonts/dearJoe 6 TRIAL.otf");
         
         englishButton = (Button)findViewById(R.id.englishbutton);
         chinaButton = (Button)findViewById(R.id.chinabutton);
@@ -46,7 +48,7 @@ public class MainActivity extends Activity {
         englishButton.setTypeface(mFont);
         chinaButton.setTypeface(mFont);
         japanButton.setTypeface(mFont);
-        selectLanguageText.setTypeface(jFont);
+        selectLanguageText.setTypeface(kFont);
     }
     
     public void mOnClick(View v) {

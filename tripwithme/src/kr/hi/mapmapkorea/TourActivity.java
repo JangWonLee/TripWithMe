@@ -32,6 +32,7 @@ public class TourActivity extends Activity {
 	private SQLiteDatabase db;
 	
 	private Typeface jFont;
+	private Typeface kFont;
 
 	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,9 +43,9 @@ public class TourActivity extends Activity {
 		View listLayout = findViewById(R.id.list_layout);
 		mViewHelper.setGlobalSize((ViewGroup) listLayout);
 
-	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
-	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
-
+        jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+        mFont=Typeface.createFromAsset(getAssets(), "fonts/Anysome Italic.otf");
+        kFont=Typeface.createFromAsset(getAssets(), "fonts/dearJoe 6 TRIAL.otf");
 		titleText = (TextView) findViewById(R.id.titletext);
 		titleText.setText("Tour List");
 		titleText.setTypeface(mFont);

@@ -20,7 +20,8 @@
         android:layout_marginTop="100dip"
         android:completionThreshold="1"
         android:hint="search"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:textSize="15dip"/>
 
     <Button
         android:id="@+id/searchbutton"
@@ -28,8 +29,11 @@
         android:layout_height="35dip"
         android:layout_marginTop="100dip"
         android:layout_toRightOf="@id/autoedit"
-        android:background="@drawable/searchbutton"
-        android:onClick="mOnClick" />
+        android:background="#ff5D5D5D"
+        android:text="select"
+        android:textColor="#ffffffff"
+        android:onClick="mOnClick"
+        android:textSize="18dip" />
     <Button
         android:id="@+id/seoulbutton"
         android:layout_width="fill_parent"

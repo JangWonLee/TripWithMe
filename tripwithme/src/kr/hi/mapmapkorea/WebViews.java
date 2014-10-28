@@ -36,6 +36,7 @@ public class WebViews extends Activity {
 	
 	private Typeface mFont;
 	private Typeface jFont;
+	private Typeface kFont;
 		
 
 	@Override
@@ -45,6 +46,7 @@ public class WebViews extends Activity {
 		
         jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
         mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+        kFont=Typeface.createFromAsset(getAssets(), "fonts/YoureInvited.otf");
 		
 		mViewHelper = new ViewHelper(this);
 		View webviewsLayout = findViewById(R.id.tab2);

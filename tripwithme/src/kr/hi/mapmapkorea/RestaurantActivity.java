@@ -32,6 +32,8 @@ public class RestaurantActivity extends Activity {
 
 	private SQLiteDatabase db;
 	private Typeface jFont;
+	private Typeface kFont;
+	
 
 	@SuppressWarnings("deprecation")
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,13 +45,16 @@ public class RestaurantActivity extends Activity {
 		mViewHelper.setGlobalSize((ViewGroup) listLayout);
 
 		
-	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
-	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+        jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+        mFont=Typeface.createFromAsset(getAssets(), "fonts/Anysome Italic.otf");
+        kFont=Typeface.createFromAsset(getAssets(), "fonts/dearJoe 6 TRIAL.otf");
 
 
 		titleText = (TextView) findViewById(R.id.titletext);
 		titleText.setText("Restaurant List");
 		titleText.setTypeface(mFont);
+		
+		
 
 		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
 				SQLiteDatabase.OPEN_READWRITE
@@ -66,6 +71,7 @@ public class RestaurantActivity extends Activity {
 
 		listView = (ListView) findViewById(R.id.listview);
 		listView.setAdapter(Adapter);
+		
 
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,

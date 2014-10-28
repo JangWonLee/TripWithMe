@@ -26,14 +26,17 @@ public class MenuActivity extends Activity {
 	private Button tourButton;
 	private Typeface mFont;
 	private Typeface jFont;
+	private Typeface kFont;
+	private TextView selectText;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_menu);
 		
 		
-	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
-	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+        jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+        mFont=Typeface.createFromAsset(getAssets(), "fonts/Anysome Italic.otf");
+        kFont=Typeface.createFromAsset(getAssets(), "fonts/dearJoe 6 TRIAL.otf");
 
 		mViewHelper = new ViewHelper(this);
 		View menuLayout = findViewById(R.id.menu_layout);
@@ -42,6 +45,11 @@ public class MenuActivity extends Activity {
 		mapButton = (Button) findViewById(R.id.mapbutton);
 		restaurantButton = (Button) findViewById(R.id.restaurantbutton);
 		tourButton = (Button) findViewById(R.id.tourbutton);
+		selectText = (TextView)findViewById(R.id.selectmenu2);
+		
+		selectText.setTypeface(kFont);
+		
+		
 	}
 
 	public void mOnClick(View v) {

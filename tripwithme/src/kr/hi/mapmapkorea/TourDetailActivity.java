@@ -38,6 +38,7 @@ public class TourDetailActivity extends Activity {
 	
 	private Typeface mFont;
 	private Typeface jFont;
+	private Typeface kFont;
 
 
 	@Override
@@ -45,9 +46,9 @@ public class TourDetailActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tourlistlistdetail);
 		
-	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
-	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
-
+        jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+        mFont=Typeface.createFromAsset(getAssets(), "fonts/Anysome Italic.otf");
+        kFont=Typeface.createFromAsset(getAssets(), "fonts/dearJoe 6 TRIAL.otf");
 		mViewHelper = new ViewHelper(this);
 		View tourdetailLayout = findViewById(R.id.tourdetail_list);
 		mViewHelper.setGlobalSize((ViewGroup) tourdetailLayout);
@@ -70,6 +71,12 @@ public class TourDetailActivity extends Activity {
 		introText.setText(intro);
 		timeText.setText(time);
 		telephoneText.setText(tel);
+		
+		listDetailTitleText.setTypeface(mFont);
+		introText.setTypeface(mFont);
+		timeText.setTypeface(mFont);
+		telephoneText.setTypeface(mFont);
+		
 	}
 
 	public void mOnClick(View v) {

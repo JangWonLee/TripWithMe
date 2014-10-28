@@ -42,6 +42,7 @@ public class RestaurantDetailActivity extends Activity {
 	
 	private Typeface mFont;
 	private Typeface jFont;
+	private Typeface kFont;
 
 	private Button locationButton;
 
@@ -55,8 +56,9 @@ public class RestaurantDetailActivity extends Activity {
 		mViewHelper.setGlobalSize((ViewGroup) retaurantdetailLayout);
 		
 		
-	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
-	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+        jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+        mFont=Typeface.createFromAsset(getAssets(), "fonts/Anysome Italic.otf");
+        kFont=Typeface.createFromAsset(getAssets(), "fonts/dearJoe 6 TRIAL.otf");
 
 
 		locationButton = (Button) findViewById(R.id.restourantlocationbutton);
@@ -86,6 +88,16 @@ public class RestaurantDetailActivity extends Activity {
 		listDetailMenuText1.setText(menu1);
 		listDetailMenuText2.setText(menu2);
 		listDetailMenuText3.setText(menu3);
+		
+		listDetailTitleText.setTypeface(mFont);
+		introText.setTypeface(mFont);
+		timeText.setTypeface(mFont);
+		telephoneText.setTypeface(mFont);
+		listDetailMenuText1.setTypeface(mFont);
+		listDetailMenuText2.setTypeface(mFont);
+		listDetailMenuText3.setTypeface(mFont);
+		
+		
 	}
 
 	public void mOnClick(View v) {
