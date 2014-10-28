@@ -30,7 +30,8 @@
         android:layout_centerVertical="true"
         android:background="@drawable/restaurentmenuicon"
         android:onClick="mOnClick" />
-    <Button
+
+    <Button
         android:id="@+id/tourbutton"
         android:layout_width="140dip"
         android:layout_height="150dip"

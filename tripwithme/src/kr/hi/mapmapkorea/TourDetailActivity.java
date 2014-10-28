@@ -1,23 +1,16 @@
 package kr.hi.mapmapkorea;
 
-import kr.hi.mapmapkorea.util.ViewHelper;
-
 import com.example.tripwithme.R;
 
-import android.support.v4.app.Fragment;
-import android.app.*;
-import android.content.*;
-import android.database.*;
-import android.database.sqlite.*;
+import kr.hi.mapmapkorea.util.ViewHelper;
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import android.os.Build;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class TourDetailActivity extends Activity {
 	private ViewHelper mViewHelper;

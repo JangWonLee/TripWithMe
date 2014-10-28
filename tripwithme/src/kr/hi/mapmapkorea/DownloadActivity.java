@@ -1,17 +1,16 @@
 package kr.hi.mapmapkorea;
 
-import com.example.tripwithme.R;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.tripwithme.R;
 
 public class DownloadActivity extends Activity {
 
