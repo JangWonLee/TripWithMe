@@ -28,8 +28,10 @@ public class SubwayActivity extends Activity {
         
         shortestTimeText = (TextView)findViewById(R.id.shortesttime);
         shortestPathText = (TextView)findViewById(R.id.shortestpath);
+        
         start = getIntent().getExtras().getString("shortestTime");
 		end = getIntent().getExtras().getString("shortestPath");
+		
 		shortestTimeText.setText(start);
     	shortestPathText.setText(end);
     }

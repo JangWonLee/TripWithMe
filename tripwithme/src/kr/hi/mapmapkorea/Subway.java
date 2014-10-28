@@ -13,32 +13,33 @@ class Shortest {
 }
 
 class Subway {
-	private int length[][] = new int[303][303]; // ����ö �뼱�� ���� ���
-	private int dist[] = new int[303]; // ��������� �� �������� ����� �����ϴ� �迭
-	private boolean s[] = new boolean[303]; // ShortPath�Լ����� ����ϴ� bool�� �迭
-	private boolean store[][] = new boolean[303][303]; // ��������� �����ϴ�
-														// ����Ʈ���� ��Ÿ���� �迭
+	private int length[][] = new int[303][303]; // 지하철 노선도 인접 행렬
+	private int dist[] = new int[303]; // 출발점에서 각 점까지의 비용을 저장하는 배열
+	private boolean s[] = new boolean[303]; // SShortPath함수에서 사용하는 bool형 배열
+	private boolean store[][] = new boolean[303][303]; // 출발점에서 시작하는 신장트리를 나타내는
+	// 배열
 	private SQLiteDatabase db;
 	private String geonameDatabaseFile = "/sdcard/Download/mapmapkorea.sqlite";
-	
 
 	public Subway() // Subway ����(������� �ʱ�ȭ)
 	{
 		for (int i = 0; i < 303; i++)
-			// ������� 9999�� �ʱ�ȭ
+			// 인접행렬 9999로 초기화
 			for (int j = 0; j < 303; j++)
 				length[i][j] = 9999;
 
 		for (int i = 0; i < 32; i++)
-			// 1 ���� �ʱ�ȭ
+			// 1 절반 초기화
 			length[i][i + 1] = 2;
 
 		for (int i = 33; i < 47; i++)
-			// 2 ���� �ʱ�ȭ
+			// 2 절반 초기화
+
 			length[i][i + 1] = 2;
 		length[43][48] = 2;
 		for (int i = 48; i < 74; i++)
-			// 2 ���� �ʱ�ȭ
+			// 2 절반 초기화
+
 			length[i][i + 1] = 2;
 		length[70][75] = 2;
 		for (int i = 75; i < 83; i++)
@@ -46,22 +47,24 @@ class Subway {
 		length[33][83] = 2;
 
 		for (int i = 84; i < 115; i++)
-			// 3 ���� �ʱ�ȭ
+			// 3 절반 초기화
+
 			length[i][i + 1] = 2;
 
 		for (int i = 116; i < 142; i++)
-			// 4 ���� �ʱ�ȭ
+			// 4 절반 초기화
 			length[i][i + 1] = 2;
 
 		for (int i = 143; i < 185; i++)
-			// 5 ���� �ʱ�ȭ
+			// 5 절반 초기화
 			length[i][i + 1] = 2;
 		length[180][186] = 2;
 		for (int i = 186; i < 192; i++)
 			length[i][i + 1] = 2;
 
 		for (int i = 193; i < 197; i++)
-			// 6 ���� �ʱ�ȭ
+			// 6 절반 초기화
+
 			length[i][i + 1] = 2;
 		length[193][198] = 2;
 		length[193][199] = 2;
@@ -69,15 +72,15 @@ class Subway {
 			length[i][i + 1] = 2;
 
 		for (int i = 231; i < 267; i++)
-			// 7 ���� �ʱ�ȭ
+			// 7 절반 초기화
 			length[i][i + 1] = 2;
 
 		for (int i = 268; i < 278; i++)
-			// 8 ���� �ʱ�ȭ
+			// 8 절반 초기화
 			length[i][i + 1] = 2;
 
 		for (int i = 279; i < 302; i++)
-			// 9 ���� �ʱ�ȭ
+			// 9 절반 초기화
 			length[i][i + 1] = 2;
 		length[0][231] = 5;
 		length[3][119] = 5;
@@ -144,7 +147,7 @@ class Subway {
 		 * length[9][40] = 0.5;
 		 */
 		for (int i = 0; i < 303; i++)
-			// ����� ������ ���� �ʱ�ȭ
+			// 행렬의 나머지 절반 초기화
 			for (int j = 0; j <= i; j++) {
 				if (i == j)
 					length[i][i] = 0;
@@ -152,13 +155,12 @@ class Subway {
 			}
 	}
 
-	private int Choose() // ShortPath �����Լ�
+	private int Choose() // ShortPath 헬퍼함수
 	{
 		double min = 9999;
 		int minpos = -1;
 
-		for (int i = 0; i < 303; ++i) // s[i]�� true�̰� dist[i]�� �ּҰ��Ǵ� i��
-										// ã�´�
+		for (int i = 0; i < 303; ++i) // s[i]가 true이고 dist[i]가 최소가되는 i를 찾는다
 		{
 			if (s[i] != false)
 				continue;
@@ -171,25 +173,24 @@ class Subway {
 		return minpos;
 	}
 
-	private void ShortestPath(int v) // �ִܳ뼱 ã�� �Լ�
+	private void ShortestPath(int v) // 최단노선 찾는 함수
 	{
 		for (int i = 0; i < 303; i++)
-			// store�迭 false�� �ʱ�ȭ
+			// store배열 false로 초기화
 			for (int j = 0; j < 303; j++)
 				store[j][i] = false;
 
-		for (int i = 0; i < 303; i++) // dist�迭�� s�迭 �ʱ�ȭ
+		for (int i = 0; i < 303; i++) // dist배열과 s배열 초기화
 		{
 			dist[i] = length[v][i];
 			if (length[v][i] < 9999 && length[v][i] > 0)
 				store[v][i] = true;
 			s[i] = false;
 		}
-		dist[v] = 0; // �ڱ��ڽ������� �Ÿ��� 0
+		dist[v] = 0; // 자기자신으로의 거리는 0
 		s[v] = true; //
 
-		for (int i = 0; i < 301; i++) // ������������� �� ����������� �ִܽð���
-										// ����
+		for (int i = 0; i < 301; i++) // 출발점에서부터 각 정거장까지의 최단시간을 결정
 		{
 			int u = Choose();
 			s[u] = true;
@@ -201,23 +202,23 @@ class Subway {
 		}
 	}
 
-	public void Path(int x, int y, Shortest shortest) // x���� y�� ���� �ִܳ뼱��
-														// ������ִ� �Լ�
+	public void Path(int x, int y, Shortest shortest) // x에서 y로 가는 최단노선을 출력해주는
+	// 함수
 	{
-		ShortestPath(x); // ��߸� x�� ���� ShortestPath ����
+		ShortestPath(x); // 출발를 x로 놓고 ShortestPath 실행
 
 		int w = y;
 		int u, v;
 
 		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
 				SQLiteDatabase.OPEN_READWRITE
-						+ SQLiteDatabase.CREATE_IF_NECESSARY);
+				+ SQLiteDatabase.CREATE_IF_NECESSARY);
 		Cursor cursor;
 
 		Stack<Integer> s = new Stack<Integer>();
 		s.push(y);
 
-		for (int j = 0; j < 303; j++) // x���� y�� ���� ��θ� stack�� ����
+		for (int j = 0; j < 303; j++) // x에서 y로 가는 경로를 stack에 저장
 		{
 			for (int i = 0; i < 303; i++) {
 
@@ -231,12 +232,12 @@ class Subway {
 				break;
 		}
 
-		shortest.path = "�ִ� ��� : ";
+		shortest.path = "최단경로: ";
 
 		int count = 0;
 		while (!s.empty()) {
 			u = s.pop();
-			if (s.empty()) // ���������̰� ȯ�¿��� �ƴ� ���
+			if (s.empty()) // 마지막역이고 환승역이 아닌 경우
 			{
 				cursor = db.rawQuery("select * FROM seoulStation Where num = "
 						+ u, null);
@@ -248,7 +249,7 @@ class Subway {
 			}
 			v = s.pop();
 
-			if (length[u][v] == 5) // ȯ�¿��ΰ��
+			if (length[u][v] == 5) // 환승역인경우
 			{
 				cursor = db.rawQuery("select * FROM seoulStation Where num = "
 						+ u, null);
@@ -257,7 +258,7 @@ class Subway {
 						+ cursor.getInt(3) + "]]";
 				// shortest.path += " " + (u+1) ;
 
-				shortest.path += " (ȯ��)";
+				shortest.path += " (환승)";
 				cursor = db.rawQuery("select * FROM seoulStation Where num = "
 						+ v, null);
 				cursor.moveToNext();
@@ -266,9 +267,9 @@ class Subway {
 				// shortest.path += " " + (v+1);
 
 				if (s.empty())
-					break; // ���������̰� ȯ�¿��� ���
+					break; // 마지막역이고 환승역인 경우
 				shortest.path += " ->";
-			} else // ȯ�¿��� �ƴ� ���
+			} else // 환승역이 아닌 경우
 			{
 
 				s.push(v);
@@ -289,7 +290,7 @@ class Subway {
 		// String S = new String();
 		// distText.setText(dist[y]+" ");
 		// distText.setText("??????????");
-		shortest.time = "�ִܽð� = " + dist[y] + "��";
+		shortest.time = "최단시간 = " + dist[y] + "분";
 	}
 
 	private TextView findViewById(int top) {
