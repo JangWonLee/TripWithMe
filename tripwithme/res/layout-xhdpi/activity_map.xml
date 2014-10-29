@@ -51,69 +51,68 @@
             android:layout_width="40dip"
             android:layout_height="40dip"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="2dip"
+            android:layout_marginTop="5dip"
             android:maxHeight="40dip"
             android:maxWidth="40dip"
-            android:layout_marginTop="5dip"
-            android:layout_marginRight="2dip"
             android:onClick="mOnClick"
             android:src="@drawable/gpsicon4" />
-        
+
         <ImageView
             android:id="@+id/submenu"
             android:layout_width="40dip"
             android:layout_height="40dip"
             android:layout_alignParentRight="true"
+            android:layout_below="@id/gpsicon"
+            android:layout_marginRight="2dip"
+            android:layout_marginTop="5dip"
             android:maxHeight="40dip"
             android:maxWidth="40dip"
-            android:layout_marginTop="5dip"
-            android:layout_marginRight="2dip"
             android:onClick="mOnClick"
-            android:src="@drawable/submenu"
-            android:layout_below="@id/gpsicon"
-            android:visibility="visible"/>
-        
-         <ImageView
+            android:src="@drawable/submenu2"
+            android:visibility="visible" />
+
+        <ImageView
             android:id="@+id/stationsubmenu"
             android:layout_width="40dip"
             android:layout_height="40dip"
             android:layout_alignParentRight="true"
+            android:layout_below="@id/submenu"
+            android:layout_marginRight="2dip"
+            android:layout_marginTop="5dip"
             android:maxHeight="40dip"
             android:maxWidth="40dip"
-            android:layout_marginTop="5dip"
-            android:layout_marginRight="2dip"
             android:onClick="mOnClick"
-            android:src="@drawable/stationsubmenu"
-            android:layout_below="@id/submenu"
-            android:visibility="invisible"/>
-         
+            android:src="@drawable/stationsubmenu2"
+            android:visibility="invisible" />
+
         <ImageView
             android:id="@+id/restsubmenu"
             android:layout_width="40dip"
             android:layout_height="40dip"
             android:layout_alignParentRight="true"
+            android:layout_below="@id/stationsubmenu"
+            android:layout_marginRight="2dip"
+            android:layout_marginTop="5dip"
             android:maxHeight="40dip"
             android:maxWidth="40dip"
-            android:layout_marginTop="5dip"
-            android:layout_marginRight="2dip"
             android:onClick="mOnClick"
-            android:src="@drawable/restsubmenu"
-            android:layout_below="@id/stationsubmenu"
-            android:visibility="invisible"/>
-                
+            android:src="@drawable/restsubmenu2"
+            android:visibility="invisible" />
+
         <ImageView
             android:id="@+id/attractionsub"
             android:layout_width="40dip"
             android:layout_height="40dip"
             android:layout_alignParentRight="true"
+            android:layout_below="@id/restsubmenu"
+            android:layout_marginRight="2dip"
+            android:layout_marginTop="5dip"
             android:maxHeight="40dip"
             android:maxWidth="40dip"
-            android:layout_marginTop="5dip"
-            android:layout_marginRight="2dip"
             android:onClick="mOnClick"
-            android:src="@drawable/attractionsub"
-            android:layout_below="@id/restsubmenu"
-            android:visibility="invisible"/>
-        
+            android:src="@drawable/attractionsub2"
+            android:visibility="invisible" />
     </RelativeLayout>
 
     <LinearLayout
@@ -121,31 +120,31 @@
         android:layout_height="40dip"
         android:layout_alignParentBottom="true" >
 
-        <TextView
-            android:id="@+id/departuretext"
+        <Button
+            android:id="@+id/departurebutton"
             android:layout_width="0dip"
             android:layout_height="30dip"
             android:layout_marginRight="2dip"
             android:layout_weight="1"
             android:background="#ffd2a272"
             android:gravity="center"
+            android:onClick="mOnClick"
             android:text="departure"
             android:textColor="#ffffff"
-            android:textSize="15dip"
-            android:onClick="mOnClick" />
+            android:textSize="15dip" />
 
-        <TextView
-            android:id="@+id/arrivaltext"
+        <Button
+            android:id="@+id/arrivalbutton"
             android:layout_width="0dip"
             android:layout_height="30dip"
             android:layout_marginLeft="2dip"
             android:layout_weight="1"
             android:background="#ffd2a272"
             android:gravity="center"
+            android:onClick="mOnClick"
             android:text="arrival"
             android:textColor="#ffffff"
-            android:textSize="15dip"
-            android:onClick="mOnClick" />
+            android:textSize="15dip" />
     </LinearLayout>
 
 </RelativeLayout>
