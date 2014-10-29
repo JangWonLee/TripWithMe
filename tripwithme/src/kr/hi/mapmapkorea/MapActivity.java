@@ -59,7 +59,7 @@ public class MapActivity extends Activity {
 
 	// MapView
 	private MapView mapView;
-	private Drawable mRest, mTour, mNow, mLocation, mBus, mSubway, mArrival, mDeparture;
+	private Drawable mRest, mTour, mNow, mLocation, mBus, mSubway, mArrival, mDeparture, mSelectedSubway;
 
 	private MapController mapController;
 	private ResourceProxy proxy;
@@ -315,7 +315,7 @@ public class MapActivity extends Activity {
 		mapView.getOverlays().add(departureOverlay.getOverlay());
 		arrivalOverlay = new MyOwnItemizedOverlay(mArrival, this);
 		mapView.getOverlays().add(arrivalOverlay.getOverlay());
-		pathOverlay =  new MyOwnItemizedOverlay(mLocation, this);
+		pathOverlay =  new MyOwnItemizedOverlay(mSelectedSubway, this);
 		mapView.getOverlays().add(pathOverlay.getOverlay());
 	}
 
@@ -1012,6 +1012,12 @@ public class MapActivity extends Activity {
 		bitmap = ((BitmapDrawable) d).getBitmap();
 		mDeparture = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
 				bitmap, 53, 40, true));
+		
+		d = getResources().getDrawable(R.drawable.selectedsubwayicon);
+		d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+		bitmap = ((BitmapDrawable) d).getBitmap();
+		mSelectedSubway = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
+				bitmap, 20, 27, true));
 	}
 
 	@Override
