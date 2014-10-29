@@ -109,6 +109,7 @@ public class MapActivity extends Activity {
 
 	private Typeface mFont;
 	private Typeface jFont;
+	private Typeface iFont;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -125,6 +126,7 @@ public class MapActivity extends Activity {
 		jFont = Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
 		mFont = Typeface.createFromAsset(getAssets(),
 				"fonts/Anysome Italic.otf");
+		iFont = Typeface.createFromAsset(getAssets(), "fonts/Belepotan-Italic.otf");
 
 		subway = new Subway();
 		shortest = new Shortest();
@@ -715,6 +717,7 @@ public class MapActivity extends Activity {
 						public void onClick(DialogInterface dialog, int which) {
 							departuretext.setText(item.getTitle());
 							departuretext.setTextColor(Color.parseColor(strColor));
+							departuretext.setTypeface(iFont);
 							if (!departuretext.getText().equals("departure")
 									&& !arrivaltext.getText().equals("arrival")) {
 								AlertDialog.Builder dialog2 = new AlertDialog.Builder(
@@ -748,6 +751,7 @@ public class MapActivity extends Activity {
 						public void onClick(DialogInterface dialog, int which) {
 							arrivaltext.setText(item.getTitle());
 							arrivaltext.setTextColor(Color.parseColor(strColor));
+							arrivaltext.setTypeface(iFont);
 							if (!departuretext.getText().equals("departure")
 									& !arrivaltext.getText().equals("arrival")) {
 								AlertDialog.Builder dialog2 = new AlertDialog.Builder(

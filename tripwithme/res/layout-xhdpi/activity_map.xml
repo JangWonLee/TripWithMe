@@ -130,7 +130,8 @@
             android:background="#ffd2a272"
             android:gravity="center"
             android:text="departure"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:textSize="15dip" />
 
         <TextView
             android:id="@+id/arrivaltext"
@@ -141,7 +142,8 @@
             android:background="#ffd2a272"
             android:gravity="center"
             android:text="arrival"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:textSize="15dip" />
     </LinearLayout>
 
 </RelativeLayout>
