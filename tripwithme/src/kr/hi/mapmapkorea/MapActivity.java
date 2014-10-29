@@ -823,6 +823,8 @@ public class MapActivity extends Activity {
 
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							if(item.getTitle().equals("Departure Location") || item.getTitle().equals("Arrival Location"))
+								return;
 							pathOverlay.clean();
 							departureButton.setText(item.getTitle());
 							departureButton.setTextColor(Color
@@ -885,11 +887,13 @@ public class MapActivity extends Activity {
 
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							if(item.getTitle().equals("Departure Location") || item.getTitle().equals("Arrival Location"))
+								return;
 							pathOverlay.clean();
 							arrivalButton.setText(item.getTitle());
 							arrivalButton.setTextColor(Color
 									.parseColor(strColor));
-							arrivalButton.setTypeface(iFont);
+							arrivalButton.setTypeface(iFont);					
 							if (!departureButton.getText().equals("departure")
 									& !arrivalButton.getText()
 											.equals("arrival")) {
