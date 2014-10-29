@@ -85,9 +85,13 @@ public class MapActivity extends Activity {
 	private TextView departuretext;
 	private TextView arrivaltext;
 	private ImageView submenu;
+	private Boolean submenuChecked;
 	private ImageView restsubmenu;
+	private Boolean restsubmenuChecked;
 	private ImageView stationsubmenu;
+	private Boolean stationsubmenuChecked;
 	private ImageView attractionsub;
+	private Boolean attractionsubChecked;
 
 	private ArrayList<String> geoList;
 	private ArrayAdapter<String> adapter;
@@ -95,7 +99,12 @@ public class MapActivity extends Activity {
 	private SQLiteDatabase db;
 	private Cursor cursor;
 
-	private MyOwnItemizedOverlay itemizedoverlay3;
+	private MyOwnItemizedOverlay restaurantOverlay;
+	private MyOwnItemizedOverlay findRestaurantOverlay;
+	private MyOwnItemizedOverlay attractionOverlay;
+	private MyOwnItemizedOverlay findAttractionOverlay;
+	private MyOwnItemizedOverlay currentLocationOverlay;
+	private MyOwnItemizedOverlay stationOverlay;
 	private MyOwnItemizedOverlay geoSearchLocation;
 
 	private Location lastLocation;
@@ -118,7 +127,6 @@ public class MapActivity extends Activity {
 		setContentView(R.layout.activity_map);
 		
 		strColor = "#ff291c73"; 
-
 		mViewHelper = new ViewHelper(this);
 		View mapLayout = findViewById(R.id.map_layout);
 		mViewHelper.setGlobalSize((ViewGroup) mapLayout);
@@ -135,9 +143,13 @@ public class MapActivity extends Activity {
 		departuretext = (TextView) findViewById(R.id.departuretext);
 		arrivaltext = (TextView) findViewById(R.id.arrivaltext);
 		submenu = (ImageView) findViewById(R.id.submenu);
+		submenuChecked = false;
 		restsubmenu = (ImageView) findViewById(R.id.restsubmenu);
+		restsubmenuChecked = false;
 		stationsubmenu = (ImageView) findViewById(R.id.stationsubmenu);
+		stationsubmenuChecked = false;
 		attractionsub = (ImageView) findViewById(R.id.attractionsub);
+		attractionsubChecked = false;
 
 		desSearchEdit.setTypeface(mFont);
 		departuretext.setTypeface(mFont);
@@ -259,7 +271,9 @@ public class MapActivity extends Activity {
 		mLocation = new BitmapDrawable(getResources(),
 				Bitmap.createScaledBitmap(bitmap, 20, 27, true));
 
-		MyOwnItemizedOverlay itemizedoverlay1 = new MyOwnItemizedOverlay(mRest,
+		restaurantOverlay = new MyOwnItemizedOverlay(mRest,
+				this);
+		findRestaurantOverlay = new MyOwnItemizedOverlay(mRest,
 				this);
 
 		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
@@ -273,37 +287,47 @@ public class MapActivity extends Activity {
 			item = new OverlayItem(cursor.getString(1), cursor.getString(2),
 					new GeoPoint(cursor.getDouble(11), cursor.getDouble(12)));
 			Log.i("aa", cursor.getString(1));
-			if (startlatitude == (double) 0)
-				itemizedoverlay1.addItem(item);
-			else if (startlatitude == cursor.getDouble(11))
-				itemizedoverlay1.addItem(item);
+			restaurantOverlay.addItem(item);
+			if (startlatitude == cursor.getDouble(11))
+				findRestaurantOverlay.addItem(item);
 		}
-		mapView.getOverlays().add(itemizedoverlay1.getOverlay());
-
-		MyOwnItemizedOverlay itemizedoverlay2 = new MyOwnItemizedOverlay(mTour,
+		mapView.getOverlays().add(findRestaurantOverlay.getOverlay());
+		
+		attractionOverlay = new MyOwnItemizedOverlay(mTour,
 				this);
-
+		findAttractionOverlay = new MyOwnItemizedOverlay(mTour,
+				this);
 		cursor = db.rawQuery("SELECT * FROM tourlist", null);
 		for (int i = 0; i < cursor.getCount(); i++) {
 			cursor.moveToNext();
 			item = new OverlayItem(cursor.getString(1), cursor.getString(2),
 					new GeoPoint(cursor.getDouble(6), cursor.getDouble(7)));
-			if (startlatitude == (double) 0)
-				itemizedoverlay2.addItem(item);
-			else if (startlatitude == cursor.getDouble(6))
-				itemizedoverlay2.addItem(item);
+			attractionOverlay.addItem(item);
+			if (startlatitude == cursor.getDouble(6))
+				findAttractionOverlay.addItem(item);
 		}
-
-		mapView.getOverlays().add(itemizedoverlay2.getOverlay());
+		mapView.getOverlays().add(findAttractionOverlay.getOverlay());
+		
+		stationOverlay = new MyOwnItemizedOverlay(mTour,
+				this);
+		cursor = db.rawQuery("SELECT * FROM SeoulStation", null);
+		for (int i = 0; i < cursor.getCount(); i++) {
+			cursor.moveToNext();
+			item = new OverlayItem( cursor.getString(2),"Line "+cursor.getInt(3),
+					new GeoPoint(cursor.getDouble(6), cursor.getDouble(7)));
+			stationOverlay.addItem(item);
+		}
+					
+		
 		db.close();
 
-		itemizedoverlay3 = new MyOwnItemizedOverlay(mNow, this);
+		currentLocationOverlay = new MyOwnItemizedOverlay(mNow, this);
 		if (startlatitude == (double) 0 && currentlatitude != 37.566352) {
 			item = new OverlayItem("Current Location", " ", new GeoPoint(
 					currentlatitude, currentlongitude));
-			itemizedoverlay3.addItem(item);
+			currentLocationOverlay.addItem(item);
 		}
-		mapView.getOverlays().add(itemizedoverlay3.getOverlay());
+		mapView.getOverlays().add(currentLocationOverlay.getOverlay());
 
 		geoSearchLocation = new MyOwnItemizedOverlay(mNow, this);
 		mapView.getOverlays().add(geoSearchLocation.getOverlay());
@@ -323,8 +347,8 @@ public class MapActivity extends Activity {
 					mlongitude = lastLocation.getLongitude();
 					item = new OverlayItem("Current Location", " ",
 							new GeoPoint(mlatitude, mlongitude));
-					// itemizedoverlay3.clean();
-					itemizedoverlay3.addItem(item);
+					// currentLocationOverlay.clean();
+					currentLocationOverlay.addItem(item);
 				}
 			}
 		}
@@ -397,18 +421,76 @@ public class MapActivity extends Activity {
 			break;
 
 		case R.id.submenu:
-			if (stationsubmenu.isShown() == false) {
+			if(submenuChecked)
+				submenuChecked = false;
+			else
+				submenuChecked = true;
+			
+			if (submenuChecked) {
 				stationsubmenu.setVisibility(View.VISIBLE);
 				restsubmenu.setVisibility(View.VISIBLE);
 				attractionsub.setVisibility(View.VISIBLE);
-				break;
-			} else if (stationsubmenu.isShown() == true) {
+
+			}
+			else {
 				stationsubmenu.setVisibility(View.INVISIBLE);
 				restsubmenu.setVisibility(View.INVISIBLE);
 				attractionsub.setVisibility(View.INVISIBLE);
-				break;
-
 			}
+			break;
+		
+		case R.id.stationsubmenu:
+			if(stationsubmenuChecked)
+				stationsubmenuChecked = false;
+			else
+				stationsubmenuChecked = true;			
+			mapView.getOverlays().clear();
+			
+			if(stationsubmenuChecked)
+				mapView.getOverlays().add(stationOverlay.getOverlay());
+			if(restsubmenuChecked)
+				mapView.getOverlays().add(restaurantOverlay.getOverlay());
+			if(attractionsubChecked)
+				mapView.getOverlays().add(attractionOverlay.getOverlay());
+			mapView.getOverlays().add(findRestaurantOverlay.getOverlay());
+			mapView.getOverlays().add(findAttractionOverlay.getOverlay());
+			mapView.invalidate();
+			break;
+			
+		case R.id.restsubmenu:
+			if(restsubmenuChecked)
+				restsubmenuChecked = false;
+			else
+				restsubmenuChecked = true;
+			mapView.getOverlays().clear();
+			if(stationsubmenuChecked)
+				mapView.getOverlays().add(stationOverlay.getOverlay());
+			if(restsubmenuChecked)
+				mapView.getOverlays().add(restaurantOverlay.getOverlay());
+			if(attractionsubChecked)
+				mapView.getOverlays().add(attractionOverlay.getOverlay());
+			mapView.getOverlays().add(findRestaurantOverlay.getOverlay());
+			mapView.getOverlays().add(findAttractionOverlay.getOverlay());
+			mapView.invalidate();
+			break;
+			
+		case R.id.attractionsub:
+			if(attractionsubChecked)
+				attractionsubChecked = false;
+			else
+				attractionsubChecked = true;
+			
+			mapView.getOverlays().clear();
+			if(stationsubmenuChecked)
+				mapView.getOverlays().add(stationOverlay.getOverlay());
+			if(restsubmenuChecked)
+				mapView.getOverlays().add(restaurantOverlay.getOverlay());
+			if(attractionsubChecked)
+				mapView.getOverlays().add(attractionOverlay.getOverlay());
+			mapView.getOverlays().add(findRestaurantOverlay.getOverlay());
+			mapView.getOverlays().add(findAttractionOverlay.getOverlay());
+			mapView.invalidate();
+			break;
 
 		case R.id.dessearchbutton:
 			// db OPEN
@@ -479,7 +561,40 @@ public class MapActivity extends Activity {
 			// outCursor.close();
 			// db.close();
 			break;
+/*			
+		case R.id.departuretext:
+			if(!departuretext.getText().toString().equals("Current Location"))
+			{
+				db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
+						SQLiteDatabase.OPEN_READWRITE
+						+ SQLiteDatabase.CREATE_IF_NECESSARY);
+				String departSQL = "select *" + " from seoulgeoname" + " where name = ?";
+				String[] departArgs = { "" };
+				departArgs[0] = departuretext.getText().toString();
+				cursor = db.rawQuery(departSQL, departArgs);
+				cursor.moveToNext();
+				mapController.setCenter(new GeoPoint(cursor.getDouble(2),
+						cursor.getDouble(3)));
+			}
+			
+			break;
+		case R.id.arrivaltext:
 
+			if(!arrivaltext.getText().toString().equals("Current Location"))
+			{
+				db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
+						SQLiteDatabase.OPEN_READWRITE
+						+ SQLiteDatabase.CREATE_IF_NECESSARY);
+				String arrivalSQL = "select *" + " from seoulgeoname" + " where name = ?";
+				String[] arrivalArgs = { "" };
+				arrivalArgs[0] = departuretext.getText().toString();
+				cursor = db.rawQuery(arrivalSQL, arrivalArgs);
+				cursor.moveToNext();
+				mapController.setCenter(new GeoPoint(cursor.getDouble(6),
+						cursor.getDouble(7)));
+			}
+			break;
+*/
 		default:
 			break;
 		}
@@ -503,30 +618,15 @@ public class MapActivity extends Activity {
 	};
 
 	public void findShortestSubwayPath(String start, String end) {
+		
 		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
 				SQLiteDatabase.OPEN_READWRITE
 						+ SQLiteDatabase.CREATE_IF_NECESSARY);
 
-		String aSQL = "select *" + " from seoulgeoname" + " where name = ?"; // ?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.?���?
-																				// 고쳐?��?��.
-
+		String aSQL = "select *" + " from seoulgeoname" + " where name = ?";
 		String[] args = { "" };
 
+		int endDB = 0;
 		double startLa;
 		double startLo;
 
@@ -537,13 +637,13 @@ public class MapActivity extends Activity {
 			args[0] = start;
 
 			cursor = db.rawQuery(aSQL, args);
-
 			cursor.moveToNext();
 
 			startLa = cursor.getDouble(2);
 			startLo = cursor.getDouble(3);
+			
 		}
-
+		
 		double endLa;
 		double endLo;
 
@@ -594,6 +694,7 @@ public class MapActivity extends Activity {
 		subway.Path(startSubway, endSubway, shortest);
 
 		setDialogBrief();
+		
 	}
 
 	private void setDialogTotal() {
@@ -656,8 +757,8 @@ public class MapActivity extends Activity {
 
 				item = new OverlayItem("Current Location", " ", new GeoPoint(
 						mlatitude, mlongitude));
-				// itemizedoverlay3.clean();
-				itemizedoverlay3.addItem(item);
+				// currentLocationOverlay.clean();
+				currentLocationOverlay.addItem(item);
 			}
 		}
 

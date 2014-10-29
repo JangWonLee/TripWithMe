@@ -131,7 +131,8 @@
             android:gravity="center"
             android:text="departure"
             android:textColor="#ffffff"
-            android:textSize="15dip" />
+            android:textSize="15dip"
+            android:onClick="mOnClick" />
 
         <TextView
             android:id="@+id/arrivaltext"
@@ -143,7 +144,8 @@
             android:gravity="center"
             android:text="arrival"
             android:textColor="#ffffff"
-            android:textSize="15dip" />
+            android:textSize="15dip"
+            android:onClick="mOnClick" />
     </LinearLayout>
 
 </RelativeLayout>
