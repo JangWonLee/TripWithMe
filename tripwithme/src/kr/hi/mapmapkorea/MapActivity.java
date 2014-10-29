@@ -106,6 +106,9 @@ public class MapActivity extends Activity {
 	private MyOwnItemizedOverlay currentLocationOverlay;
 	private MyOwnItemizedOverlay stationOverlay;
 	private MyOwnItemizedOverlay geoSearchLocation;
+	private MyOwnItemizedOverlay departureOverlay;
+	private MyOwnItemizedOverlay arrivalOverlay;
+	
 
 	private Location lastLocation;
 	private String geonameDatabaseFile = "/sdcard/Download/mapmapkorea.sqlite";
@@ -304,8 +307,13 @@ public class MapActivity extends Activity {
 		}
 		mapView.getOverlays().add(currentLocationOverlay.getOverlay());
 
+		
 		geoSearchLocation = new MyOwnItemizedOverlay(mLocation, this);
 		mapView.getOverlays().add(geoSearchLocation.getOverlay());
+		departureOverlay = new MyOwnItemizedOverlay(mLocation, this);
+		mapView.getOverlays().add(departureOverlay.getOverlay());
+		arrivalOverlay = new MyOwnItemizedOverlay(mLocation, this);
+		mapView.getOverlays().add(arrivalOverlay.getOverlay());
 	}
 
 	public void mOnClick(View v) {
@@ -384,8 +392,10 @@ public class MapActivity extends Activity {
 
 			mapView.getOverlays().add(findRestaurantOverlay.getOverlay());
 			mapView.getOverlays().add(findAttractionOverlay.getOverlay());
-			mapView.getOverlays().add(geoSearchLocation.getOverlay());
 			mapView.getOverlays().add(currentLocationOverlay.getOverlay());
+			mapView.getOverlays().add(geoSearchLocation.getOverlay());
+			mapView.getOverlays().add(departureOverlay.getOverlay());
+			mapView.getOverlays().add(arrivalOverlay.getOverlay());
 			
 			mapView.invalidate();
 			break;
@@ -410,8 +420,10 @@ public class MapActivity extends Activity {
 
 			mapView.getOverlays().add(findRestaurantOverlay.getOverlay());
 			mapView.getOverlays().add(findAttractionOverlay.getOverlay());
-			mapView.getOverlays().add(geoSearchLocation.getOverlay());
 			mapView.getOverlays().add(currentLocationOverlay.getOverlay());
+			mapView.getOverlays().add(geoSearchLocation.getOverlay());
+			mapView.getOverlays().add(departureOverlay.getOverlay());
+			mapView.getOverlays().add(arrivalOverlay.getOverlay());
 			
 			mapView.invalidate();
 			break;
@@ -436,8 +448,10 @@ public class MapActivity extends Activity {
 
 			mapView.getOverlays().add(findRestaurantOverlay.getOverlay());
 			mapView.getOverlays().add(findAttractionOverlay.getOverlay());
-			mapView.getOverlays().add(geoSearchLocation.getOverlay());
 			mapView.getOverlays().add(currentLocationOverlay.getOverlay());
+			mapView.getOverlays().add(geoSearchLocation.getOverlay());
+			mapView.getOverlays().add(departureOverlay.getOverlay());
+			mapView.getOverlays().add(arrivalOverlay.getOverlay());
 			mapView.invalidate();
 			break;
 
@@ -806,6 +820,30 @@ public class MapActivity extends Activity {
 								dialog2.setNegativeButton("close", null);
 								dialog2.show();
 							}
+							
+							if (!item.getTitle().equals("Current Location")) {
+								db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
+										SQLiteDatabase.OPEN_READWRITE
+												+ SQLiteDatabase.CREATE_IF_NECESSARY);
+								String departureSQL = "select *" + " from seoulgeoname"
+										+ " where name = ?";
+								String[] departureArgs = { "" };
+								departureArgs[0] = item.getTitle();
+								cursor = db.rawQuery(departureSQL, departureArgs);
+								cursor.moveToNext();
+								departureOverlay.clean();
+								OverlayItem dItem = new OverlayItem("Departure Location", " ",
+										new GeoPoint(cursor.getDouble(2), cursor.getDouble(3)));
+								departureOverlay.addItem(dItem);
+								
+							} else {
+								departureOverlay.clean();
+								OverlayItem dItem = new OverlayItem("Departure Location", " ",
+										new GeoPoint(currentlatitude, currentlongitude));
+								departureOverlay.addItem(dItem);
+							}
+							mapView.invalidate();
+
 						}
 					});
 			dialog.setNeutralButton("arrival",
@@ -842,6 +880,29 @@ public class MapActivity extends Activity {
 								dialog2.setNegativeButton("close", null);
 								dialog2.show();
 							}
+							
+							if (!item.getTitle().equals("Current Location")) {
+								db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
+										SQLiteDatabase.OPEN_READWRITE
+												+ SQLiteDatabase.CREATE_IF_NECESSARY);
+								String arrivalSQL = "select *" + " from seoulgeoname"
+										+ " where name = ?";
+								String[] arrivalArgs = { "" };
+								arrivalArgs[0] = item.getTitle();
+								cursor = db.rawQuery(arrivalSQL, arrivalArgs);
+								cursor.moveToNext();
+								arrivalOverlay.clean();
+								OverlayItem aItem = new OverlayItem("Arrival Location", " ",
+										new GeoPoint(cursor.getDouble(2), cursor.getDouble(3)));
+								departureOverlay.addItem(aItem);
+								
+							} else {
+								arrivalOverlay.clean();
+								OverlayItem aItem = new OverlayItem("Arrival Location", " ",
+										new GeoPoint(currentlatitude, currentlongitude));
+								departureOverlay.addItem(aItem);
+							}
+							mapView.invalidate();
 						}
 					});
 			dialog.show();
