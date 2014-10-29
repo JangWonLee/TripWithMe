@@ -275,6 +275,12 @@ class Subway {
 						+ "\n";
 				shortest.totalPath += "Line " + cursor.getInt(3) + " : "
 						+ cursor.getString(2) + "\n";
+				cursor = db.rawQuery(
+						"select * FROM seoulStation Where num = "
+								+ pathAry[i + 2], null);
+				cursor.moveToNext();
+
+				shortest.briefPath +="            [ Direction : " + cursor.getString(2) + " ]" + "\n";
 
 				// shortest.path += " " + (u+1) ;
 
@@ -293,13 +299,13 @@ class Subway {
 					cursor.moveToNext();
 					shortest.briefPath += "Line " + cursor.getInt(3) + " : "
 							+ cursor.getString(2)
-							+ "\n            [ Direction : ";
+							+ "\n";
 					cursor = db.rawQuery(
 							"select * FROM seoulStation Where num = "
 									+ pathAry[i + 1], null);
 					cursor.moveToNext();
 
-					shortest.briefPath += cursor.getString(2) + " ]" + "\n";
+					shortest.briefPath +="            [ Direction : " + cursor.getString(2) + " ]" + "\n";
 					// shortest.path += " " + (u+1) + " -> ";
 				}
 				cursor = db.rawQuery("select * FROM seoulStation Where num = "
