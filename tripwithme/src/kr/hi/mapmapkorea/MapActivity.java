@@ -108,6 +108,7 @@ public class MapActivity extends Activity {
 	private MyOwnItemizedOverlay geoSearchLocation;
 	private MyOwnItemizedOverlay departureOverlay;
 	private MyOwnItemizedOverlay arrivalOverlay;
+	private MyOwnItemizedOverlay pathOverlay;
 	
 
 	private Location lastLocation;
@@ -314,6 +315,8 @@ public class MapActivity extends Activity {
 		mapView.getOverlays().add(departureOverlay.getOverlay());
 		arrivalOverlay = new MyOwnItemizedOverlay(mArrival, this);
 		mapView.getOverlays().add(arrivalOverlay.getOverlay());
+		pathOverlay =  new MyOwnItemizedOverlay(mLocation, this);
+		mapView.getOverlays().add(pathOverlay.getOverlay());
 	}
 
 	public void mOnClick(View v) {
@@ -396,6 +399,7 @@ public class MapActivity extends Activity {
 			mapView.getOverlays().add(geoSearchLocation.getOverlay());
 			mapView.getOverlays().add(departureOverlay.getOverlay());
 			mapView.getOverlays().add(arrivalOverlay.getOverlay());
+			mapView.getOverlays().add(pathOverlay.getOverlay());
 			
 			mapView.invalidate();
 			break;
@@ -424,6 +428,7 @@ public class MapActivity extends Activity {
 			mapView.getOverlays().add(geoSearchLocation.getOverlay());
 			mapView.getOverlays().add(departureOverlay.getOverlay());
 			mapView.getOverlays().add(arrivalOverlay.getOverlay());
+			mapView.getOverlays().add(pathOverlay.getOverlay());
 			
 			mapView.invalidate();
 			break;
@@ -452,6 +457,7 @@ public class MapActivity extends Activity {
 			mapView.getOverlays().add(geoSearchLocation.getOverlay());
 			mapView.getOverlays().add(departureOverlay.getOverlay());
 			mapView.getOverlays().add(arrivalOverlay.getOverlay());
+			mapView.getOverlays().add(pathOverlay.getOverlay());
 			mapView.invalidate();
 			break;
 
@@ -664,6 +670,33 @@ public class MapActivity extends Activity {
 		Log.i("end", " " + endSubway);
 
 		subway.Path(startSubway, endSubway, shortest);
+	
+		pathOverlay.clean();
+		aSQL = "select *" + " from seoulStation" + " where num = ?";
+		for(int i=0; i<shortest.pathCount; i++)
+		{
+
+			args[0] = shortest.pathAry[i]+"";
+			cursor = db.rawQuery(aSQL, args);
+			cursor.moveToNext();
+			
+			
+/*			출발 도착이 지하철 역인 경우 레이아웃에 추가 안하고 싶을때
+  			if(i == 0)  
+				if(startLa == cursor.getDouble(6) && startLo == cursor.getDouble(7))
+					continue;
+			if(i == shortest.pathCount-1)
+				if(endLa == cursor.getDouble(6) && endLo == cursor.getDouble(7))
+					continue;
+*/			
+			
+			item = new OverlayItem(cursor.getString(2), "Line "
+					+ cursor.getInt(3), new GeoPoint(cursor.getDouble(6),
+					cursor.getDouble(7)));
+			pathOverlay.addItem(item);
+		}
+		mapView.invalidate();
+		
 
 		setDialogBrief();
 

@@ -11,6 +11,8 @@ class Shortest {
 	public String time;
 	public String briefPath;
 	public String totalPath;
+	public int pathAry[];
+	public int pathCount;
 }
 
 class Subway {
@@ -320,6 +322,8 @@ class Subway {
 		// distText.setText(dist[y]+" ");
 		// distText.setText("??????????");
 		shortest.time = ""+dist[y];
+		shortest.pathAry = pathAry;
+		shortest.pathCount = count;
 	}
 
 	private TextView findViewById(int top) {
