@@ -313,7 +313,7 @@ class Subway {
 		// String S = new String();
 		// distText.setText(dist[y]+" ");
 		// distText.setText("??????????");
-		shortest.time = "Shortest Time = " + dist[y] + "분";
+		shortest.time = ""+dist[y];
 	}
 
 	private TextView findViewById(int top) {

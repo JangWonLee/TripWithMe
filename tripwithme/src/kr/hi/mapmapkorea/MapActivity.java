@@ -597,7 +597,7 @@ public class MapActivity extends Activity {
 	private void setDialogTotal() {
 		AlertDialog.Builder ab2 = new AlertDialog.Builder(MapActivity.this);
 		ab2.setTitle(" All Path").setMessage(
-				"시간" + shortest.time + "\n\n\n\n" + "경로" + shortest.totalPath);
+				"Shortest Time = " + shortest.time + "minute\n\n\n\n" + "Path\n" + shortest.totalPath);
 		ab2.setPositiveButton("Brief Path",
 				new DialogInterface.OnClickListener() {
 					@Override
@@ -618,7 +618,7 @@ public class MapActivity extends Activity {
 	private void setDialogBrief() {
 		AlertDialog.Builder ab = new AlertDialog.Builder(MapActivity.this);
 		ab.setTitle(" You need to go..").setMessage(
-				"시간" + shortest.time + "\n\n\n\n" + "경로" + shortest.briefPath);
+				"Shortest Time = " + shortest.time + "minute\n\n\n\n" + "Path\n" + shortest.briefPath);
 		ab.setPositiveButton("All Path", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
