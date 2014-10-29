@@ -59,7 +59,7 @@ public class MapActivity extends Activity {
 
 	// MapView
 	private MapView mapView;
-	private Drawable mRest, mTour, mNow, mLocation, mBus, mSubway;
+	private Drawable mRest, mTour, mNow, mLocation, mBus, mSubway, mArrival, mDeparture;
 
 	private MapController mapController;
 	private ResourceProxy proxy;
@@ -310,9 +310,9 @@ public class MapActivity extends Activity {
 		
 		geoSearchLocation = new MyOwnItemizedOverlay(mLocation, this);
 		mapView.getOverlays().add(geoSearchLocation.getOverlay());
-		departureOverlay = new MyOwnItemizedOverlay(mLocation, this);
+		departureOverlay = new MyOwnItemizedOverlay(mDeparture, this);
 		mapView.getOverlays().add(departureOverlay.getOverlay());
-		arrivalOverlay = new MyOwnItemizedOverlay(mLocation, this);
+		arrivalOverlay = new MyOwnItemizedOverlay(mArrival, this);
 		mapView.getOverlays().add(arrivalOverlay.getOverlay());
 	}
 
@@ -894,13 +894,13 @@ public class MapActivity extends Activity {
 								arrivalOverlay.clean();
 								OverlayItem aItem = new OverlayItem("Arrival Location", " ",
 										new GeoPoint(cursor.getDouble(2), cursor.getDouble(3)));
-								departureOverlay.addItem(aItem);
+								arrivalOverlay.addItem(aItem);
 								
 							} else {
 								arrivalOverlay.clean();
 								OverlayItem aItem = new OverlayItem("Arrival Location", " ",
 										new GeoPoint(currentlatitude, currentlongitude));
-								departureOverlay.addItem(aItem);
+								arrivalOverlay.addItem(aItem);
 							}
 							mapView.invalidate();
 						}
@@ -967,6 +967,18 @@ public class MapActivity extends Activity {
 		bitmap = ((BitmapDrawable) d).getBitmap();
 		mSubway = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
 				bitmap, 20, 27, true));
+		
+		d = getResources().getDrawable(R.drawable.arrivalicon);
+		d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+		bitmap = ((BitmapDrawable) d).getBitmap();
+		mArrival = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
+				bitmap, 38, 40, true));
+		
+		d = getResources().getDrawable(R.drawable.departureicon);
+		d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+		bitmap = ((BitmapDrawable) d).getBitmap();
+		mDeparture = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
+				bitmap, 53, 40, true));
 	}
 
 	@Override
