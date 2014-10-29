@@ -1,5 +1,6 @@
 package kr.hi.mapmapkorea;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import kr.hi.mapmapkorea.util.ViewHelper;
@@ -10,6 +11,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -40,6 +42,7 @@ public class SearchActivity extends Activity {
 
 	private Typeface jFont;
 	private Typeface kFont;
+	private File seoul;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,6 +80,13 @@ public class SearchActivity extends Activity {
 		searchButton.setTypeface(jFont);
 		seoulButton.setTypeface(mFont);
 		
+		
+		File seoul = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
+		
+		if(seoul.exists()) {
+			seoulButton.setVisibility(View.VISIBLE);
+		}
 
 		adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, list);

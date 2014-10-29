@@ -43,6 +43,7 @@
         android:onClick="mOnClick"
         android:padding="30dip"
         android:text="seoul"
+        android:visibility="invisible"
         android:textColor="#ffffffff"
         android:textSize="25dip" />
 

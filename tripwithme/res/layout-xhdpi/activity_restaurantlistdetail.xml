@@ -9,10 +9,11 @@
 
     <Button
         android:id="@+id/restourantlocationbutton"
-        android:layout_width="200dip"
+        android:layout_width="70dip"
         android:layout_height="70dip"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_margin="10dip"
         android:background="@drawable/locationbutton2"
         android:onClick="mOnClick"
         android:padding="20dip" />
