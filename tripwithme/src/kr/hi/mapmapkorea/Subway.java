@@ -282,7 +282,7 @@ class Subway {
 								+ pathAry[i + 2], null);
 				cursor.moveToNext();
 
-				shortest.briefPath +="            [ Direction : " + cursor.getString(2) + " ]" + "\n";
+				shortest.briefPath +="[ Direction : " + cursor.getString(2) + " ]" + "\n\n";
 
 				// shortest.path += " " + (u+1) ;
 
@@ -307,7 +307,7 @@ class Subway {
 									+ pathAry[i + 1], null);
 					cursor.moveToNext();
 
-					shortest.briefPath +="            [ Direction : " + cursor.getString(2) + " ]" + "\n";
+					shortest.briefPath +="[ Direction : " + cursor.getString(2) + " ]" + "\n\n";
 					// shortest.path += " " + (u+1) + " -> ";
 				}
 				cursor = db.rawQuery("select * FROM seoulStation Where num = "

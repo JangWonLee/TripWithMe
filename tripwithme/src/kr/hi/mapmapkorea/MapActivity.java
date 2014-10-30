@@ -462,6 +462,9 @@ public class MapActivity extends Activity {
 			break;
 
 		case R.id.dessearchbutton:
+		    InputMethodManager mgr = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		    mgr.hideSoftInputFromWindow(mapView.getWindowToken(), 0);
+
 			// db OPEN
 			db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
 					SQLiteDatabase.OPEN_READWRITE
@@ -726,7 +729,7 @@ public class MapActivity extends Activity {
 
 	private void setDialogBrief() {
 		AlertDialog.Builder ab = new AlertDialog.Builder(MapActivity.this);
-		ab.setTitle(" You need to go..").setMessage(
+		ab.setTitle("Brief Path").setMessage(
 				"Shortest Time = " + shortest.time + "minute\n\n\n\n"
 						+ "Path\n" + shortest.briefPath);
 		ab.setPositiveButton("All Path", new DialogInterface.OnClickListener() {
