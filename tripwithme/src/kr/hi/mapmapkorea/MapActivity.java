@@ -266,10 +266,22 @@ public class MapActivity extends Activity {
 
 		for (int i = 0; i < cursor.getCount(); i++) {
 			cursor.moveToNext();
-			item = new OverlayItem(cursor.getString(1), cursor.getString(2),
+			if(cursor.getString(7) == null)
+				item = new OverlayItem(cursor.getString(1), cursor.getString(2) + "\n" + "\n" + cursor.getString(3)
+					 + "\n" + "\n"+ cursor.getString(4) + "\n" + "\n" + cursor.getString(5) + "\n" + "\n" + cursor.getString(6),
 					new GeoPoint(cursor.getDouble(11), cursor.getDouble(12)));
+			else if(cursor.getString(8) == null)
+				item = new OverlayItem(cursor.getString(1), cursor.getString(2) + "\n" + "\n" + cursor.getString(3)
+						 + "\n" + "\n"+ cursor.getString(4) + "\n" + "\n" + cursor.getString(5) + "\n" + "\n" + cursor.getString(6)
+						 + "\n" + "\n" + cursor.getString(7),
+						new GeoPoint(cursor.getDouble(11), cursor.getDouble(12)));
+			else
+				item = new OverlayItem(cursor.getString(1), cursor.getString(2) + "\n" + "\n" + cursor.getString(3)
+						 + "\n" + "\n"+ cursor.getString(4) + "\n" + "\n" + cursor.getString(5) + "\n" + "\n" + cursor.getString(6)
+						 + "\n" + "\n" + cursor.getString(7) + "\n" + "\n" + cursor.getString(8),
+						  new GeoPoint(cursor.getDouble(11), cursor.getDouble(12)));
 			Log.i("aa", cursor.getString(1));
-			restaurantOverlay.addItem(item);
+			restaurantOverlay.addItem(item); 
 			if (startlatitude == cursor.getDouble(11))
 				findRestaurantOverlay.addItem(item);
 		}
@@ -280,7 +292,8 @@ public class MapActivity extends Activity {
 		cursor = db.rawQuery("SELECT * FROM tourlist", null);
 		for (int i = 0; i < cursor.getCount(); i++) {
 			cursor.moveToNext();
-			item = new OverlayItem(cursor.getString(1), cursor.getString(2),
+			item = new OverlayItem(cursor.getString(1), cursor.getString(2) + "\n" + "\n" + cursor.getString(3)
+					 + "\n" + "\n"+ cursor.getString(4) + "\n" + "\n" + cursor.getString(5),
 					new GeoPoint(cursor.getDouble(6), cursor.getDouble(7)));
 			attractionOverlay.addItem(item);
 			if (startlatitude == cursor.getDouble(6))
