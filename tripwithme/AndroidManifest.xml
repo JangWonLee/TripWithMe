@@ -18,6 +18,7 @@
         android:icon="@drawable/icon2"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar"
+        android:largeHeap="true"
     >
     	<activity 
     	    android:name="kr.hi.mapmapkorea.IntroActivity" android:label="@string/app_name">

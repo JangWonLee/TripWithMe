@@ -118,6 +118,7 @@ public class MapActivity extends Activity {
 	private int GPSstate; // 0=Not GPS 1=GPS
 
 	private Subway subway;
+	private Bus bus;
 	private Shortest shortest;
 
 	private Typeface mFont;
@@ -142,6 +143,7 @@ public class MapActivity extends Activity {
 				"fonts/Belepotan-Italic.otf");
 
 		subway = new Subway();
+		bus = new Bus();
 		shortest = new Shortest();
 		desSearchEdit = (AutoCompleteTextView) findViewById(R.id.dessearchedit);
 		desSearchEdit.setHint("Search");
@@ -718,6 +720,117 @@ public class MapActivity extends Activity {
 
 	}
 
+	public void findShortestBusPath(String start, String end) {
+
+		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
+				SQLiteDatabase.OPEN_READWRITE
+						+ SQLiteDatabase.CREATE_IF_NECESSARY);
+
+		String aSQL = "select *" + " from seoulgeoname" + " where name = ?";
+		String[] args = { "" };
+
+		int endDB = 0;
+		double startLa;
+		double startLo;
+
+		if (start.equals("Current Location")) {
+			startLa = currentlatitude;
+			startLo = currentlongitude;
+		} else {
+			args[0] = start;
+
+			cursor = db.rawQuery(aSQL, args);
+			cursor.moveToNext();
+
+			startLa = cursor.getDouble(2);
+			startLo = cursor.getDouble(3);
+
+		}
+
+		double endLa;
+		double endLo;
+
+		if (end.equals("Current Location")) {
+			endLa = currentlatitude;
+			endLo = currentlongitude;
+		} else {
+			args[0] = end;
+
+			cursor = db.rawQuery(aSQL, args);
+
+			cursor.moveToNext();
+
+			endLa = cursor.getDouble(2);
+			endLo = cursor.getDouble(3);
+		}
+
+		int startSubway = 0;
+		int endSubway = 0;
+		double startDistance = 99999;
+		double endDistance = 99999;
+		double la;
+		double lo;
+
+		db = SQLiteDatabase.openDatabase("/sdcard/Download/busstop2.sqlite", null,
+				SQLiteDatabase.OPEN_READWRITE
+						+ SQLiteDatabase.CREATE_IF_NECESSARY);
+		
+		cursor = db.rawQuery("SELECT * FROM busstop2", null);
+
+		for (int i = 0; i < cursor.getCount(); i++) {
+			cursor.moveToNext();
+
+			la = cursor.getDouble(5);
+			lo = cursor.getDouble(6);
+
+			if (((startLa - la) * (startLa - la) + (startLo - lo)
+					* (startLo - lo)) < startDistance) {
+				startDistance = ((startLa - la) * (startLa - la) + (startLo - lo)
+						* (startLo - lo));
+				startSubway = cursor.getInt(7);
+			}
+			if (((endLa - la) * (endLa - la) + (endLo - lo) * (endLo - lo)) < endDistance) {
+				endDistance = ((endLa - la) * (endLa - la) + (endLo - lo)
+						* (endLo - lo));
+				endSubway = cursor.getInt(7);
+			}
+		}
+		Log.i("start", " " + startSubway);
+		Log.i("end", " " + endSubway);
+
+		bus.search(startSubway, endSubway, shortest);
+	
+		pathOverlay.clean();
+		aSQL = "select *" + " from busstop2" + " where busstop_id = ?";
+		for(int i=0; i<shortest.pathCount; i++)
+		{
+
+			args[0] = shortest.pathAry[i]+"";
+			cursor = db.rawQuery(aSQL, args);
+			cursor.moveToNext();
+			
+			
+/*			출발 도착이 지하철 역인 경우 레이아웃에 추가 안하고 싶을때
+  			if(i == 0)  
+				if(startLa == cursor.getDouble(6) && startLo == cursor.getDouble(7))
+					continue;
+			if(i == shortest.pathCount-1)
+				if(endLa == cursor.getDouble(6) && endLo == cursor.getDouble(7))
+					continue;
+*/			
+			
+			item = new OverlayItem(cursor.getString(4), "Line "
+					+ cursor.getInt(2), new GeoPoint(cursor.getDouble(5),
+					cursor.getDouble(6)));
+			pathOverlay.addItem(item);
+		}
+		mapView.invalidate();
+	
+
+		setDialogBrief();
+	
+	}
+	
 	private void setDialogTotal() {
 		AlertDialog.Builder ab2 = new AlertDialog.Builder(MapActivity.this);
 		ab2.setTitle(" All Path").setMessage(
@@ -853,7 +966,7 @@ public class MapActivity extends Activity {
 										mContext);
 								dialog2.setTitle("You");
 								dialog2.setMessage("Want to find shortest path?");
-								dialog2.setPositiveButton("Yes",
+								dialog2.setPositiveButton("Yes & Subway",
 										new DialogInterface.OnClickListener() {
 
 											@Override
@@ -868,7 +981,21 @@ public class MapActivity extends Activity {
 																.toString());
 											}
 										});
+								dialog2.setNeutralButton("Yes & Bus",
+										new DialogInterface.OnClickListener() {
 
+											@Override
+											public void onClick(
+													DialogInterface dialog,
+													int which) {
+												findShortestBusPath(
+														departureButton
+																.getText()
+																.toString(),
+														arrivalButton.getText()
+																.toString());
+											}
+										});
 								dialog2.setNegativeButton("close", null);
 								dialog2.show();
 							}
