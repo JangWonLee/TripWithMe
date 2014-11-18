@@ -33,21 +33,21 @@ public class WebViews extends Activity {
 	private ViewHelper mViewHelper;
 
 	private WebView webview;
-	
+
 	private Typeface mFont;
 	private Typeface jFont;
 	private Typeface kFont;
-		
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.webviews);
-		
-        jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
-        mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
-        kFont=Typeface.createFromAsset(getAssets(), "fonts/YoureInvited.otf");
-		
+
+		jFont = Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+		mFont = Typeface.createFromAsset(getAssets(),
+				"fonts/FinenessProBlack.otf");
+		kFont = Typeface.createFromAsset(getAssets(), "fonts/YoureInvited.otf");
+
 		mViewHelper = new ViewHelper(this);
 		View webviewsLayout = findViewById(R.id.tab2);
 		mViewHelper.setGlobalSize((ViewGroup) webviewsLayout);

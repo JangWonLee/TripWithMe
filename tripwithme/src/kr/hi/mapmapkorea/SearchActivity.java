@@ -81,7 +81,7 @@ public class SearchActivity extends Activity {
 		seoulButton.setTypeface(mFont);
 		
 		
-		File seoul = new File(Environment.getExternalStorageDirectory()
+		seoul = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
 		
 		if(seoul.exists()) {
@@ -105,9 +105,13 @@ public class SearchActivity extends Activity {
 			break;
 
 		case R.id.seoulbutton:
-			intent = new Intent(this, MenuActivity.class);
-			startActivity(intent);
-			break;
+			if (seoul.exists()) {
+				intent = new Intent(this, MenuActivity.class);
+				startActivity(intent);
+				break;
+			} else {
+				Toast.makeText(SearchActivity.this, "No map file, Please Download first", Toast.LENGTH_LONG).show();
+			}
 		}
 	}
 }
