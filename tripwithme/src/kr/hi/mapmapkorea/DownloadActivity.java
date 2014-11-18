@@ -28,17 +28,15 @@ public class DownloadActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_download);
 
+		jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
+		mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
+		kFont=Typeface.createFromAsset(getAssets(), "fonts/YoureInvited.otf");
+		
 		downloadButton = (Button) findViewById(R.id.downloadbutton);
 //		downloadProgress = (ProgressBar) findViewById(R.id.downloadprogress);
 		regionText = (TextView) findViewById(R.id.regiontext);
 		msg = getIntent().getExtras().getString("msg");
 		
-		
-	    jFont=Typeface.createFromAsset(getAssets(), "fonts/chubgothic_1.ttf");
-	    mFont=Typeface.createFromAsset(getAssets(), "fonts/FinenessProBlack.otf");
-	    kFont=Typeface.createFromAsset(getAssets(), "fonts/YoureInvited.otf");
-
-
 		regionText.setText(msg);
 		regionText.setVisibility(View.VISIBLE);
 		

@@ -38,6 +38,7 @@
         android:layout_height="60dip"
         android:layout_margin="10dip"
         android:background="#00FF0000"
+        android:onClick="mOnClick"
         android:text="中國語"
         android:textColor="#ffffffff"
         android:textSize="30dip" />
@@ -48,6 +49,7 @@
         android:layout_height="60dip"
         android:layout_margin="10dip"
         android:background="#00FF0000"
+        android:onClick="mOnClick"
         android:text="日本語"
         android:textColor="#ffffffff"
         android:textSize="30dip" />

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_2"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="100dip"
+        android:layout_marginTop="100dip"
+        android:gravity="center"
+        android:text="개발자 : 박동균, 이장원, 이윤혜" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="200dip"
+        android:layout_marginTop="100dip"
+        android:gravity="center"
+        android:text="우리는 고생했다" />
+
+</LinearLayout>

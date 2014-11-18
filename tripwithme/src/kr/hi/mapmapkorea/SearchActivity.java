@@ -32,7 +32,6 @@ public class SearchActivity extends Activity {
 	private TextView selectCityText;
 	private TextView orText;
 	private TextView searchCityText;
-	private Intent intent;
 	private Button searchButton;
 	private Button seoulButton;
 
@@ -98,15 +97,32 @@ public class SearchActivity extends Activity {
 	public void mOnClick(View v) {
 		switch (v.getId()) {
 		case R.id.searchbutton:
+			/**
+			 * Intent값 서울:0
+			 * 			부산:1
+			 * 			인천:2
+			 */
 			String msg = autoEdit.getText().toString();
-			intent = new Intent(this, DownloadActivity.class);
-			intent.putExtra("msg", msg);
-			startActivity(intent);
+			if (msg.equals("Seoul") || msg.equals("seoul") || msg.equals("SEOUL")) {
+				Intent intent = new Intent(this, WebViews.class);
+				intent.putExtra("City", 0);
+				startActivity(intent);	
+			} else if (msg.equals("Busan") || msg.equals("busan") || msg.equals("BUSAN")) {
+				Intent intent = new Intent(this, WebViews.class);
+				intent.putExtra("City", 1);
+				startActivity(intent);	
+			} else if (msg.equals("Incheon") || msg.equals("incheon") || msg.equals("INCHEON")) {
+				Intent intent = new Intent(this, WebViews.class);
+				intent.putExtra("City", 2);
+				startActivity(intent);	
+			} else {
+				Toast.makeText(SearchActivity.this, "Wrong City Name, Please Check again", Toast.LENGTH_LONG).show();
+			}
 			break;
 
 		case R.id.seoulbutton:
 			if (seoul.exists()) {
-				intent = new Intent(this, MenuActivity.class);
+				Intent intent = new Intent(this, MenuActivity.class);
 				startActivity(intent);
 				break;
 			} else {

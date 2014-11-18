@@ -33,6 +33,8 @@ public class WebViews extends Activity {
 	private ViewHelper mViewHelper;
 
 	private WebView webview;
+	
+	private String urlAddress;
 
 	private Typeface mFont;
 	private Typeface jFont;
@@ -54,8 +56,25 @@ public class WebViews extends Activity {
 
 		webview = (WebView) findViewById(R.id.webview);
 		webview.getSettings().setJavaScriptEnabled(true);
-		webview.loadUrl("https://docs.google.com/file/d/0B0vdbaa0j01ySkl5RzVIV1dtRzA/edit?usp=docslist_api");
 
+		int cityNumber = getIntent().getIntExtra("City", 9);
+		switch (cityNumber) {
+		case 0:
+			urlAddress = "https://docs.google.com/file/d/0B0vdbaa0j01ySkl5RzVIV1dtRzA/edit?usp=docslist_api";
+			break;
+		case 1:
+			urlAddress = "";
+			break;
+		case 2:
+			urlAddress = "";
+			break;
+		default:
+			break;
+		}
+
+//		webview.loadUrl("https://docs.google.com/file/d/0B0vdbaa0j01ySkl5RzVIV1dtRzA/edit?usp=docslist_api");
+		webview.loadUrl(urlAddress);
+		
 		webview.setWebViewClient(new WebViewClientClass());
 
 		webview.setDownloadListener(new DownloadListener() {
