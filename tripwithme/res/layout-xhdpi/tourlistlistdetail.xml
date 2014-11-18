@@ -13,7 +13,8 @@
         android:layout_height="70dip"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/locationbutton2"
+        android:layout_margin="10dip"
+        android:background="@drawable/selector"
         android:onClick="mOnClick"
         android:padding="20dip" />
 

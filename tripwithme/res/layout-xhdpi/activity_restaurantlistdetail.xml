@@ -14,7 +14,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="10dip"
-        android:background="@drawable/locationbutton2"
+        android:background="@drawable/selector"
         android:onClick="mOnClick"
         android:padding="20dip" />
 

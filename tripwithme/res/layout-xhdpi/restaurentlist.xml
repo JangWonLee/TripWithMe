@@ -7,7 +7,7 @@
     <ImageView
         android:layout_width = "fill_parent"
         android:layout_height = "fill_parent"
-        android:src ="@drawable/bg_restaurentlist"
+        android:src ="@drawable/background_3"
         android:gravity = "fill"
     />
     
