@@ -59,14 +59,15 @@ public class MapActivity extends Activity {
 
 	// MapView
 	private MapView mapView;
-	private Drawable mRest, mTour, mNow, mLocation, mBus, mSubway, mArrival, mDeparture, mSelectedSubway;
+	private Drawable mRest, mTour, mNow, mLocation, mBus, mSubway, mArrival,
+			mDeparture, mSelectedSubway;
 
 	private MapController mapController;
 	private ResourceProxy proxy;
 
 	private LocationManager locationManager;
 	private String mProvider;
- 
+
 	private String strColor;
 
 	private double mlatitude;
@@ -109,7 +110,6 @@ public class MapActivity extends Activity {
 	private MyOwnItemizedOverlay departureOverlay;
 	private MyOwnItemizedOverlay arrivalOverlay;
 	private MyOwnItemizedOverlay pathOverlay;
-	
 
 	private Location lastLocation;
 	private String geonameDatabaseFile = "/sdcard/Download/mapmapkorea.sqlite";
@@ -203,6 +203,7 @@ public class MapActivity extends Activity {
 			this.finish();
 		}
 		this.mapView = new OfflineMapView(this, "Download/Seoul.sqlitedb");
+//		this.mapView = new OfflineMapView(this, "Download/Busan.sqlitedb");
 		this.mapController = mapView.getController();
 
 		// set Zoom Countrol
@@ -243,6 +244,8 @@ public class MapActivity extends Activity {
 				GeoPoint geoPoint = new GeoPoint(currentlatitude,
 						currentlongitude);
 				this.mapController.setCenter(geoPoint);
+//				this.mapController.setCenter(new GeoPoint(35.138063, 129.079782));
+				Log.i("ddd", "ddd");
 			} else {
 				this.mapController
 						.setCenter(new GeoPoint(37.566352, 126.978103));
@@ -268,22 +271,32 @@ public class MapActivity extends Activity {
 
 		for (int i = 0; i < cursor.getCount(); i++) {
 			cursor.moveToNext();
-			if(cursor.getString(7) == null)
-				item = new OverlayItem(cursor.getString(1), cursor.getString(2) + "\n" + "\n" + cursor.getString(3)
-					 + "\n" + "\n"+ cursor.getString(4) + "\n" + "\n" + cursor.getString(5) + "\n" + "\n" + cursor.getString(6),
-					new GeoPoint(cursor.getDouble(11), cursor.getDouble(12)));
-			else if(cursor.getString(8) == null)
-				item = new OverlayItem(cursor.getString(1), cursor.getString(2) + "\n" + "\n" + cursor.getString(3)
-						 + "\n" + "\n"+ cursor.getString(4) + "\n" + "\n" + cursor.getString(5) + "\n" + "\n" + cursor.getString(6)
-						 + "\n" + "\n" + cursor.getString(7),
-						new GeoPoint(cursor.getDouble(11), cursor.getDouble(12)));
+			if (cursor.getString(7) == null)
+				item = new OverlayItem(cursor.getString(1), cursor.getString(2)
+						+ "\n" + "\n" + cursor.getString(3) + "\n" + "\n"
+						+ cursor.getString(4) + "\n" + "\n"
+						+ cursor.getString(5) + "\n" + "\n"
+						+ cursor.getString(6), new GeoPoint(
+						cursor.getDouble(11), cursor.getDouble(12)));
+			else if (cursor.getString(8) == null)
+				item = new OverlayItem(cursor.getString(1), cursor.getString(2)
+						+ "\n" + "\n" + cursor.getString(3) + "\n" + "\n"
+						+ cursor.getString(4) + "\n" + "\n"
+						+ cursor.getString(5) + "\n" + "\n"
+						+ cursor.getString(6) + "\n" + "\n"
+						+ cursor.getString(7), new GeoPoint(
+						cursor.getDouble(11), cursor.getDouble(12)));
 			else
-				item = new OverlayItem(cursor.getString(1), cursor.getString(2) + "\n" + "\n" + cursor.getString(3)
-						 + "\n" + "\n"+ cursor.getString(4) + "\n" + "\n" + cursor.getString(5) + "\n" + "\n" + cursor.getString(6)
-						 + "\n" + "\n" + cursor.getString(7) + "\n" + "\n" + cursor.getString(8),
-						  new GeoPoint(cursor.getDouble(11), cursor.getDouble(12)));
+				item = new OverlayItem(cursor.getString(1), cursor.getString(2)
+						+ "\n" + "\n" + cursor.getString(3) + "\n" + "\n"
+						+ cursor.getString(4) + "\n" + "\n"
+						+ cursor.getString(5) + "\n" + "\n"
+						+ cursor.getString(6) + "\n" + "\n"
+						+ cursor.getString(7) + "\n" + "\n"
+						+ cursor.getString(8), new GeoPoint(
+						cursor.getDouble(11), cursor.getDouble(12)));
 			Log.i("aa", cursor.getString(1));
-			restaurantOverlay.addItem(item); 
+			restaurantOverlay.addItem(item);
 			if (startlatitude == cursor.getDouble(11))
 				findRestaurantOverlay.addItem(item);
 		}
@@ -294,8 +307,9 @@ public class MapActivity extends Activity {
 		cursor = db.rawQuery("SELECT * FROM tourlist", null);
 		for (int i = 0; i < cursor.getCount(); i++) {
 			cursor.moveToNext();
-			item = new OverlayItem(cursor.getString(1), cursor.getString(2) + "\n" + "\n" + cursor.getString(3)
-					 + "\n" + "\n"+ cursor.getString(4) + "\n" + "\n" + cursor.getString(5),
+			item = new OverlayItem(cursor.getString(1), cursor.getString(2)
+					+ "\n" + "\n" + cursor.getString(3) + "\n" + "\n"
+					+ cursor.getString(4) + "\n" + "\n" + cursor.getString(5),
 					new GeoPoint(cursor.getDouble(6), cursor.getDouble(7)));
 			attractionOverlay.addItem(item);
 			if (startlatitude == cursor.getDouble(6))
@@ -323,14 +337,13 @@ public class MapActivity extends Activity {
 		}
 		mapView.getOverlays().add(currentLocationOverlay.getOverlay());
 
-		
 		geoSearchLocation = new MyOwnItemizedOverlay(mLocation, this);
 		mapView.getOverlays().add(geoSearchLocation.getOverlay());
 		departureOverlay = new MyOwnItemizedOverlay(mDeparture, this);
 		mapView.getOverlays().add(departureOverlay.getOverlay());
 		arrivalOverlay = new MyOwnItemizedOverlay(mArrival, this);
 		mapView.getOverlays().add(arrivalOverlay.getOverlay());
-		pathOverlay =  new MyOwnItemizedOverlay(mSelectedSubway, this);
+		pathOverlay = new MyOwnItemizedOverlay(mSelectedSubway, this);
 		mapView.getOverlays().add(pathOverlay.getOverlay());
 	}
 
@@ -415,7 +428,7 @@ public class MapActivity extends Activity {
 			mapView.getOverlays().add(departureOverlay.getOverlay());
 			mapView.getOverlays().add(arrivalOverlay.getOverlay());
 			mapView.getOverlays().add(pathOverlay.getOverlay());
-			
+
 			mapView.invalidate();
 			break;
 
@@ -444,7 +457,7 @@ public class MapActivity extends Activity {
 			mapView.getOverlays().add(departureOverlay.getOverlay());
 			mapView.getOverlays().add(arrivalOverlay.getOverlay());
 			mapView.getOverlays().add(pathOverlay.getOverlay());
-			
+
 			mapView.invalidate();
 			break;
 
@@ -477,8 +490,8 @@ public class MapActivity extends Activity {
 			break;
 
 		case R.id.dessearchbutton:
-		    InputMethodManager mgr = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-		    mgr.hideSoftInputFromWindow(mapView.getWindowToken(), 0);
+			InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			mgr.hideSoftInputFromWindow(mapView.getWindowToken(), 0);
 
 			// db OPEN
 			db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
@@ -565,7 +578,8 @@ public class MapActivity extends Activity {
 					mapController.setCenter(new GeoPoint(cursor.getDouble(2),
 							cursor.getDouble(3)));
 				} else {
-					mapController.setCenter(new GeoPoint(currentlatitude, currentlongitude));
+					mapController.setCenter(new GeoPoint(currentlatitude,
+							currentlongitude));
 				}
 			}
 			break;
@@ -586,7 +600,8 @@ public class MapActivity extends Activity {
 					mapController.setCenter(new GeoPoint(cursor.getDouble(2),
 							cursor.getDouble(3)));
 				} else {
-					mapController.setCenter(new GeoPoint(currentlatitude, currentlongitude));
+					mapController.setCenter(new GeoPoint(currentlatitude,
+							currentlongitude));
 				}
 			}
 			break;
@@ -688,33 +703,28 @@ public class MapActivity extends Activity {
 		Log.i("end", " " + endSubway);
 
 		subway.Path(startSubway, endSubway, shortest);
-	
+
 		pathOverlay.clean();
 		aSQL = "select *" + " from seoulStation" + " where num = ?";
-		for(int i=0; i<shortest.pathCount; i++)
-		{
+		for (int i = 0; i < shortest.pathCount; i++) {
 
-			args[0] = shortest.pathAry[i]+"";
+			args[0] = shortest.pathAry[i] + "";
 			cursor = db.rawQuery(aSQL, args);
 			cursor.moveToNext();
-			
-			
-/*			출발 도착이 지하철 역인 경우 레이아웃에 추가 안하고 싶을때
-  			if(i == 0)  
-				if(startLa == cursor.getDouble(6) && startLo == cursor.getDouble(7))
-					continue;
-			if(i == shortest.pathCount-1)
-				if(endLa == cursor.getDouble(6) && endLo == cursor.getDouble(7))
-					continue;
-*/			
-			
+
+			/*
+			 * 출발 도착이 지하철 역인 경우 레이아웃에 추가 안하고 싶을때 if(i == 0) if(startLa ==
+			 * cursor.getDouble(6) && startLo == cursor.getDouble(7)) continue;
+			 * if(i == shortest.pathCount-1) if(endLa == cursor.getDouble(6) &&
+			 * endLo == cursor.getDouble(7)) continue;
+			 */
+
 			item = new OverlayItem(cursor.getString(2), "Line "
 					+ cursor.getInt(3), new GeoPoint(cursor.getDouble(6),
 					cursor.getDouble(7)));
 			pathOverlay.addItem(item);
 		}
 		mapView.invalidate();
-		
 
 		setDialogBrief();
 
@@ -775,10 +785,10 @@ public class MapActivity extends Activity {
 		double la;
 		double lo;
 
-		db = SQLiteDatabase.openDatabase("/sdcard/Download/busstop2.sqlite", null,
-				SQLiteDatabase.OPEN_READWRITE
+		db = SQLiteDatabase.openDatabase("/sdcard/Download/busstop2.sqlite",
+				null, SQLiteDatabase.OPEN_READWRITE
 						+ SQLiteDatabase.CREATE_IF_NECESSARY);
-		
+
 		cursor = db.rawQuery("SELECT * FROM busstop2", null);
 
 		for (int i = 0; i < cursor.getCount(); i++) {
@@ -794,9 +804,8 @@ public class MapActivity extends Activity {
 				startDistance2 = startDistance1;
 				startSubway1 = cursor.getInt(7);
 				startSubway2 = startSubway1;
-			}
-			else if(((startLa - la) * (startLa - la) + (startLo - lo)
-					* (startLo - lo)) <= startDistance2){
+			} else if (((startLa - la) * (startLa - la) + (startLo - lo)
+					* (startLo - lo)) <= startDistance2) {
 				startDistance2 = ((startLa - la) * (startLa - la) + (startLo - lo)
 						* (startLo - lo));
 				startSubway2 = cursor.getInt(7);
@@ -807,66 +816,56 @@ public class MapActivity extends Activity {
 				endDistance2 = endDistance1;
 				endSubway1 = cursor.getInt(7);
 				endSubway2 = endSubway1;
-			}
-			else if(((endLa - la) * (endLa - la) + (endLo - lo) * (endLo - lo)) <= endDistance2) {
+			} else if (((endLa - la) * (endLa - la) + (endLo - lo)
+					* (endLo - lo)) <= endDistance2) {
 				endDistance2 = ((endLa - la) * (endLa - la) + (endLo - lo)
 						* (endLo - lo));
 				endSubway2 = cursor.getInt(7);
 			}
 		}
-//		Log.i("start", " " + startSubway);
-//		Log.i("end", " " + endSubway);
+		// Log.i("start", " " + startSubway);
+		// Log.i("end", " " + endSubway);
 		Shortest swapShortest = new Shortest();
 		bus.search(startSubway1, endSubway1, shortest);
-/*		
-		bus.search(startSubway1, endSubway2, swapShortest);
-		if(swapShortest.pathCount < shortest.pathCount) {
-			shortest = swapShortest;
-			swapShortest = new Shortest();
-		}
-		
-		bus.search(startSubway2, endSubway1, swapShortest);
-		if(swapShortest.pathCount < shortest.pathCount) {
-			shortest = swapShortest;
-			swapShortest = new Shortest();
-		}
-		
-		bus.search(startSubway2, endSubway2, swapShortest);
-		if(swapShortest.pathCount < shortest.pathCount) {
-			shortest = swapShortest;
-		}
-*/		
+		/*
+		 * bus.search(startSubway1, endSubway2, swapShortest);
+		 * if(swapShortest.pathCount < shortest.pathCount) { shortest =
+		 * swapShortest; swapShortest = new Shortest(); }
+		 * 
+		 * bus.search(startSubway2, endSubway1, swapShortest);
+		 * if(swapShortest.pathCount < shortest.pathCount) { shortest =
+		 * swapShortest; swapShortest = new Shortest(); }
+		 * 
+		 * bus.search(startSubway2, endSubway2, swapShortest);
+		 * if(swapShortest.pathCount < shortest.pathCount) { shortest =
+		 * swapShortest; }
+		 */
 		pathOverlay.clean();
 		aSQL = "select *" + " from busstop2" + " where busstop_id = ?";
-		for(int i=0; i<shortest.pathCount; i++)
-		{
+		for (int i = 0; i < shortest.pathCount; i++) {
 
-			args[0] = shortest.pathAry[i]+"";
+			args[0] = shortest.pathAry[i] + "";
 			cursor = db.rawQuery(aSQL, args);
 			cursor.moveToNext();
-			
-			
-/*			출발 도착이 지하철 역인 경우 레이아웃에 추가 안하고 싶을때
-  			if(i == 0)  
-				if(startLa == cursor.getDouble(6) && startLo == cursor.getDouble(7))
-					continue;
-			if(i == shortest.pathCount-1)
-				if(endLa == cursor.getDouble(6) && endLo == cursor.getDouble(7))
-					continue;
-*/			
-			
+
+			/*
+			 * 출발 도착이 지하철 역인 경우 레이아웃에 추가 안하고 싶을때 if(i == 0) if(startLa ==
+			 * cursor.getDouble(6) && startLo == cursor.getDouble(7)) continue;
+			 * if(i == shortest.pathCount-1) if(endLa == cursor.getDouble(6) &&
+			 * endLo == cursor.getDouble(7)) continue;
+			 */
+
 			item = new OverlayItem(cursor.getString(4), "Line "
 					+ cursor.getString(2), new GeoPoint(cursor.getDouble(5),
 					cursor.getDouble(6)));
 			pathOverlay.addItem(item);
 		}
 		mapView.invalidate();
-	
 
 		setDialogBrief();
-	
+
 	}
-	
+
 	private void setDialogTotal() {
 		AlertDialog.Builder ab2 = new AlertDialog.Builder(MapActivity.this);
 		ab2.setTitle(" All Path").setMessage(
@@ -988,7 +987,9 @@ public class MapActivity extends Activity {
 
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							if(item.getTitle().equals("Departure Location") || item.getTitle().equals("Arrival Location"))
+							if (item.getTitle().equals("Departure Location")
+									|| item.getTitle().equals(
+											"Arrival Location"))
 								return;
 							pathOverlay.clean();
 							departureButton.setText(item.getTitle());
@@ -1035,26 +1036,35 @@ public class MapActivity extends Activity {
 								dialog2.setNegativeButton("close", null);
 								dialog2.show();
 							}
-							
+
 							if (!item.getTitle().equals("Current Location")) {
-								db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
-										SQLiteDatabase.OPEN_READWRITE
-												+ SQLiteDatabase.CREATE_IF_NECESSARY);
-								String departureSQL = "select *" + " from seoulgeoname"
+								db = SQLiteDatabase
+										.openDatabase(
+												geonameDatabaseFile,
+												null,
+												SQLiteDatabase.OPEN_READWRITE
+														+ SQLiteDatabase.CREATE_IF_NECESSARY);
+								String departureSQL = "select *"
+										+ " from seoulgeoname"
 										+ " where name = ?";
 								String[] departureArgs = { "" };
 								departureArgs[0] = item.getTitle();
-								cursor = db.rawQuery(departureSQL, departureArgs);
+								cursor = db.rawQuery(departureSQL,
+										departureArgs);
 								cursor.moveToNext();
 								departureOverlay.clean();
-								OverlayItem dItem = new OverlayItem("Departure Location", " ",
-										new GeoPoint(cursor.getDouble(2), cursor.getDouble(3)));
+								OverlayItem dItem = new OverlayItem(
+										"Departure Location", " ",
+										new GeoPoint(cursor.getDouble(2),
+												cursor.getDouble(3)));
 								departureOverlay.addItem(dItem);
-								
+
 							} else {
 								departureOverlay.clean();
-								OverlayItem dItem = new OverlayItem("Departure Location", " ",
-										new GeoPoint(currentlatitude, currentlongitude));
+								OverlayItem dItem = new OverlayItem(
+										"Departure Location", " ",
+										new GeoPoint(currentlatitude,
+												currentlongitude));
 								departureOverlay.addItem(dItem);
 							}
 							mapView.invalidate();
@@ -1066,13 +1076,15 @@ public class MapActivity extends Activity {
 
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							if(item.getTitle().equals("Departure Location") || item.getTitle().equals("Arrival Location"))
+							if (item.getTitle().equals("Departure Location")
+									|| item.getTitle().equals(
+											"Arrival Location"))
 								return;
 							pathOverlay.clean();
 							arrivalButton.setText(item.getTitle());
 							arrivalButton.setTextColor(Color
 									.parseColor(strColor));
-							arrivalButton.setTypeface(iFont);					
+							arrivalButton.setTypeface(iFont);
 							if (!departureButton.getText().equals("departure")
 									& !arrivalButton.getText()
 											.equals("arrival")) {
@@ -1098,26 +1110,34 @@ public class MapActivity extends Activity {
 								dialog2.setNegativeButton("close", null);
 								dialog2.show();
 							}
-							
+
 							if (!item.getTitle().equals("Current Location")) {
-								db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
-										SQLiteDatabase.OPEN_READWRITE
-												+ SQLiteDatabase.CREATE_IF_NECESSARY);
-								String arrivalSQL = "select *" + " from seoulgeoname"
+								db = SQLiteDatabase
+										.openDatabase(
+												geonameDatabaseFile,
+												null,
+												SQLiteDatabase.OPEN_READWRITE
+														+ SQLiteDatabase.CREATE_IF_NECESSARY);
+								String arrivalSQL = "select *"
+										+ " from seoulgeoname"
 										+ " where name = ?";
 								String[] arrivalArgs = { "" };
 								arrivalArgs[0] = item.getTitle();
 								cursor = db.rawQuery(arrivalSQL, arrivalArgs);
 								cursor.moveToNext();
 								arrivalOverlay.clean();
-								OverlayItem aItem = new OverlayItem("Arrival Location", " ",
-										new GeoPoint(cursor.getDouble(2), cursor.getDouble(3)));
+								OverlayItem aItem = new OverlayItem(
+										"Arrival Location", " ", new GeoPoint(
+												cursor.getDouble(2), cursor
+														.getDouble(3)));
 								arrivalOverlay.addItem(aItem);
-								
+
 							} else {
 								arrivalOverlay.clean();
-								OverlayItem aItem = new OverlayItem("Arrival Location", " ",
-										new GeoPoint(currentlatitude, currentlongitude));
+								OverlayItem aItem = new OverlayItem(
+										"Arrival Location", " ", new GeoPoint(
+												currentlatitude,
+												currentlongitude));
 								arrivalOverlay.addItem(aItem);
 							}
 							mapView.invalidate();
@@ -1185,24 +1205,24 @@ public class MapActivity extends Activity {
 		bitmap = ((BitmapDrawable) d).getBitmap();
 		mSubway = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
 				bitmap, 20, 27, true));
-		
+
 		d = getResources().getDrawable(R.drawable.arrivalicon);
 		d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
 		bitmap = ((BitmapDrawable) d).getBitmap();
-		mArrival = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
-				bitmap, 38, 40, true));
-		
+		mArrival = new BitmapDrawable(getResources(),
+				Bitmap.createScaledBitmap(bitmap, 38, 40, true));
+
 		d = getResources().getDrawable(R.drawable.departureicon);
 		d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
 		bitmap = ((BitmapDrawable) d).getBitmap();
-		mDeparture = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
-				bitmap, 53, 40, true));
-		
+		mDeparture = new BitmapDrawable(getResources(),
+				Bitmap.createScaledBitmap(bitmap, 53, 40, true));
+
 		d = getResources().getDrawable(R.drawable.selectedsubwayicon);
 		d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
 		bitmap = ((BitmapDrawable) d).getBitmap();
-		mSelectedSubway = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
-				bitmap, 20, 27, true));
+		mSelectedSubway = new BitmapDrawable(getResources(),
+				Bitmap.createScaledBitmap(bitmap, 20, 27, true));
 	}
 
 	@Override
