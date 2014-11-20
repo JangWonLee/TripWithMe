@@ -1,69 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.tripwithme"
-    android:versionCode="1" android:versionName="1.0" >
-    
+    android:versionCode="1"
+    android:versionName="1.0" >
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon2"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.NoTitleBar"
         android:largeHeap="true"
-    >
-    	<activity 
-    	    android:name="kr.hi.mapmapkorea.IntroActivity" android:label="@string/app_name">
-    	    	<intent-filter>
-    	    	    <action android:name="android.intent.action.MAIN"/>
-    	    	    <category android:name="android.intent.category.LAUNCHER" />
-    	    	</intent-filter>
-    	</activity>
-    	
+        android:theme="@android:style/Theme.NoTitleBar" >
+        <activity
+            android:name="kr.hi.mapmapkorea.IntroActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="kr.hi.mapmapkorea.MainActivity"
             android:label="@string/app_name" >
         </activity>
-        
-        <activity android:name="kr.hi.mapmapkorea.SearchActivity" 
+        <activity
+            android:name="kr.hi.mapmapkorea.SearchActivity"
             android:label="@string/app_name" />
-        
-        <activity android:name="kr.hi.mapmapkorea.MapActivity" 
+        <activity
+            android:name="kr.hi.mapmapkorea.MapActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden" />
-        
-        <activity android:name="kr.hi.mapmapkorea.SubwayActivity" 
-            android:label="@string/app_name"  />
-        
-        <activity android:name="kr.hi.mapmapkorea.MenuActivity" 
+        <activity
+            android:name="kr.hi.mapmapkorea.SubwayActivity"
             android:label="@string/app_name" />
-        
-        <activity android:name="kr.hi.mapmapkorea.RestaurantActivity" 
-            android:label="@string/app_name"/>
-        
-        <activity android:name="kr.hi.mapmapkorea.TourActivity" 
+        <activity
+            android:name="kr.hi.mapmapkorea.MenuActivity"
             android:label="@string/app_name" />
-        
-        <activity android:name="kr.hi.mapmapkorea.RestaurantDetailActivity" 
+        <activity
+            android:name="kr.hi.mapmapkorea.RestaurantActivity"
             android:label="@string/app_name" />
-        
-        <activity android:name="kr.hi.mapmapkorea.TourDetailActivity" 
+        <activity
+            android:name="kr.hi.mapmapkorea.TourActivity"
             android:label="@string/app_name" />
-        
-        <activity android:name="kr.hi.mapmapkorea.DownloadActivity" 
+        <activity
+            android:name="kr.hi.mapmapkorea.RestaurantDetailActivity"
             android:label="@string/app_name" />
-        
-        <activity android:name="kr.hi.mapmapkorea.WebViews" 
+        <activity
+            android:name="kr.hi.mapmapkorea.TourDetailActivity"
             android:label="@string/app_name" />
-        
+        <activity
+            android:name="kr.hi.mapmapkorea.DownloadActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name="kr.hi.mapmapkorea.WebViews"
+            android:label="@string/app_name" />
     </application>
 
 </manifest>
