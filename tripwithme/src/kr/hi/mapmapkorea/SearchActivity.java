@@ -95,21 +95,21 @@ public class SearchActivity extends Activity {
 		incheon = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download", "Incheon.sqlitedb");
 
-		// // init Offline Map
-		// File from = new File(Environment.getExternalStorageDirectory()
-		// .getAbsolutePath() + "/Download",
-		// "0B0vdbaa0j01ySkl5RzVIV1dtRzA.bin");
-		// File to = new File(Environment.getExternalStorageDirectory()
-		// .getAbsolutePath() + "/Download", "Seoul.sqlitedb");
-		// if (from.exists())
-		// from.renameTo(to);
-		// File map = new File(Environment.getExternalStorageDirectory()
-		// .getAbsolutePath() + "/Download", "Seoul.sqlitedb");
-		// if (!map.exists()) {
-		// Toast.makeText(this, "Please download map", Toast.LENGTH_SHORT)
-		// .show();
-		// this.finish();
-		// }
+		// init Offline Map
+		File from = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download",
+				"0B0vdbaa0j01ySkl5RzVIV1dtRzA.bin");
+		File to = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
+		if (from.exists())
+			from.renameTo(to);
+		File map = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
+		if (!map.exists()) {
+			Toast.makeText(this, "Please download map", Toast.LENGTH_SHORT)
+					.show();
+			this.finish();
+		}
 
 		if (seoul.exists()) {
 			cityMapButton1.setVisibility(View.VISIBLE);
