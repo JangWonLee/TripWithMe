@@ -28,7 +28,7 @@
         android:layout_height="150dip"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/restaurentmenuicon"
+        android:background="@drawable/restselector"
         android:onClick="mOnClick" />
 
     <Button
@@ -38,7 +38,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@id/restaurantbutton"
         android:layout_margin="5dip"
-        android:background="@drawable/tourmenuicon"
+        android:background="@drawable/tourselector"
         android:onClick="mOnClick" />
 
     <Button
@@ -48,7 +48,7 @@
         android:layout_above="@id/restaurantbutton"
         android:layout_alignParentLeft="true"
         android:layout_margin="5dip"
-        android:background="@drawable/mapicon"
+        android:background="@drawable/mapselector2"
         android:onClick="mOnClick" />
 
 </RelativeLayout>
