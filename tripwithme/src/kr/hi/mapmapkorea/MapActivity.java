@@ -66,7 +66,7 @@ public class MapActivity extends Activity {
 
 	private LocationManager locationManager;
 	private String mProvider;
-
+ 
 	private String strColor;
 
 	private double mlatitude;
@@ -764,10 +764,14 @@ public class MapActivity extends Activity {
 			endLo = cursor.getDouble(3);
 		}
 
-		int startSubway = 0;
-		int endSubway = 0;
-		double startDistance = 99999;
-		double endDistance = 99999;
+		int startSubway1 = 0;
+		int startSubway2 = 0;
+		int endSubway1 = 0;
+		int endSubway2 = 0;
+		double startDistance1 = 99999;
+		double startDistance2 = 99999;
+		double endDistance1 = 99999;
+		double endDistance2 = 99999;
 		double la;
 		double lo;
 
@@ -784,22 +788,54 @@ public class MapActivity extends Activity {
 			lo = cursor.getDouble(6);
 
 			if (((startLa - la) * (startLa - la) + (startLo - lo)
-					* (startLo - lo)) < startDistance) {
-				startDistance = ((startLa - la) * (startLa - la) + (startLo - lo)
+					* (startLo - lo)) <= startDistance1) {
+				startDistance1 = ((startLa - la) * (startLa - la) + (startLo - lo)
 						* (startLo - lo));
-				startSubway = cursor.getInt(7);
+				startDistance2 = startDistance1;
+				startSubway1 = cursor.getInt(7);
+				startSubway2 = startSubway1;
 			}
-			if (((endLa - la) * (endLa - la) + (endLo - lo) * (endLo - lo)) < endDistance) {
-				endDistance = ((endLa - la) * (endLa - la) + (endLo - lo)
+			else if(((startLa - la) * (startLa - la) + (startLo - lo)
+					* (startLo - lo)) <= startDistance2){
+				startDistance2 = ((startLa - la) * (startLa - la) + (startLo - lo)
+						* (startLo - lo));
+				startSubway2 = cursor.getInt(7);
+			}
+			if (((endLa - la) * (endLa - la) + (endLo - lo) * (endLo - lo)) <= endDistance1) {
+				endDistance1 = ((endLa - la) * (endLa - la) + (endLo - lo)
 						* (endLo - lo));
-				endSubway = cursor.getInt(7);
+				endDistance2 = endDistance1;
+				endSubway1 = cursor.getInt(7);
+				endSubway2 = endSubway1;
+			}
+			else if(((endLa - la) * (endLa - la) + (endLo - lo) * (endLo - lo)) <= endDistance2) {
+				endDistance2 = ((endLa - la) * (endLa - la) + (endLo - lo)
+						* (endLo - lo));
+				endSubway2 = cursor.getInt(7);
 			}
 		}
-		Log.i("start", " " + startSubway);
-		Log.i("end", " " + endSubway);
-
-		bus.search(startSubway, endSubway, shortest);
-	
+//		Log.i("start", " " + startSubway);
+//		Log.i("end", " " + endSubway);
+		Shortest swapShortest = new Shortest();
+		bus.search(startSubway1, endSubway1, shortest);
+/*		
+		bus.search(startSubway1, endSubway2, swapShortest);
+		if(swapShortest.pathCount < shortest.pathCount) {
+			shortest = swapShortest;
+			swapShortest = new Shortest();
+		}
+		
+		bus.search(startSubway2, endSubway1, swapShortest);
+		if(swapShortest.pathCount < shortest.pathCount) {
+			shortest = swapShortest;
+			swapShortest = new Shortest();
+		}
+		
+		bus.search(startSubway2, endSubway2, swapShortest);
+		if(swapShortest.pathCount < shortest.pathCount) {
+			shortest = swapShortest;
+		}
+*/		
 		pathOverlay.clean();
 		aSQL = "select *" + " from busstop2" + " where busstop_id = ?";
 		for(int i=0; i<shortest.pathCount; i++)
@@ -820,7 +856,7 @@ public class MapActivity extends Activity {
 */			
 			
 			item = new OverlayItem(cursor.getString(4), "Line "
-					+ cursor.getInt(2), new GeoPoint(cursor.getDouble(5),
+					+ cursor.getString(2), new GeoPoint(cursor.getDouble(5),
 					cursor.getDouble(6)));
 			pathOverlay.addItem(item);
 		}

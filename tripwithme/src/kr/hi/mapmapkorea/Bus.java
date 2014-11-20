@@ -142,6 +142,19 @@ public class Bus {
 		}
 		shortest.pathAry = pathAry;
 		shortest.briefPath = shortest.totalPath;
+		
+		db = SQLiteDatabase.openDatabase("/sdcard/Download/myway.sqlite", null,
+				SQLiteDatabase.OPEN_READWRITE
+						+ SQLiteDatabase.CREATE_IF_NECESSARY);
+		for(int i=0; i<10; i++) {
+			String temp;
+			temp = "insert into myway values ('" + "dd" + "','";
+			for(int j=1; j<654; j++)
+				temp +=  "dd"  + "','";
+			temp +=  "dd"  + "');";
+			db.execSQL(temp);
+		}
+		
 	}
 
 	public void compare(int stop, int line) {
