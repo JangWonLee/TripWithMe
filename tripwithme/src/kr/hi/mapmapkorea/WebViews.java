@@ -57,7 +57,7 @@ public class WebViews extends Activity {
 		webview = (WebView) findViewById(R.id.webview);
 		webview.getSettings().setJavaScriptEnabled(true);
 
-		int cityNumber = getIntent().getIntExtra("City", 9);
+		int cityNumber = getIntent().getIntExtra("CityToWebview", 9);
 		switch (cityNumber) {
 		case 0:
 			urlAddress = "https://docs.google.com/file/d/0B0vdbaa0j01ySkl5RzVIV1dtRzA/edit?usp=docslist_api";

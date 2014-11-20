@@ -2,27 +2,27 @@ package kr.hi.mapmapkorea;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Set;
 
 import kr.hi.mapmapkorea.util.ViewHelper;
-
-import com.example.tripwithme.R;
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.KeyEvent;
-import android.widget.TextView.OnEditorActionListener;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.tripwithme.R;
 
 public class SearchActivity extends Activity {
 	private ViewHelper mViewHelper;
@@ -46,6 +46,13 @@ public class SearchActivity extends Activity {
 	private File seoul;
 	private File busan;
 	private File incheon;
+	
+	private String cityMapName[];
+	private Set<String> setOfPut;
+	private Set<String> setOfGet;
+	private ArrayList<String> setOfList;
+	private SharedPreferences sp;
+	
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -91,11 +98,14 @@ public class SearchActivity extends Activity {
 		seoul = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
 		busan = new File(Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/Download", "Busan.sqlitedb");
+				.getAbsolutePath() + "/Download", "Busan.sqlite");
 		incheon = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download", "Incheon.sqlitedb");
+		
 
-		// init Offline Map
+		/**
+		 * 맵 이름 변환
+		 */
 		File from = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download",
 				"0B0vdbaa0j01ySkl5RzVIV1dtRzA.bin");
@@ -107,19 +117,73 @@ public class SearchActivity extends Activity {
 				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
 		if (!map.exists()) {
 			Toast.makeText(this, "Please download map", Toast.LENGTH_SHORT)
-					.show();
+			.show();
 			this.finish();
 		}
-
-		if (seoul.exists()) {
+		
+		Log.i("busan", busan.exists() + "");
+		if (seoul.exists() && busan.exists()) {
+			Log.i("11", "111");
 			cityMapButton1.setVisibility(View.VISIBLE);
+			cityMapButton1.setText("Seoul");
+			cityMapButton2.setVisibility(View.VISIBLE);
+			cityMapButton2.setText("Busan");
+		} else if (seoul.exists()) {
+			Log.i("11", "222");
+			cityMapButton1.setVisibility(View.VISIBLE);
+			cityMapButton1.setText("Seoutl");
+		} else if (busan.exists()) {
+			Log.i("11", "333");
+			cityMapButton2.setVisibility(View.VISIBLE);
+			cityMapButton2.setText("Busan");
 		}
+		
 
 		adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, list);
 
 		autoEdit.setAdapter(adapter);
 
+	}
+
+	private void setDialogDownload(final int cityNumber) {
+		String cityName = null;
+		switch (cityNumber) {
+		case 0:
+			cityName = "SEOUL";
+			break;
+		case 1:
+			cityName = "BUSAN";
+			break;
+		case 2:
+			cityName = "INCHEON";
+			break;
+		default:
+			break;
+		}
+		
+		AlertDialog.Builder ab = new AlertDialog.Builder(SearchActivity.this);
+		ab.setTitle(" ※※※※※ ").setMessage(
+				"  You choose the city named * " + cityName
+						+ "*.\n\n Do you want to Download this city_map?\n");
+		ab.setPositiveButton("Download", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+//				setOfList.add(String.valueOf(cityNumber));
+//				setOfPut.add(String.valueOf(cityNumber));
+				
+				Intent intent = new Intent(SearchActivity.this, WebViews.class);
+				intent.putExtra("CityToWebview", cityNumber);
+				startActivity(intent);
+				dialog.cancel();
+			}
+		}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
+		ab.show();
 	}
 
 	public void mOnClick(View v) {
@@ -131,19 +195,13 @@ public class SearchActivity extends Activity {
 			String msg = autoEdit.getText().toString();
 			if (msg.equals("Seoul") || msg.equals("seoul")
 					|| msg.equals("SEOUL")) {
-				Intent intent = new Intent(this, WebViews.class);
-				intent.putExtra("City", 0);
-				startActivity(intent);
+				setDialogDownload(0);
 			} else if (msg.equals("Busan") || msg.equals("busan")
 					|| msg.equals("BUSAN")) {
-				Intent intent = new Intent(this, WebViews.class);
-				intent.putExtra("City", 1);
-				startActivity(intent);
+				setDialogDownload(1);
 			} else if (msg.equals("Incheon") || msg.equals("incheon")
 					|| msg.equals("INCHEON")) {
-				Intent intent = new Intent(this, WebViews.class);
-				intent.putExtra("City", 2);
-				startActivity(intent);
+				setDialogDownload(2);
 			} else {
 				Toast.makeText(SearchActivity.this,
 						"Wrong City Name, Please Check again",
@@ -152,35 +210,41 @@ public class SearchActivity extends Activity {
 			break;
 
 		case R.id.citymapbutton1:
-			if (seoul.exists()) {
-				Intent intent = new Intent(this, MenuActivity.class);
-				startActivity(intent);
-				break;
-			} else {
-				Toast.makeText(SearchActivity.this,
-						"No map file, Please Download first", Toast.LENGTH_LONG)
-						.show();
+			Intent intent1 = new Intent(this, MenuActivity.class);
+			if (seoul.exists() || (seoul.exists() && busan.exists())) {
+				intent1.putExtra("CityToMenuActivity", 0);
+			} else if (busan.exists()) {
+				intent1.putExtra("CityToMenuActivity", 1);
 			}
+			startActivity(intent1);
+//			else {
+//				Toast.makeText(SearchActivity.this,
+//						"No map file, Please Download first", Toast.LENGTH_LONG)
+//						.show();
+//			}
+			break;
 		case R.id.citymapbutton2:
-			if (seoul.exists()) {
-				Intent intent = new Intent(this, MenuActivity.class);
-				startActivity(intent);
-				break;
-			} else {
-				Toast.makeText(SearchActivity.this,
-						"No map file, Please Download first", Toast.LENGTH_LONG)
-						.show();
-			}
+			Intent intent2 = new Intent(this, MenuActivity.class);
+			if (busan.exists()) {
+				intent2.putExtra("CityToMenuActivity", 1);
+				startActivity(intent2);
+			} 
+//			else {
+//				Toast.makeText(SearchActivity.this,
+//						"No map file, Please Download first", Toast.LENGTH_LONG)
+//						.show();
+//			}
+			break;
 		case R.id.citymapbutton3:
 			if (seoul.exists()) {
 				Intent intent = new Intent(this, MenuActivity.class);
 				startActivity(intent);
-				break;
 			} else {
 				Toast.makeText(SearchActivity.this,
 						"No map file, Please Download first", Toast.LENGTH_LONG)
 						.show();
 			}
+			break;
 		}
 	}
 }
