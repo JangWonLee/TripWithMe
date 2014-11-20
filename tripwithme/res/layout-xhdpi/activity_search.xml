@@ -35,47 +35,58 @@
         android:textColor="#ffffffff"
         android:textSize="18dip" />
 
-    <Button
-        android:id="@+id/seoulbutton"
-        android:layout_width="200dip"
-        android:layout_height="60dip"
-        android:layout_below="@id/autoedit"
-        android:layout_gravity="center"
-        android:layout_marginBottom="15dip"
-        android:layout_marginTop="15dip"
-        android:background="@drawable/citybuttonicon"
-        android:gravity="center"
-        android:onClick="mOnClick"
-        android:text="Seoul"
-        android:textColor="#ffffffff"
-        android:textSize="25dip"
-        android:visibility="visible" />
-
-    <Button
-        android:id="@+id/busanbutton"
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="90dip"
-        android:layout_below="@id/seoulbutton"
-        android:background="#00ffffff"
-        android:onClick="mOnClick"
-        android:padding="30dip"
-        android:text="seoul"
-        android:textColor="#ffffffff"
-        android:textSize="25dip"
-        android:visibility="invisible" />
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/searchbutton"
+        android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/incheonbutton"
-        android:layout_width="fill_parent"
-        android:layout_height="90dip"
-        android:layout_below="@id/busanbutton"
-        android:background="#00ffffff"
-        android:onClick="mOnClick"
-        android:padding="30dip"
-        android:text="seoul"
-        android:textColor="#ffffffff"
-        android:textSize="25dip"
-        android:visibility="invisible" />
+        <Button
+            android:id="@+id/citymapbutton1"
+            android:layout_width="200dip"
+            android:layout_height="60dip"
+            android:layout_below="@id/autoedit"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dip"
+            android:layout_marginTop="15dip"
+            android:background="@drawable/citybuttonicon"
+            android:gravity="center"
+            android:onClick="mOnClick"
+            android:text="Seoul"
+            android:textColor="#ffffffff"
+            android:textSize="25dip"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/citymapbutton2"
+            android:layout_width="fill_parent"
+            android:layout_height="90dip"
+            android:layout_below="@id/citymapbutton1"
+            android:layout_gravity="center"
+            android:background="@drawable/citybuttonicon"
+            android:gravity="center"
+            android:onClick="mOnClick"
+            android:padding="30dip"
+            android:text="seoul"
+            android:textColor="#ffffffff"
+            android:textSize="25dip"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/citymapbutton3"
+            android:layout_width="fill_parent"
+            android:layout_height="90dip"
+            android:layout_below="@id/citymapbutton2"
+            android:layout_gravity="center"
+            android:background="@drawable/citybuttonicon"
+            android:gravity="center"
+            android:onClick="mOnClick"
+            android:padding="30dip"
+            android:text="seoul"
+            android:textColor="#ffffffff"
+            android:textSize="25dip"
+            android:visibility="invisible" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/searchcitytext"

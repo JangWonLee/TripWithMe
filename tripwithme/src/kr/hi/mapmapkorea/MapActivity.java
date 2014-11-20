@@ -187,21 +187,21 @@ public class MapActivity extends Activity {
 
 		this.mapLayout = (RelativeLayout) findViewById(R.id.mapLayout);
 
-		// init Offline Map
-		File from = new File(Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/Download",
-				"0B0vdbaa0j01ySkl5RzVIV1dtRzA.bin");
-		File to = new File(Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
-		if (from.exists())
-			from.renameTo(to);
-		File map = new File(Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
-		if (!map.exists()) {
-			Toast.makeText(this, "Please download map", Toast.LENGTH_SHORT)
-					.show();
-			this.finish();
-		}
+//		// init Offline Map
+//		File from = new File(Environment.getExternalStorageDirectory()
+//				.getAbsolutePath() + "/Download",
+//				"0B0vdbaa0j01ySkl5RzVIV1dtRzA.bin");
+//		File to = new File(Environment.getExternalStorageDirectory()
+//				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
+//		if (from.exists())
+//			from.renameTo(to);
+//		File map = new File(Environment.getExternalStorageDirectory()
+//				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
+//		if (!map.exists()) {
+//			Toast.makeText(this, "Please download map", Toast.LENGTH_SHORT)
+//					.show();
+//			this.finish();
+//		}
 		this.mapView = new OfflineMapView(this, "Download/Seoul.sqlitedb");
 		this.mapController = mapView.getController();
 
