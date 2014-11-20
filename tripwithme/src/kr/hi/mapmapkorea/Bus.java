@@ -111,7 +111,8 @@ public class Bus {
 				Log.i("minLine stop",""+ minLine+"  "+stopNumOfLine);
 			else if(busline[minLine][stopNumOfLine] == -1)//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 				Log.i("stopNumOfLine",""+ stopNumOfLine);
-			else if(myWay[busline[minLine][stopNumOfLine]][minLine] == i) {
+			else 
+				if(myWay[busline[minLine][stopNumOfLine]][minLine] == i) {
 				Log.i("minLine",""+ i);
 				pathAry[shortest.pathCount] = busline[minLine][stopNumOfLine];
 				shortest.pathCount++;
