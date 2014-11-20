@@ -55,7 +55,7 @@ public class Bus {
 		int minTime1 = 9999, minTime2 = 9999;
 		int minLine = 0;
 		
-		for(int c=0; c<5; c++){
+		for(int c=0; c<10; c++){
 
 			Log.i("while", "while Start");
 			int count = 0;
@@ -64,17 +64,16 @@ public class Bus {
 				for (int j = 0; j < 655; j++) {
 					if (myWay[i][j] < min) {
 						min = myWay[i][j];
-						if(i == 1698)
-							Log.i("최소값1698"+j, myWay[i][j] + "");
 					}
 				}
 				for (int j = 0; j < 655; j++) {
-					if (bus[i][j] != 9999 && myWay[i][j] - min > 99) {
-						if(i == 1698)
-							Log.i("전1698-"+j, myWay[i][j] + "");
+					if (bus[i][j] != 9999 && myWay[i][j] - min > 10) {
+
+						if(i==24 && j==353)
+							Log.i("353-24 바뀌기 전",""+ myWay[i][j]);
 						myWay[i][j] = min + 10;   								// 환승 거리!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
-						if(i == 1698)
-							Log.i("후1698-"+j, myWay[i][j] + "");
+						if(i==24 && j==353)
+							Log.i("353-24 바뀐 후",""+ myWay[i][j]);
 						compare(i,j);
 					}
 				}
@@ -107,11 +106,11 @@ public class Bus {
 		shortest.totalPath = minLine + "-" + stopNum + "  ";
 		stopNumOfLine--;
 		for(int i = minTime2-1; i > -1; i--) {
-			if(stopNumOfLine == -1)//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-				Log.i("minLine stop",""+ minLine+"  "+stopNumOfLine);
-			else if(busline[minLine][stopNumOfLine] == -1)//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-				Log.i("stopNumOfLine",""+ stopNumOfLine);
-			else 
+//			if(stopNumOfLine == -1)//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+//				Log.i("minLine stop",""+ minLine+"  "+stopNumOfLine);
+//			else if(busline[minLine][stopNumOfLine] == -1)//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+//				Log.i("stopNumOfLine",""+ stopNumOfLine);
+//			else 
 				if(myWay[busline[minLine][stopNumOfLine]][minLine] == i) {
 				Log.i("minLine",""+ i);
 				pathAry[shortest.pathCount] = busline[minLine][stopNumOfLine];
@@ -142,19 +141,22 @@ public class Bus {
 		}
 		shortest.pathAry = pathAry;
 		shortest.briefPath = shortest.totalPath;
-		
+/*		
 		db = SQLiteDatabase.openDatabase("/sdcard/Download/myway.sqlite", null,
 				SQLiteDatabase.OPEN_READWRITE
-						+ SQLiteDatabase.CREATE_IF_NECESSARY);
-		for(int i=0; i<10; i++) {
+
+				+ SQLiteDatabase.CREATE_IF_NECESSARY);
+		
+		for(int i=0; i<10536; i++) {
+			Log.i("Count", i + "");
 			String temp;
-			temp = "insert into myway values ('" + "dd" + "','";
+			temp = "insert into myway values ('" + myWay[i][0] + "','";
 			for(int j=1; j<654; j++)
-				temp +=  "dd"  + "','";
-			temp +=  "dd"  + "');";
+				temp +=  myWay[i][j]  + "','";
+			temp +=  myWay[i][654]  + "');";
 			db.execSQL(temp);
 		}
-		
+*/		
 	}
 
 	public void compare(int stop, int line) {
@@ -173,9 +175,11 @@ public class Bus {
 			if(myWay[busline[line][i]][line] > myWay[stop][line]) {
 //				myWay[busline[line][i]][line] = bus[busline[line][i]][line] - bus[stop][line] + myWay[stop][line];
 				if(myWay[busline[line][i]][line] > bus[busline[line][i]][line] - bus[stop][line] + myWay[stop][line]) {
+					if(busline[line][i]==24 && line==353)
+						Log.i("!!!353-24 바뀌기 전",""+ myWay[busline[line][i]][line]);
 					myWay[busline[line][i]][line] = bus[busline[line][i]][line] - bus[stop][line] + myWay[stop][line];
-					if(busline[line][i]==1698)
-						Log.i("1698!!!!!"+line,""+ (bus[busline[line][i]][line] - bus[stop][line] + myWay[stop][line]));
+					if(busline[line][i]==24 && line==353)
+						Log.i("!!!353-24 바뀐 후",""+ myWay[busline[line][i]][line]);
 				}
 			}
 		}

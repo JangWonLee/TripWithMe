@@ -827,19 +827,19 @@ public class MapActivity extends Activity {
 		// Log.i("end", " " + endSubway);
 		Shortest swapShortest = new Shortest();
 		bus.search(startSubway1, endSubway1, shortest);
-		/*
-		 * bus.search(startSubway1, endSubway2, swapShortest);
-		 * if(swapShortest.pathCount < shortest.pathCount) { shortest =
-		 * swapShortest; swapShortest = new Shortest(); }
-		 * 
-		 * bus.search(startSubway2, endSubway1, swapShortest);
-		 * if(swapShortest.pathCount < shortest.pathCount) { shortest =
-		 * swapShortest; swapShortest = new Shortest(); }
-		 * 
-		 * bus.search(startSubway2, endSubway2, swapShortest);
-		 * if(swapShortest.pathCount < shortest.pathCount) { shortest =
-		 * swapShortest; }
-		 */
+/*		
+		bus.search(startSubway1, endSubway2, swapShortest);
+		if(swapShortest.pathCount < shortest.pathCount) { shortest =
+		swapShortest; swapShortest = new Shortest(); }
+		
+		bus.search(startSubway2, endSubway1, swapShortest);
+		if(swapShortest.pathCount < shortest.pathCount) { shortest =
+		swapShortest; swapShortest = new Shortest(); }
+		
+		bus.search(startSubway2, endSubway2, swapShortest);
+		if(swapShortest.pathCount < shortest.pathCount) { shortest =
+		swapShortest; }
+*/		 
 		pathOverlay.clean();
 		aSQL = "select *" + " from busstop2" + " where busstop_id = ?";
 		for (int i = 0; i < shortest.pathCount; i++) {
