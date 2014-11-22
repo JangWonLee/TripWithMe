@@ -841,11 +841,15 @@ public class MapActivity extends Activity {
 		swapShortest; }
 */		 
 		pathOverlay.clean();
-		aSQL = "select *" + " from busstop2" + " where busstop_id = ?";
+		String busSql = "select * FROM busstop2 Where line_id = ? and busstop_id = ?";
+		String[] busArgs = { "" ,""};
+		cursor = db.rawQuery(busSql, busArgs);
+		cursor.moveToNext();
 		for (int i = 0; i < shortest.pathCount; i++) {
 
-			args[0] = shortest.pathAry[i] + "";
-			cursor = db.rawQuery(aSQL, args);
+			busArgs[1] = shortest.pathAry[i] + "";
+			busArgs[0] = shortest.lineAry[i] + "";
+			cursor = db.rawQuery(busSql, busArgs);
 			cursor.moveToNext();
 
 			/*
@@ -869,7 +873,7 @@ public class MapActivity extends Activity {
 	private void setDialogTotal() {
 		AlertDialog.Builder ab2 = new AlertDialog.Builder(MapActivity.this);
 		ab2.setTitle(" All Path").setMessage(
-				"Shortest Time = " + shortest.time + "minute\n\n\n\n"
+				shortest.time + "\n\n\n\n"
 						+ "Path\n" + shortest.totalPath);
 		ab2.setPositiveButton("Brief Path",
 				new DialogInterface.OnClickListener() {
@@ -891,7 +895,7 @@ public class MapActivity extends Activity {
 	private void setDialogBrief() {
 		AlertDialog.Builder ab = new AlertDialog.Builder(MapActivity.this);
 		ab.setTitle("Brief Path").setMessage(
-				"Shortest Time = " + shortest.time + "minute\n\n\n\n"
+				shortest.time + "\n\n\n\n"
 						+ "Path\n" + shortest.briefPath);
 		ab.setPositiveButton("All Path", new DialogInterface.OnClickListener() {
 			@Override
@@ -1092,7 +1096,7 @@ public class MapActivity extends Activity {
 										mContext);
 								dialog2.setTitle("You");
 								dialog2.setMessage("Want to find shortest path?");
-								dialog2.setPositiveButton("Yes",
+								dialog2.setPositiveButton("Yes & Subway",
 										new DialogInterface.OnClickListener() {
 
 											@Override
@@ -1100,6 +1104,21 @@ public class MapActivity extends Activity {
 													DialogInterface dialog,
 													int which) {
 												findShortestSubwayPath(
+														departureButton
+																.getText()
+																.toString(),
+														arrivalButton.getText()
+																.toString());
+											}
+										});
+								dialog2.setNeutralButton("Yes & Bus",
+										new DialogInterface.OnClickListener() {
+
+											@Override
+											public void onClick(
+													DialogInterface dialog,
+													int which) {
+												findShortestBusPath(
 														departureButton
 																.getText()
 																.toString(),
