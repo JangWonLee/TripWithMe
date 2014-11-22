@@ -116,6 +116,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/bottom"
         android:layout_width="fill_parent"
         android:layout_height="40dip"
         android:layout_alignParentBottom="true" >
@@ -148,5 +149,24 @@
             android:textColor="#ffffff"
             android:textSize="15dip" />
     </LinearLayout>
+    
+    <RelativeLayout
+        android:id="@+id/route"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/bottom" >
+        
+        <Button 
+            android:id="@+id/routebutton"
+            android:layout_width="80dip"
+            android:layout_height="40dip"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dip"
+            android:maxHeight="40dip"
+            android:maxWidth="80dip"
+            android:background="@drawable/routeselector"
+            android:onClick="mOnClick"/>
+    </RelativeLayout>
 
 </RelativeLayout>
