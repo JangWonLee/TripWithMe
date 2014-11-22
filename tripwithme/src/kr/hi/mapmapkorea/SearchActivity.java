@@ -2,7 +2,6 @@ package kr.hi.mapmapkorea;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Set;
 
 import kr.hi.mapmapkorea.util.ViewHelper;
 import android.app.Activity;
@@ -11,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,31 +29,31 @@ public class SearchActivity extends Activity {
 	private ViewHelper mViewHelper;
 
 	private Typeface mFont;
+	private Typeface jFont;
+	private Typeface kFont;
+	
 	private TextView autoText;
 	private TextView selectCityText;
 	private TextView orText;
 	private TextView searchCityText;
+	
 	private Button searchButton;
 	private Button cityMapButton1;
 	private Button cityMapButton2;
 	private Button cityMapButton3;
+	private Button cityDeleteButton;
 
 	private AutoCompleteTextView autoEdit;
 	private ArrayList<String> list;
 	private ArrayAdapter<String> adapter;
 
-	private Typeface jFont;
-	private Typeface kFont;
 	private File seoul;
 	private File busan;
 	private File incheon;
-	
-	private String cityMapName[];
-	private Set<String> setOfPut;
-	private Set<String> setOfGet;
-	private ArrayList<String> setOfList;
-	private SharedPreferences sp;
-	
+
+	private CheckBox checkBox1;
+	private CheckBox checkBox2;
+	private CheckBox checkBox3;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -72,10 +73,20 @@ public class SearchActivity extends Activity {
 		orText = (TextView) findViewById(R.id.ortext);
 		searchCityText = (TextView) findViewById(R.id.searchcitytext);
 		autoEdit = (AutoCompleteTextView) findViewById(R.id.autoedit);
+
 		searchButton = (Button) findViewById(R.id.searchbutton);
 		cityMapButton1 = (Button) findViewById(R.id.citymapbutton1);
 		cityMapButton2 = (Button) findViewById(R.id.citymapbutton2);
 		cityMapButton3 = (Button) findViewById(R.id.citymapbutton3);
+		cityDeleteButton = (Button) findViewById(R.id.citydeletebutton);
+
+		checkBox1 = (CheckBox) findViewById(R.id.checkbox1);
+		checkBox2 = (CheckBox) findViewById(R.id.checkbox2);
+		checkBox3 = (CheckBox) findViewById(R.id.checkbox3);
+
+		checkBox1.setVisibility(View.INVISIBLE);
+		checkBox2.setVisibility(View.INVISIBLE);
+		checkBox3.setVisibility(View.INVISIBLE);
 
 		selectCityText.setTypeface(kFont);
 		orText.setTypeface(kFont);
@@ -98,10 +109,9 @@ public class SearchActivity extends Activity {
 		seoul = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
 		busan = new File(Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/Download", "Busan.sqlite");
+				.getAbsolutePath() + "/Download", "Busan.sqlitedb");
 		incheon = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download", "Incheon.sqlitedb");
-		
 
 		/**
 		 * 맵 이름 변환
@@ -117,33 +127,80 @@ public class SearchActivity extends Activity {
 				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
 		if (!map.exists()) {
 			Toast.makeText(this, "Please download map", Toast.LENGTH_SHORT)
-			.show();
+					.show();
 			this.finish();
 		}
-		
+
 		Log.i("busan", busan.exists() + "");
-		if (seoul.exists() && busan.exists()) {
-			Log.i("11", "111");
-			cityMapButton1.setVisibility(View.VISIBLE);
-			cityMapButton1.setText("Seoul");
-			cityMapButton2.setVisibility(View.VISIBLE);
-			cityMapButton2.setText("Busan");
-		} else if (seoul.exists()) {
-			Log.i("11", "222");
-			cityMapButton1.setVisibility(View.VISIBLE);
-			cityMapButton1.setText("Seoul");
-		} else if (busan.exists()) {
-			Log.i("11", "333");
-			cityMapButton2.setVisibility(View.VISIBLE);
-			cityMapButton2.setText("Busan");
-		}
-		
+
+		setButtonVisiblity();
 
 		adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, list);
 
 		autoEdit.setAdapter(adapter);
 
+	}
+
+	private void setButtonVisiblity() {
+		if (seoul.exists() && busan.exists()) {
+			cityMapButton1.setVisibility(View.VISIBLE);
+			checkBox1.setVisibility(View.VISIBLE);
+			cityMapButton1.setText("Seoul");
+
+			cityMapButton2.setVisibility(View.VISIBLE);
+			checkBox2.setVisibility(View.VISIBLE);
+			cityMapButton2.setText("Busan");
+			
+			cityDeleteButton.setVisibility(View.VISIBLE);
+			
+		} else if (seoul.exists()) {
+			cityMapButton1.setVisibility(View.VISIBLE);
+			checkBox1.setVisibility(View.VISIBLE);
+			cityMapButton1.setText("Seoul");
+			cityDeleteButton.setVisibility(View.VISIBLE);
+			
+		} else if (busan.exists()) {
+			cityMapButton2.setVisibility(View.VISIBLE);
+			checkBox2.setVisibility(View.VISIBLE);
+			cityMapButton2.setText("Busan");
+			cityDeleteButton.setVisibility(View.VISIBLE);
+		}
+	}
+
+	private void setDialogDelete(final File file, final File file1) {
+		AlertDialog.Builder ab = new AlertDialog.Builder(SearchActivity.this);
+		ab.setTitle("You can delete city..").setMessage("dddd");
+		ab.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (file.delete()) {
+					
+					if (file1 == null) {
+						file.delete();
+					} else {
+						file.delete();
+						file1.delete();
+					}
+//					setButtonVisiblity();
+					
+					Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
+					startActivity(intent);
+					finish();
+					Log.i("fi", "yes");
+				} else {
+					Log.i("fi", "nono");
+				}
+			}
+		}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		});
+		ab.show();
 	}
 
 	private void setDialogDownload(final int cityNumber) {
@@ -161,7 +218,7 @@ public class SearchActivity extends Activity {
 		default:
 			break;
 		}
-		
+
 		AlertDialog.Builder ab = new AlertDialog.Builder(SearchActivity.this);
 		ab.setTitle(" ※※※※※ ").setMessage(
 				"  You choose the city named * " + cityName
@@ -169,9 +226,9 @@ public class SearchActivity extends Activity {
 		ab.setPositiveButton("Download", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-//				setOfList.add(String.valueOf(cityNumber));
-//				setOfPut.add(String.valueOf(cityNumber));
-				
+				// setOfList.add(String.valueOf(cityNumber));
+				// setOfPut.add(String.valueOf(cityNumber));
+
 				Intent intent = new Intent(SearchActivity.this, WebViews.class);
 				intent.putExtra("CityToWebview", cityNumber);
 				startActivity(intent);
@@ -217,24 +274,16 @@ public class SearchActivity extends Activity {
 				intent1.putExtra("CityToMenuActivity", 1);
 			}
 			startActivity(intent1);
-//			else {
-//				Toast.makeText(SearchActivity.this,
-//						"No map file, Please Download first", Toast.LENGTH_LONG)
-//						.show();
-//			}
 			break;
+			
 		case R.id.citymapbutton2:
 			Intent intent2 = new Intent(this, MenuActivity.class);
 			if (busan.exists()) {
 				intent2.putExtra("CityToMenuActivity", 1);
 				startActivity(intent2);
-			} 
-//			else {
-//				Toast.makeText(SearchActivity.this,
-//						"No map file, Please Download first", Toast.LENGTH_LONG)
-//						.show();
-//			}
+			}
 			break;
+			
 		case R.id.citymapbutton3:
 			if (seoul.exists()) {
 				Intent intent = new Intent(this, MenuActivity.class);
@@ -244,6 +293,27 @@ public class SearchActivity extends Activity {
 						"No map file, Please Download first", Toast.LENGTH_LONG)
 						.show();
 			}
+			break;
+			
+		case R.id.citydeletebutton:
+			File file = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download", "Busan.sqlite");
+			
+			Log.i("file", file.exists() + "");
+			
+			if (checkBox1.isChecked() && checkBox2.isChecked()) {
+//				setDialogDelete(seoul, busan);
+				
+			} else if (checkBox1.isChecked()) {
+//				setDialogDelete(seoul);
+//				setDialogDelete(file, null);
+				
+			} else if (checkBox2.isChecked()) {
+//				setDialogDelete(busan, null);
+				Log.i("aa", "2222");
+			}
+			
+//			setButtonVisiblity();
 			break;
 		}
 	}

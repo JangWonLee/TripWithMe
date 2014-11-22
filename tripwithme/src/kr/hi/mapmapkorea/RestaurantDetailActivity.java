@@ -43,6 +43,7 @@ public class RestaurantDetailActivity extends Activity {
 	private Typeface mFont;
 	private Typeface jFont;
 	private Typeface kFont;
+	private Integer cityNumber;
 
 	private Button locationButton;
 
@@ -72,6 +73,7 @@ public class RestaurantDetailActivity extends Activity {
 		menu3 = getIntent().getExtras().getString("menu3");
 		latitude = getIntent().getExtras().getDouble("latitude");
 		longitude = getIntent().getExtras().getDouble("longitude");
+		cityNumber = getIntent().getIntExtra("RastaurantToDetailActivity", 9);
 
 		listDetailTitleText = (TextView) findViewById(R.id.restourantlistdetailtitletext);
 		introText = (TextView) findViewById(R.id.restourantintrotext);
@@ -104,6 +106,7 @@ public class RestaurantDetailActivity extends Activity {
 		Intent intent = new Intent(this, MapActivity.class);
 		intent.putExtra("latitude", latitude);
 		intent.putExtra("longitude", longitude);
+		intent.putExtra("CityToMapActivity", cityNumber);
 		startActivity(intent);
 
 	}

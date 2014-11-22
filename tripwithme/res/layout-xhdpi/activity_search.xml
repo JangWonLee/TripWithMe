@@ -35,53 +35,121 @@
         android:textColor="#ffffffff"
         android:textSize="18dip" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/maptext"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/searchbutton"
+        android:layout_height="30dip"
+        android:layout_below="@+id/autoedit"
+        android:layout_marginTop="10dip"
+        android:text="You have map.."
+        android:textColor="#ffffffff"
+        android:textSize="20dip" />
+
+    <LinearLayout
+        android:id="@+id/setofbutton"
+        android:layout_width="fill_parent"
+        android:layout_height="150dip"
+        android:layout_below="@+id/maptext"
+        android:layout_marginTop="5dip"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/citymapbutton1"
-            android:layout_width="300dip"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="50dip"
             android:layout_below="@id/autoedit"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dip"
-            android:background="@drawable/searchselector"
-            android:gravity="center"
-            android:onClick="mOnClick"
-            android:textColor="#ffffffff"
-            android:textSize="25dip"
-            android:visibility="invisible" />
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/citymapbutton2"
-            android:layout_width="300dip"
+            <Button
+                android:id="@+id/citymapbutton1"
+                android:layout_width="250dip"
+                android:layout_height="50dip"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dip"
+                android:background="@drawable/searchselector"
+                android:gravity="center"
+                android:onClick="mOnClick"
+                android:textColor="#ffffffff"
+                android:textSize="25dip"
+                android:visibility="invisible" />
+
+            <CheckBox
+                android:id="@+id/checkbox1"
+                android:layout_width="50dip"
+                android:layout_height="50dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="50dip"
             android:layout_below="@id/citymapbutton1"
-            android:layout_gravity="center"
-            android:background="@drawable/searchselector"
-            android:gravity="center"
-            android:onClick="mOnClick"
-            android:textColor="#ffffffff"
-            android:textSize="25dip"
-            android:visibility="visible" />
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/citymapbutton3"
-            android:layout_width="300dip"
+            <Button
+                android:id="@+id/citymapbutton2"
+                android:layout_width="250dip"
+                android:layout_height="50dip"
+                android:layout_below="@id/citymapbutton1"
+                android:layout_gravity="center"
+                android:background="@drawable/searchselector"
+                android:gravity="center"
+                android:onClick="mOnClick"
+                android:textColor="#ffffffff"
+                android:textSize="25dip"
+                android:visibility="invisible" />
+
+            <CheckBox
+                android:id="@+id/checkbox2"
+                android:layout_width="50dip"
+                android:layout_height="50dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="50dip"
             android:layout_below="@id/citymapbutton2"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dip"
-            android:background="@drawable/searchselector"
-            android:gravity="center"
-            android:onClick="mOnClick"
-            android:textColor="#ffffffff"
-            android:textSize="25dip"
-            android:visibility="visible" />
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/citymapbutton3"
+                android:layout_width="250dip"
+                android:layout_height="50dip"
+                android:layout_below="@id/citymapbutton2"
+                android:layout_gravity="center"
+                android:background="@drawable/searchselector"
+                android:gravity="center"
+                android:onClick="mOnClick"
+                android:textColor="#ffffffff"
+                android:textSize="25dip"
+                android:visibility="invisible" />
+
+            <CheckBox
+                android:id="@+id/checkbox3"
+                android:layout_width="50dip"
+                android:layout_height="50dip" />
+        </LinearLayout>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/citydeletebutton"
+        android:layout_width="100dip"
+        android:layout_height="30dip"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/setofbutton"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dip"
+        android:background="@drawable/searchselector"
+        android:gravity="center"
+        android:onClick="mOnClick"
+        android:text="Delete"
+        android:textColor="#ffffffff"
+        android:textSize="25dip"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/searchcitytext"
