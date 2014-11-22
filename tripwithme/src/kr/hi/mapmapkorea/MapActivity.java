@@ -14,6 +14,7 @@ import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.PathOverlay;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,6 +25,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -96,7 +99,7 @@ public class MapActivity extends Activity {
 
 	private ArrayList<String> geoList;
 	private ArrayAdapter<String> adapter;
-
+	private PathOverlay myPath;	
 	private SQLiteDatabase db;
 	private Cursor cursor;
 
@@ -387,6 +390,13 @@ public class MapActivity extends Activity {
 			mapView.getOverlays().add(arrivalOverlay.getOverlay());
 			pathOverlay = new MyOwnItemizedOverlay(mSelectedSubway, this);
 			mapView.getOverlays().add(pathOverlay.getOverlay());
+			myPath = new PathOverlay(Color.RED, this);
+			Paint paint = new Paint();
+			paint.setAlpha(155);
+			paint.setColor(Color.argb(150, 255, 0, 0));
+			paint.setStyle(Style.STROKE);
+			paint.setStrokeWidth(10);
+			myPath.setPaint(paint);
 		}
 	}
 
@@ -471,6 +481,7 @@ public class MapActivity extends Activity {
 			mapView.getOverlays().add(departureOverlay.getOverlay());
 			mapView.getOverlays().add(arrivalOverlay.getOverlay());
 			mapView.getOverlays().add(pathOverlay.getOverlay());
+			mapView.getOverlays().add(myPath);
 
 			mapView.invalidate();
 			break;
@@ -500,6 +511,7 @@ public class MapActivity extends Activity {
 			mapView.getOverlays().add(departureOverlay.getOverlay());
 			mapView.getOverlays().add(arrivalOverlay.getOverlay());
 			mapView.getOverlays().add(pathOverlay.getOverlay());
+			mapView.getOverlays().add(myPath);
 
 			mapView.invalidate();
 			break;
@@ -529,6 +541,7 @@ public class MapActivity extends Activity {
 			mapView.getOverlays().add(departureOverlay.getOverlay());
 			mapView.getOverlays().add(arrivalOverlay.getOverlay());
 			mapView.getOverlays().add(pathOverlay.getOverlay());
+			mapView.getOverlays().add(myPath);
 			mapView.invalidate();
 			break;
 
@@ -648,7 +661,49 @@ public class MapActivity extends Activity {
 				}
 			}
 			break;
+		case R.id.routebutton:
+			if (departureButton.getText().equals("Departure Location")
+					|| arrivalButton.equals("Arrival Location"))
+				break;
+			else {
+				AlertDialog.Builder dialog2 = new AlertDialog.Builder(
+						MapActivity.this);
+				dialog2.setTitle("You");
+				dialog2.setMessage("Want to find shortest path?");
+				dialog2.setPositiveButton("Yes & Subway",
+						new DialogInterface.OnClickListener() {
 
+							@Override
+							public void onClick(
+									DialogInterface dialog,
+									int which) {
+								findShortestSubwayPath(
+										departureButton
+												.getText()
+												.toString(),
+										arrivalButton.getText()
+												.toString());
+							}
+						});
+				dialog2.setNeutralButton("Yes & Bus",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(
+									DialogInterface dialog,
+									int which) {
+								findShortestBusPath(
+										departureButton
+												.getText()
+												.toString(),
+										arrivalButton.getText()
+												.toString());
+							}
+						});
+				dialog2.setNegativeButton("close", null);
+				dialog2.show();
+			}			
+			break;
 		default:
 			break;
 		}
@@ -749,6 +804,7 @@ public class MapActivity extends Activity {
 
 		pathOverlay.clean();
 		aSQL = "select *" + " from seoulStation" + " where num = ?";
+		myPath.clearPath();
 		for (int i = 0; i < shortest.pathCount; i++) {
 
 			args[0] = shortest.pathAry[i] + "";
@@ -765,11 +821,13 @@ public class MapActivity extends Activity {
 			item = new OverlayItem(cursor.getString(2), "Line "
 					+ cursor.getInt(3), new GeoPoint(cursor.getDouble(6),
 					cursor.getDouble(7)));
+			myPath.addPoint(new GeoPoint(cursor.getDouble(6),cursor.getDouble(7)));
 			pathOverlay.addItem(item);
 		}
+		mapView.getOverlays().add(myPath);
 		mapView.invalidate();
 
-		setDialogBrief();
+		setDialogBrief(true);
 
 	}
 
@@ -886,8 +944,7 @@ public class MapActivity extends Activity {
 		pathOverlay.clean();
 		String busSql = "select * FROM busstop2 Where line_id = ? and busstop_id = ?";
 		String[] busArgs = { "", "" };
-		cursor = db.rawQuery(busSql, busArgs);
-		cursor.moveToNext();
+		myPath.clearPath();
 		for (int i = 0; i < shortest.pathCount; i++) {
 
 			busArgs[1] = shortest.pathAry[i] + "";
@@ -906,25 +963,63 @@ public class MapActivity extends Activity {
 					+ cursor.getString(2), new GeoPoint(cursor.getDouble(5),
 					cursor.getDouble(6)));
 			pathOverlay.addItem(item);
+			myPath.addPoint(new GeoPoint(cursor.getDouble(5),cursor.getDouble(6)));
 		}
+		mapView.getOverlays().add(myPath);
 		mapView.invalidate();
 
-		setDialogBrief();
+		setDialogBrief(false);
 
 	}
 
-	private void setDialogTotal() {
+	private void setDialogTotal(final boolean findSubway) {
 		AlertDialog.Builder ab2 = new AlertDialog.Builder(MapActivity.this);
-		ab2.setTitle(" All Path").setMessage(
+		ab2.setTitle(" All Path").setMessage("Detarture : " + departureButton.getText() + "\n"
+				+ "Arrival : " + arrivalButton.getText() +  "\n" +
 				shortest.time + "\n\n\n\n" + "Path\n" + shortest.totalPath);
 		ab2.setPositiveButton("Brief Path",
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						setDialogBrief();
+						setDialogBrief(findSubway);
 						dialog.cancel();
 					}
-				}).setNegativeButton("Cancel",
+				});
+		if(findSubway) {
+			ab2.setNeutralButton("Find Bus Way",
+					new DialogInterface.OnClickListener() {
+	
+				@Override
+				public void onClick(
+						DialogInterface dialog,
+						int which) {
+					findShortestBusPath(
+							departureButton
+									.getText()
+									.toString(),
+							arrivalButton.getText()
+									.toString());
+				}
+			});
+		}
+		else {
+			ab2.setNeutralButton("find Subway Way",
+					new DialogInterface.OnClickListener() {
+	
+				@Override
+				public void onClick(
+						DialogInterface dialog,
+						int which) {
+					findShortestSubwayPath(
+							departureButton
+									.getText()
+									.toString(),
+							arrivalButton.getText()
+									.toString());
+				}
+			});
+		}		
+		ab2.setNegativeButton("Cancel",
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -934,17 +1029,53 @@ public class MapActivity extends Activity {
 		ab2.show();
 	}
 
-	private void setDialogBrief() {
+	private void setDialogBrief(final boolean findSubway) {
 		AlertDialog.Builder ab = new AlertDialog.Builder(MapActivity.this);
-		ab.setTitle("Brief Path").setMessage(
+		ab.setTitle("Brief Path").setMessage("Detarture : " + departureButton.getText() + "\n"
+				+ "Arrival : " + arrivalButton.getText() +  "\n" +
 				shortest.time + "\n\n\n\n" + "Path\n" + shortest.briefPath);
 		ab.setPositiveButton("All Path", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				setDialogTotal();
+				setDialogTotal(findSubway);
 				dialog.cancel();
 			}
-		}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		});
+		if(findSubway) {
+			ab.setNeutralButton("Find Bus Way",
+					new DialogInterface.OnClickListener() {
+	
+				@Override
+				public void onClick(
+						DialogInterface dialog,
+						int which) {
+					findShortestBusPath(
+							departureButton
+									.getText()
+									.toString(),
+							arrivalButton.getText()
+									.toString());
+				}
+			});
+		}
+		else {
+			ab.setNeutralButton("find Subway Way",
+					new DialogInterface.OnClickListener() {
+	
+				@Override
+				public void onClick(
+						DialogInterface dialog,
+						int which) {
+					findShortestSubwayPath(
+							departureButton
+									.getText()
+									.toString(),
+							arrivalButton.getText()
+									.toString());
+				}
+			});
+		}
+		ab.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();

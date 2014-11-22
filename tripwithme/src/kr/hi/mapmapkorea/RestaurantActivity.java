@@ -104,6 +104,7 @@ public class RestaurantActivity extends Activity {
 							cursor.getDouble(cursor.getColumnIndex("latitude")));
 					intent.putExtra("longitude", cursor.getDouble(cursor
 							.getColumnIndex("longitude")));
+					intent.putExtra("RastaurantToDetailActivity", cityNumber);
 					startActivity(intent);
 				}
 			});

@@ -29,12 +29,13 @@
     <TextView
         android:id="@+id/tourlistintrotext"
         android:layout_width="fill_parent"
-        android:layout_height="60dip"
+        android:layout_height="100dip"
         android:layout_below="@id/tourlistlistdetailtitletext"
         android:gravity="center"
         android:padding="15dip"
         android:textColor="#ffffffff"
-        android:textSize="25dip" />
+        android:textSize="25dip"
+        android:lines="2"/>
 
     <TextView
         android:id="@+id/tourlisttelephonetext"
