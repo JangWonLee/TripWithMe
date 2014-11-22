@@ -832,7 +832,6 @@ public class MapActivity extends Activity {
 	}
 
 	public void findShortestBusPath(String start, String end) {
-		myPath.clearPath();
 		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
 				SQLiteDatabase.OPEN_READWRITE
 						+ SQLiteDatabase.CREATE_IF_NECESSARY);
