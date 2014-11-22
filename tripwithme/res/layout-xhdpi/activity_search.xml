@@ -29,11 +29,8 @@
         android:layout_height="35dip"
         android:layout_marginTop="100dip"
         android:layout_toRightOf="@id/autoedit"
-        android:background="#ff5D5D5D"
-        android:onClick="mOnClick"
-        android:text="Download"
-        android:textColor="#ffffffff"
-        android:textSize="18dip" />
+        android:background="@drawable/downloadselector"
+        android:onClick="mOnClick"/>
 
     <TextView
         android:id="@+id/maptext"
@@ -67,7 +64,7 @@
                 android:layout_height="50dip"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dip"
-                android:background="@drawable/searchselector"
+                android:background="@drawable/languageselector"
                 android:gravity="center"
                 android:onClick="mOnClick"
                 android:textColor="#ffffffff"
@@ -77,7 +74,8 @@
             <CheckBox
                 android:id="@+id/checkbox1"
                 android:layout_width="50dip"
-                android:layout_height="50dip" />
+                android:layout_height="50dip"
+                android:layout_marginLeft="5dip" />
         </LinearLayout>
 
         <LinearLayout
@@ -94,7 +92,7 @@
                 android:layout_height="50dip"
                 android:layout_below="@id/citymapbutton1"
                 android:layout_gravity="center"
-                android:background="@drawable/searchselector"
+                android:background="@drawable/languageselector"
                 android:gravity="center"
                 android:onClick="mOnClick"
                 android:textColor="#ffffffff"
@@ -104,7 +102,8 @@
             <CheckBox
                 android:id="@+id/checkbox2"
                 android:layout_width="50dip"
-                android:layout_height="50dip" />
+                android:layout_height="50dip"
+                android:layout_marginLeft="5dip" />
         </LinearLayout>
 
         <LinearLayout
@@ -121,7 +120,7 @@
                 android:layout_height="50dip"
                 android:layout_below="@id/citymapbutton2"
                 android:layout_gravity="center"
-                android:background="@drawable/searchselector"
+                android:background="@drawable/languageselector"
                 android:gravity="center"
                 android:onClick="mOnClick"
                 android:textColor="#ffffffff"
@@ -131,7 +130,8 @@
             <CheckBox
                 android:id="@+id/checkbox3"
                 android:layout_width="50dip"
-                android:layout_height="50dip" />
+                android:layout_height="50dip"
+                android:layout_marginLeft="5dip" />
         </LinearLayout>
     </LinearLayout>
 
