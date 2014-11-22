@@ -29,7 +29,7 @@ public class Bus {
 			for (int j = 0; j < 179; j++)
 				busline[i][j] = -1;
 
-		for (int i = 0; i < 32146; i++) {
+		for (int i = 0; i < 31631; i++) {
 			bus[cursor.getInt(7)][cursor.getInt(1)] = cursor.getInt(3);
 			busline[cursor.getInt(1)][cursor.getInt(3)] = cursor.getInt(7);
 			cursor.moveToNext();

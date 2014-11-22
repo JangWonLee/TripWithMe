@@ -131,7 +131,7 @@ public class SearchActivity extends Activity {
 		} else if (seoul.exists()) {
 			Log.i("11", "222");
 			cityMapButton1.setVisibility(View.VISIBLE);
-			cityMapButton1.setText("Seoutl");
+			cityMapButton1.setText("Seoul");
 		} else if (busan.exists()) {
 			Log.i("11", "333");
 			cityMapButton2.setVisibility(View.VISIBLE);
