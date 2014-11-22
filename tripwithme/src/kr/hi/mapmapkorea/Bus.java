@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 public class Bus {
-	public int bus[][] = new int[10536][655]; // 지하철 노선도 인접 행렬
+	public int bus[][] = new int[10536][655]; // 지하철 노선도 인접 행렬 //10504 634
 	private int myWay[][] = new int[10536][655];
 	private int busline[][] = new int[655][179];
 
