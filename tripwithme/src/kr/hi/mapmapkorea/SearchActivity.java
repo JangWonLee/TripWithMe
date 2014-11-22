@@ -113,6 +113,38 @@ public class SearchActivity extends Activity {
 		incheon = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download", "Incheon.sqlitedb");
 
+		checkBox1.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (checkBox1.isChecked() || checkBox2.isChecked() || checkBox3.isChecked()) {
+					cityDeleteButton.setVisibility(View.VISIBLE);
+				} else {
+					cityDeleteButton.setVisibility(View.INVISIBLE);
+				}
+			}
+		});
+		
+		checkBox2.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (checkBox1.isChecked() || checkBox2.isChecked() || checkBox3.isChecked()) {
+					cityDeleteButton.setVisibility(View.VISIBLE);
+				} else {
+					cityDeleteButton.setVisibility(View.INVISIBLE);
+				}
+			}
+		});
+		
+		checkBox3.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (checkBox1.isChecked() || checkBox2.isChecked() || checkBox3.isChecked()) {
+					cityDeleteButton.setVisibility(View.VISIBLE);
+				} else {
+					cityDeleteButton.setVisibility(View.INVISIBLE);
+				}
+			}
+		});
 		/**
 		 * 맵 이름 변환
 		 */
@@ -152,20 +184,23 @@ public class SearchActivity extends Activity {
 			checkBox2.setVisibility(View.VISIBLE);
 			cityMapButton2.setText("Busan");
 			
-			cityDeleteButton.setVisibility(View.VISIBLE);
+//			cityDeleteButton.setVisibility(View.VISIBLE);
 			
 		} else if (seoul.exists()) {
 			cityMapButton1.setVisibility(View.VISIBLE);
 			checkBox1.setVisibility(View.VISIBLE);
 			cityMapButton1.setText("Seoul");
-			cityDeleteButton.setVisibility(View.VISIBLE);
+//			cityDeleteButton.setVisibility(View.VISIBLE);
 			
 		} else if (busan.exists()) {
 			cityMapButton2.setVisibility(View.VISIBLE);
 			checkBox2.setVisibility(View.VISIBLE);
 			cityMapButton2.setText("Busan");
-			cityDeleteButton.setVisibility(View.VISIBLE);
+//			cityDeleteButton.setVisibility(View.VISIBLE);
 		}
+//		if (checkBox1.isChecked() || checkBox2.isChecked() || checkBox3.isChecked()) {
+//			cityDeleteButton.setVisibility(View.VISIBLE);
+//		}
 	}
 
 	private void setDialogDelete(final File file, final File file1) {
@@ -220,7 +255,7 @@ public class SearchActivity extends Activity {
 		}
 
 		AlertDialog.Builder ab = new AlertDialog.Builder(SearchActivity.this);
-		ab.setTitle(" ※※※※※ ").setMessage(
+		ab.setTitle(cityName).setMessage(
 				"  You choose the city named * " + cityName
 						+ "*.\n\n Do you want to Download this city_map?\n");
 		ab.setPositiveButton("Download", new DialogInterface.OnClickListener() {
