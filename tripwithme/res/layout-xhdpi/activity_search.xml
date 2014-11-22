@@ -137,18 +137,17 @@
 
     <Button
         android:id="@+id/citydeletebutton"
-        android:layout_width="100dip"
-        android:layout_height="30dip"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
         android:layout_alignParentRight="true"
         android:layout_below="@id/setofbutton"
         android:layout_gravity="center"
+        android:layout_marginRight="10dip"
         android:layout_marginBottom="15dip"
-        android:background="@drawable/searchselector"
+        android:layout_marginTop="15dip"
+        android:background="@drawable/deleteselector"
         android:gravity="center"
         android:onClick="mOnClick"
-        android:text="Delete"
-        android:textColor="#ffffffff"
-        android:textSize="25dip"
         android:visibility="invisible" />
 
     <TextView
