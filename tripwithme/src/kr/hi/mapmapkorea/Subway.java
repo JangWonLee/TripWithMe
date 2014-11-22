@@ -12,7 +12,9 @@ class Shortest {
 	public String briefPath;
 	public String totalPath;
 	public int pathAry[];
+	public int lineAry[];
 	public int pathCount;
+	public int transferCount;
 }
 
 class Subway {
@@ -321,7 +323,7 @@ class Subway {
 		// String S = new String();
 		// distText.setText(dist[y]+" ");
 		// distText.setText("??????????");
-		shortest.time = ""+dist[y];
+		shortest.time = "Shortest Time = "+dist[y]+"minute";
 		shortest.pathAry = pathAry;
 		shortest.pathCount = count;
 	}
