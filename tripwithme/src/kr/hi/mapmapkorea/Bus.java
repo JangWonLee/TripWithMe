@@ -7,12 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 public class Bus {
-	public int bus[][] = new int[10536][655]; // 지하철 노선도 인접 행렬 //10504 634
-	private int myWay[][] = new int[10536][655];
-	private int busline[][] = new int[655][179];
+	public int bus[][] = new int[10522][635]; // 지하철 노선도 인접 행렬 //10536->10522  655
+	private int myWay[][] = new int[10522][635];
+	private int busline[][] = new int[635][179];
 
 	private SQLiteDatabase db;
-	private String geonameDatabaseFile = "/sdcard/Download/busstop2.sqlite";
+	private String geonameDatabaseFile = "/sdcard/Download/mapmapkorea.sqlite";
 
 	public Bus() // Bus ����(������� �ʱ�ȭ)
 	{
@@ -22,14 +22,14 @@ public class Bus {
 		Cursor cursor;
 		cursor = db.rawQuery("select * FROM busstop2", null);
 		cursor.moveToNext();
-		for (int i = 0; i < 10536; i++)
-			for (int j = 0; j < 655; j++)
+		for (int i = 0; i < 10522; i++)
+			for (int j = 0; j < 635; j++)
 				bus[i][j] = 9999;
-		for (int i = 0; i < 655; i++)
+		for (int i = 0; i < 635; i++)
 			for (int j = 0; j < 179; j++)
 				busline[i][j] = -1;
 
-		for (int i = 0; i < 31631; i++) {
+		for (int i = 0; i < 31716; i++) { //31631->31716
 			bus[cursor.getInt(7)][cursor.getInt(1)] = cursor.getInt(3);
 			busline[cursor.getInt(1)][cursor.getInt(3)] = cursor.getInt(7);
 			cursor.moveToNext();
@@ -38,13 +38,13 @@ public class Bus {
 
 	public void search(int startStopNum, int endStopNum, Shortest shortest) {
 		ArrayList<Integer> station = new ArrayList<Integer>();
-		for (int i = 0; i < 10536; i++)
-			for (int j = 0; j < 655; j++)
+		for (int i = 0; i < 10522; i++)
+			for (int j = 0; j < 635; j++)
 				myWay[i][j] = 9999;
 		/**
 		 * 첫 정류장 0 초기화
 		 */
-		for (int i = 0; i < 655; i++) { 
+		for (int i = 0; i < 635; i++) { 
 			if (bus[startStopNum][i] != 9999) {
 				myWay[startStopNum][i] = 0;
 				compare(startStopNum, i);
@@ -59,14 +59,14 @@ public class Bus {
 
 			Log.i("while", "while Start");
 			int count = 0;
-			for (int i = 0; i < 10536; i++) {
+			for (int i = 0; i < 10522; i++) {
 				int min = 9999;
-				for (int j = 0; j < 655; j++) {
+				for (int j = 0; j < 635; j++) {
 					if (myWay[i][j] < min) {
 						min = myWay[i][j];
 					}
 				}
-				for (int j = 0; j < 655; j++) {
+				for (int j = 0; j < 635; j++) {
 					if (bus[i][j] != 9999 && myWay[i][j] - min > 10) {
 
 						if(i==24 && j==353)
@@ -77,7 +77,7 @@ public class Bus {
 						compare(i,j);
 					}
 				}
-				for (int j = 0; j < 655; j++) {
+				for (int j = 0; j < 635; j++) {
 					if (myWay[endStopNum][j] != 9999) {
 						minTime2 = myWay[endStopNum][j];
 						minLine = j;
@@ -146,7 +146,7 @@ public class Bus {
 			else {
 				i -= 9;																	// 환승 거리!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
 				Log.i("minLinekkkk",""+ i);
-				for(int j=0; j<655; j++) {
+				for(int j=0; j<635; j++) {
 					String temp = "";
 					Log.i(j+"  "+i,""+ myWay[busline[minLine][stopNumOfLine+1]][j]);
 					if(myWay[busline[minLine][stopNumOfLine+1]][j] == i) {
@@ -183,7 +183,7 @@ public class Bus {
 
 				+ SQLiteDatabase.CREATE_IF_NECESSARY);
 		
-		for(int i=0; i<10536; i++) {
+		for(int i=0; i<10522; i++) {
 			Log.i("Count", i + "");
 			String temp;
 			temp = "insert into myway values ('" + myWay[i][0] + "','";
@@ -197,7 +197,7 @@ public class Bus {
 
 	public void compare(int stop, int line) {
 /*
-		for (int i = 0; i < 10536; i++) {
+		for (int i = 0; i < 10522; i++) {
 			if (bus[i][line] != 9999 )
 				if (myWay[i][line] > myWay[stop][line])
 					if(bus[i][line] > bus[stop][line])

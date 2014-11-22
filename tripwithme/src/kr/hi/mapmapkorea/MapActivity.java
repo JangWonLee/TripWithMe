@@ -662,8 +662,8 @@ public class MapActivity extends Activity {
 			}
 			break;
 		case R.id.routebutton:
-			if (departureButton.getText().equals("Departure Location")
-					|| arrivalButton.equals("Arrival Location"))
+			if (departureButton.getText().equals("departure")
+					|| arrivalButton.getText().equals("arrival"))
 				break;
 			else {
 				AlertDialog.Builder dialog2 = new AlertDialog.Builder(
@@ -832,7 +832,7 @@ public class MapActivity extends Activity {
 	}
 
 	public void findShortestBusPath(String start, String end) {
-
+		myPath.clearPath();
 		db = SQLiteDatabase.openDatabase(geonameDatabaseFile, null,
 				SQLiteDatabase.OPEN_READWRITE
 						+ SQLiteDatabase.CREATE_IF_NECESSARY);
@@ -886,7 +886,7 @@ public class MapActivity extends Activity {
 		double la;
 		double lo;
 
-		db = SQLiteDatabase.openDatabase("/sdcard/Download/busstop2.sqlite",
+		db = SQLiteDatabase.openDatabase(geonameDatabaseFile,
 				null, SQLiteDatabase.OPEN_READWRITE
 						+ SQLiteDatabase.CREATE_IF_NECESSARY);
 
