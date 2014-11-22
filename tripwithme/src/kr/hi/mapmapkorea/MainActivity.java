@@ -20,6 +20,7 @@ public class MainActivity extends Activity {
 	private Typeface mFont;
 	private Typeface jFont;
 	private Typeface kFont;
+	private Typeface lFont;
 
 	private Button englishButton;
 	private Button chinaButton;
@@ -42,6 +43,7 @@ public class MainActivity extends Activity {
 				"fonts/Anysome Italic.otf");
 		kFont = Typeface.createFromAsset(getAssets(),
 				"fonts/dearJoe 6 TRIAL.otf");
+		lFont = Typeface.createFromAsset(getAssets(), "fonts/WDCLF.ttf");
 
 		englishButton = (Button) findViewById(R.id.englishbutton);
 		chinaButton = (Button) findViewById(R.id.chinabutton);
@@ -49,8 +51,8 @@ public class MainActivity extends Activity {
 		selectLanguageText = (TextView) findViewById(R.id.selectlanguagetext);
 
 		englishButton.setTypeface(mFont);
-		chinaButton.setTypeface(mFont);
-		japanButton.setTypeface(mFont);
+		chinaButton.setTypeface(lFont);
+		japanButton.setTypeface(lFont);
 		selectLanguageText.setTypeface(kFont);
 	}
 

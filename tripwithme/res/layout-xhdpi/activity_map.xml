@@ -56,7 +56,7 @@
             android:maxHeight="40dip"
             android:maxWidth="40dip"
             android:onClick="mOnClick"
-            android:src="@drawable/gpsicon4" />
+            android:src="@drawable/gpsselector" />
 
         <ImageView
             android:id="@+id/submenu"
@@ -69,7 +69,7 @@
             android:maxHeight="40dip"
             android:maxWidth="40dip"
             android:onClick="mOnClick"
-            android:src="@drawable/submenu2"
+            android:src="@drawable/submenuselector"
             android:visibility="visible" />
 
         <ImageView
