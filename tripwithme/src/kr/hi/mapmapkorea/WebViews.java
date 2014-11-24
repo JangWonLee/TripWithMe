@@ -63,7 +63,7 @@ public class WebViews extends Activity {
 			urlAddress = "https://docs.google.com/file/d/0B0vdbaa0j01ySkl5RzVIV1dtRzA/edit?usp=docslist_api";
 			break;
 		case 1:
-			urlAddress = "";
+			urlAddress = "https://docs.google.com/file/d/0B0vdbaa0j01yUjlBQ1lGb3V1S2c/edit?usp=docslist_api";
 			break;
 		case 2:
 			urlAddress = "";
