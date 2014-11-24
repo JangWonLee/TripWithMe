@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import kr.hi.mapmapkorea.util.ViewHelper;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -20,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,12 +34,12 @@ public class SearchActivity extends Activity {
 	private Typeface mFont;
 	private Typeface jFont;
 	private Typeface kFont;
-	
+
 	private TextView autoText;
 	private TextView selectCityText;
 	private TextView orText;
 	private TextView searchCityText;
-	
+
 	private Button searchButton;
 	private Button cityMapButton1;
 	private Button cityMapButton2;
@@ -54,6 +57,13 @@ public class SearchActivity extends Activity {
 	private CheckBox checkBox1;
 	private CheckBox checkBox2;
 	private CheckBox checkBox3;
+
+	private ProgressBar progressBar;
+
+	private Integer mProg;
+
+	private Boolean seoulIsDownloading;
+	private Boolean busanIsDownloading;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -92,6 +102,11 @@ public class SearchActivity extends Activity {
 		orText.setTypeface(kFont);
 		searchCityText.setTypeface(kFont);
 
+		progressBar = (ProgressBar) findViewById(R.id.progressbar);
+
+		seoulIsDownloading = false;
+		busanIsDownloading = false;
+
 		list = new ArrayList<String>();
 		list.add("Seoul");
 		list.add("Busan");
@@ -116,35 +131,39 @@ public class SearchActivity extends Activity {
 		checkBox1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (checkBox1.isChecked() || checkBox2.isChecked() || checkBox3.isChecked()) {
+				if (checkBox1.isChecked() || checkBox2.isChecked()
+						|| checkBox3.isChecked()) {
 					cityDeleteButton.setVisibility(View.VISIBLE);
 				} else {
 					cityDeleteButton.setVisibility(View.INVISIBLE);
 				}
 			}
 		});
-		
+
 		checkBox2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (checkBox1.isChecked() || checkBox2.isChecked() || checkBox3.isChecked()) {
+				if (checkBox1.isChecked() || checkBox2.isChecked()
+						|| checkBox3.isChecked()) {
 					cityDeleteButton.setVisibility(View.VISIBLE);
 				} else {
 					cityDeleteButton.setVisibility(View.INVISIBLE);
 				}
 			}
 		});
-		
+
 		checkBox3.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (checkBox1.isChecked() || checkBox2.isChecked() || checkBox3.isChecked()) {
+				if (checkBox1.isChecked() || checkBox2.isChecked()
+						|| checkBox3.isChecked()) {
 					cityDeleteButton.setVisibility(View.VISIBLE);
 				} else {
 					cityDeleteButton.setVisibility(View.INVISIBLE);
 				}
 			}
 		});
+
 		/**
 		 * 맵 이름 변환
 		 */
@@ -160,7 +179,6 @@ public class SearchActivity extends Activity {
 		if (!map.exists()) {
 			Toast.makeText(this, "Please download map", Toast.LENGTH_SHORT)
 					.show();
-			this.finish();
 		}
 
 		Log.i("busan", busan.exists() + "");
@@ -171,6 +189,11 @@ public class SearchActivity extends Activity {
 				android.R.layout.simple_dropdown_item_1line, list);
 
 		autoEdit.setAdapter(adapter);
+
+		if (seoul.exists()) {
+			mProg = (int) seoul.length();
+		}
+		progressBar.setProgress(mProg);
 
 	}
 
@@ -183,24 +206,25 @@ public class SearchActivity extends Activity {
 			cityMapButton2.setVisibility(View.VISIBLE);
 			checkBox2.setVisibility(View.VISIBLE);
 			cityMapButton2.setText("Busan");
-			
-//			cityDeleteButton.setVisibility(View.VISIBLE);
-			
+
+			// cityDeleteButton.setVisibility(View.VISIBLE);
+
 		} else if (seoul.exists()) {
 			cityMapButton1.setVisibility(View.VISIBLE);
 			checkBox1.setVisibility(View.VISIBLE);
 			cityMapButton1.setText("Seoul");
-//			cityDeleteButton.setVisibility(View.VISIBLE);
-			
+			// cityDeleteButton.setVisibility(View.VISIBLE);
+
 		} else if (busan.exists()) {
 			cityMapButton2.setVisibility(View.VISIBLE);
 			checkBox2.setVisibility(View.VISIBLE);
 			cityMapButton2.setText("Busan");
-//			cityDeleteButton.setVisibility(View.VISIBLE);
+			// cityDeleteButton.setVisibility(View.VISIBLE);
 		}
-//		if (checkBox1.isChecked() || checkBox2.isChecked() || checkBox3.isChecked()) {
-//			cityDeleteButton.setVisibility(View.VISIBLE);
-//		}
+		// if (checkBox1.isChecked() || checkBox2.isChecked() ||
+		// checkBox3.isChecked()) {
+		// cityDeleteButton.setVisibility(View.VISIBLE);
+		// }
 	}
 
 	private void setDialogDelete(final File file, final File file1) {
@@ -211,16 +235,16 @@ public class SearchActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				if (file.delete()) {
-					
+
 					if (file1 == null) {
 						file.delete();
 					} else {
 						file.delete();
 						file1.delete();
 					}
-//					setButtonVisiblity();
-					
-					Intent intent = new Intent(SearchActivity.this, SearchActivity.class);
+
+					Intent intent = new Intent(SearchActivity.this,
+							SearchActivity.class);
 					startActivity(intent);
 					finish();
 					Log.i("fi", "yes");
@@ -310,7 +334,7 @@ public class SearchActivity extends Activity {
 			}
 			startActivity(intent1);
 			break;
-			
+
 		case R.id.citymapbutton2:
 			Intent intent2 = new Intent(this, MenuActivity.class);
 			if (busan.exists()) {
@@ -318,7 +342,7 @@ public class SearchActivity extends Activity {
 				startActivity(intent2);
 			}
 			break;
-			
+
 		case R.id.citymapbutton3:
 			if (seoul.exists()) {
 				Intent intent = new Intent(this, MenuActivity.class);
@@ -329,27 +353,27 @@ public class SearchActivity extends Activity {
 						.show();
 			}
 			break;
-			
+
 		case R.id.citydeletebutton:
 			File file = new File(Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/Download", "Busan.sqlite");
-			
+					.getAbsolutePath() + "/Download", "Busan.sqlite");
+
 			Log.i("file", file.exists() + "");
-			
+
 			if (checkBox1.isChecked() && checkBox2.isChecked()) {
-//				setDialogDelete(seoul, busan);
-				
+				// setDialogDelete(seoul, busan);
+
 			} else if (checkBox1.isChecked()) {
-//				setDialogDelete(seoul);
-//				setDialogDelete(file, null);
-				
+				setDialogDelete(seoul, null);
+
 			} else if (checkBox2.isChecked()) {
-//				setDialogDelete(busan, null);
+				// setDialogDelete(busan, null);
 				Log.i("aa", "2222");
 			}
-			
-//			setButtonVisiblity();
+
+			// setButtonVisiblity();
 			break;
+
 		}
 	}
 }
