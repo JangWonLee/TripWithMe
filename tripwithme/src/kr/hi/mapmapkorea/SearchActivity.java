@@ -197,7 +197,7 @@ public class SearchActivity extends Activity {
 
 	}
 
-	private void setButtonVisiblity() {
+	public void setButtonVisiblity() {
 		if (seoul.exists() && busan.exists()) {
 			cityMapButton1.setVisibility(View.VISIBLE);
 			checkBox1.setVisibility(View.VISIBLE);

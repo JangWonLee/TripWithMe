@@ -39,6 +39,8 @@ public class WebViews extends Activity {
 	private Typeface mFont;
 	private Typeface jFont;
 	private Typeface kFont;
+	
+	private Intent intent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,17 +58,23 @@ public class WebViews extends Activity {
 
 		webview = (WebView) findViewById(R.id.webview);
 		webview.getSettings().setJavaScriptEnabled(true);
-
+		
 		int cityNumber = getIntent().getIntExtra("CityToWebview", 9);
+		
+		intent = new Intent(WebViews.this, SearchActivity.class);
+		
 		switch (cityNumber) {
 		case 0:
 			urlAddress = "https://docs.google.com/file/d/0B0vdbaa0j01ySkl5RzVIV1dtRzA/edit?usp=docslist_api";
+			intent.putExtra("Downloading", 0);
 			break;
 		case 1:
 			urlAddress = "https://docs.google.com/file/d/0B0vdbaa0j01yUjlBQ1lGb3V1S2c/edit?usp=docslist_api";
+			intent.putExtra("Downloading", 1);
 			break;
 		case 2:
 			urlAddress = "";
+			intent.putExtra("Downloading", 2);
 			break;
 		default:
 			break;
