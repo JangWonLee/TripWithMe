@@ -195,7 +195,7 @@ public class SearchActivity extends Activity {
 		
 		from = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download",
-				"0B0vdbaa0j01yOTRadXVBWWxHeGs.bin");
+				"0B0vdbaa0j01yVEh3MG9PckJRTEk.bin");
 		to = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download", "MapMapKorea.sqlite");
 		if (from.exists())
@@ -272,7 +272,7 @@ public class SearchActivity extends Activity {
 
 	private void setDialogDelete(final File file, final File file1) {
 		AlertDialog.Builder ab = new AlertDialog.Builder(SearchActivity.this);
-		ab.setTitle("You can delete city..").setMessage("dddd");
+		ab.setTitle("You choose the city").setMessage("Are you sure you want to Delete ?");
 		ab.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 
 			@Override
