@@ -52,7 +52,7 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dip"
+            android:layout_height="40dip"
             android:layout_below="@id/autoedit"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
@@ -61,7 +61,7 @@
             <Button
                 android:id="@+id/citymapbutton1"
                 android:layout_width="250dip"
-                android:layout_height="50dip"
+                android:layout_height="40dip"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dip"
                 android:background="@drawable/languageselector"
@@ -74,13 +74,13 @@
             <CheckBox
                 android:id="@+id/checkbox1"
                 android:layout_width="50dip"
-                android:layout_height="50dip"
+                android:layout_height="40dip"
                 android:layout_marginLeft="5dip" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dip"
+            android:layout_height="40dip"
             android:layout_below="@id/citymapbutton1"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
@@ -89,7 +89,7 @@
             <Button
                 android:id="@+id/citymapbutton2"
                 android:layout_width="250dip"
-                android:layout_height="50dip"
+                android:layout_height="40dip"
                 android:layout_below="@id/citymapbutton1"
                 android:layout_gravity="center"
                 android:background="@drawable/languageselector"
@@ -102,13 +102,13 @@
             <CheckBox
                 android:id="@+id/checkbox2"
                 android:layout_width="50dip"
-                android:layout_height="50dip"
+                android:layout_height="40dip"
                 android:layout_marginLeft="5dip" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dip"
+            android:layout_height="40dip"
             android:layout_below="@id/citymapbutton2"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
@@ -117,7 +117,7 @@
             <Button
                 android:id="@+id/citymapbutton3"
                 android:layout_width="250dip"
-                android:layout_height="50dip"
+                android:layout_height="40dip"
                 android:layout_below="@id/citymapbutton2"
                 android:layout_gravity="center"
                 android:background="@drawable/languageselector"
@@ -130,7 +130,7 @@
             <CheckBox
                 android:id="@+id/checkbox3"
                 android:layout_width="50dip"
-                android:layout_height="50dip"
+                android:layout_height="40dip"
                 android:layout_marginLeft="5dip" />
         </LinearLayout>
     </LinearLayout>
@@ -149,14 +149,6 @@
         android:gravity="center"
         android:onClick="mOnClick"
         android:visibility="invisible" />
-
-    <ProgressBar
-        android:id="@+id/progressbar"
-        android:layout_width="fill_parent"
-        android:layout_height="20dip"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:max="100"
-        android:layout_above="@+id/selectcitytext" />
     <TextView
         android:id="@+id/searchcitytext"
         android:layout_width="fill_parent"

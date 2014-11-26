@@ -39,6 +39,7 @@ public class WebViews extends Activity {
 	private Typeface mFont;
 	private Typeface jFont;
 	private Typeface kFont;
+	private boolean isMap;
 	
 	private Intent intent;
 
@@ -60,20 +61,31 @@ public class WebViews extends Activity {
 		webview.getSettings().setJavaScriptEnabled(true);
 		
 		int cityNumber = getIntent().getIntExtra("CityToWebview", 9);
+		isMap = getIntent().getExtras().getBoolean("isMap");
 		
 		intent = new Intent(WebViews.this, SearchActivity.class);
 		
 		switch (cityNumber) {
 		case 0:
-			urlAddress = "https://docs.google.com/file/d/0B0vdbaa0j01ySkl5RzVIV1dtRzA/edit?usp=docslist_api";
+			if(isMap)
+				urlAddress = "https://docs.google.com/file/d/0B0vdbaa0j01ySkl5RzVIV1dtRzA/edit?usp=docslist_api";
+			else
+				urlAddress = "https://docs.google.com/file/d/0B0vdbaa0j01yVEh3MG9PckJRTEk/edit?usp=docslist_api";
 			intent.putExtra("Downloading", 0);
 			break;
 		case 1:
-			urlAddress = "https://docs.google.com/file/d/0B0vdbaa0j01yUjlBQ1lGb3V1S2c/edit?usp=docslist_api";
+			if(isMap)
+				urlAddress = "https://docs.google.com/file/d/0B0vdbaa0j01yOTRadXVBWWxHeGs/edit?usp=docslist_api";
+			else
+				urlAddress = "https://docs.google.com/file/d/0B0vdbaa0j01ydldXZklzLWs5SEE/edit?usp=docslist_api";
+				;
 			intent.putExtra("Downloading", 1);
 			break;
 		case 2:
-			urlAddress = "";
+			if(isMap)
+				urlAddress = "";
+			else
+				;
 			intent.putExtra("Downloading", 2);
 			break;
 		default:

@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,8 +52,12 @@ public class SearchActivity extends Activity {
 	private ArrayAdapter<String> adapter;
 
 	private File seoul;
+	private File seoulDB;
 	private File busan;
+	private File busanDB;
 	private File incheon;
+	private File incheonDB;
+	private boolean isMap;
 
 	private CheckBox checkBox1;
 	private CheckBox checkBox2;
@@ -61,6 +66,7 @@ public class SearchActivity extends Activity {
 	private ProgressBar progressBar;
 
 	private Integer mProg;
+	private ListView listView;
 
 	private Boolean seoulIsDownloading;
 	private Boolean busanIsDownloading;
@@ -85,6 +91,7 @@ public class SearchActivity extends Activity {
 		autoEdit = (AutoCompleteTextView) findViewById(R.id.autoedit);
 
 		searchButton = (Button) findViewById(R.id.searchbutton);
+		
 		cityMapButton1 = (Button) findViewById(R.id.citymapbutton1);
 		cityMapButton2 = (Button) findViewById(R.id.citymapbutton2);
 		cityMapButton3 = (Button) findViewById(R.id.citymapbutton3);
@@ -97,12 +104,13 @@ public class SearchActivity extends Activity {
 		checkBox1.setVisibility(View.INVISIBLE);
 		checkBox2.setVisibility(View.INVISIBLE);
 		checkBox3.setVisibility(View.INVISIBLE);
-
+		
+		listView = (ListView) findViewById(R.id.listview);
+		
 		selectCityText.setTypeface(kFont);
 		orText.setTypeface(kFont);
 		searchCityText.setTypeface(kFont);
 
-		progressBar = (ProgressBar) findViewById(R.id.progressbar);
 
 		seoulIsDownloading = false;
 		busanIsDownloading = false;
@@ -123,8 +131,12 @@ public class SearchActivity extends Activity {
 
 		seoul = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
+		seoulDB = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download", "MapMapKorea.sqlite");
 		busan = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download", "Busan.sqlitedb");
+		busanDB = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download", "MapMapKorea2.sqlite");
 		incheon = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download", "Incheon.sqlitedb");
 
@@ -176,29 +188,57 @@ public class SearchActivity extends Activity {
 			from.renameTo(to);
 		File map = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath() + "/Download", "Seoul.sqlitedb");
-		if (!map.exists()) {
+		if (!map.exists())
 			Toast.makeText(this, "Please download map", Toast.LENGTH_SHORT)
 					.show();
-		}
+		
+		
+		from = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download",
+				"0B0vdbaa0j01yOTRadXVBWWxHeGs.bin");
+		to = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download", "MapMapKorea.sqlite");
+		if (from.exists())
+			from.renameTo(to);
+		
+		File from1 = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download",
+				"0B0vdbaa0j01yOTRadXVBWWxHeGs.bin");
+		File to1 = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download", "Busan.sqlitedb");
+		if (from1.exists())
+			from1.renameTo(to1);
+		
+		File map1 = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download", "Busan.sqlitedb");
+		if (!map.exists())
+			Toast.makeText(this, "Please download map", Toast.LENGTH_SHORT)
+					.show();
+		from1 = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download",
+				"0B0vdbaa0j01ydldXZklzLWs5SEE.bin");
+		to1 = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Download", "MapMapKorea2.sqlite");
+		if (from1.exists())
+			from1.renameTo(to1);
+			
+		
 
 		Log.i("busan", busan.exists() + "");
 
 		setButtonVisiblity();
 
+			
 		adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, list);
 
 		autoEdit.setAdapter(adapter);
 
-		if (seoul.exists()) {
-			mProg = (int) seoul.length();
-		}
-		progressBar.setProgress(mProg);
 
 	}
 
 	public void setButtonVisiblity() {
-		if (seoul.exists() && busan.exists()) {
+		if (seoul.exists() && seoulDB.exists() && busan.exists()) {
 			cityMapButton1.setVisibility(View.VISIBLE);
 			checkBox1.setVisibility(View.VISIBLE);
 			cityMapButton1.setText("Seoul");
@@ -206,19 +246,22 @@ public class SearchActivity extends Activity {
 			cityMapButton2.setVisibility(View.VISIBLE);
 			checkBox2.setVisibility(View.VISIBLE);
 			cityMapButton2.setText("Busan");
+			Log.i("??","??1");
 
 			// cityDeleteButton.setVisibility(View.VISIBLE);
 
-		} else if (seoul.exists()) {
+		} else if (seoul.exists() && seoulDB.exists() ) {
 			cityMapButton1.setVisibility(View.VISIBLE);
 			checkBox1.setVisibility(View.VISIBLE);
 			cityMapButton1.setText("Seoul");
+			Log.i("??","??2");
 			// cityDeleteButton.setVisibility(View.VISIBLE);
 
 		} else if (busan.exists()) {
-			cityMapButton2.setVisibility(View.VISIBLE);
-			checkBox2.setVisibility(View.VISIBLE);
-			cityMapButton2.setText("Busan");
+			cityMapButton1.setVisibility(View.VISIBLE);
+			checkBox1.setVisibility(View.VISIBLE);
+			cityMapButton1.setText("Busan");
+			Log.i("??","??3");
 			// cityDeleteButton.setVisibility(View.VISIBLE);
 		}
 		// if (checkBox1.isChecked() || checkBox2.isChecked() ||
@@ -238,10 +281,17 @@ public class SearchActivity extends Activity {
 
 					if (file1 == null) {
 						file.delete();
+						if(file == seoul)
+							seoulDB.delete();
+						else if(file == busan)
+							busanDB.delete();
 					} else {
 						file.delete();
 						file1.delete();
+						seoulDB.delete();
+						busanDB.delete();
 					}
+					
 
 					Intent intent = new Intent(SearchActivity.this,
 							SearchActivity.class);
@@ -282,7 +332,7 @@ public class SearchActivity extends Activity {
 		ab.setTitle(cityName).setMessage(
 				"  You choose the city named * " + cityName
 						+ "*.\n\n Do you want to Download this city_map?\n");
-		ab.setPositiveButton("Download", new DialogInterface.OnClickListener() {
+		ab.setPositiveButton("Map Download", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// setOfList.add(String.valueOf(cityNumber));
@@ -290,10 +340,28 @@ public class SearchActivity extends Activity {
 
 				Intent intent = new Intent(SearchActivity.this, WebViews.class);
 				intent.putExtra("CityToWebview", cityNumber);
+				isMap=true;
+				intent.putExtra("isMap", isMap);
 				startActivity(intent);
 				dialog.cancel();
 			}
-		}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		});
+		ab.setNeutralButton("Data Download",
+				new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(
+					DialogInterface dialog,
+					int which) {
+				Intent intent = new Intent(SearchActivity.this, WebViews.class);
+				intent.putExtra("CityToWebview", cityNumber);
+				isMap=false;
+				intent.putExtra("isMap", isMap);
+				startActivity(intent);
+				dialog.cancel();				
+			}
+		});
+		ab.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
@@ -361,13 +429,16 @@ public class SearchActivity extends Activity {
 			Log.i("file", file.exists() + "");
 
 			if (checkBox1.isChecked() && checkBox2.isChecked()) {
-				// setDialogDelete(seoul, busan);
+			    setDialogDelete(seoul, busan);
 
-			} else if (checkBox1.isChecked()) {
+			} else if (checkBox1.isChecked() && seoul.exists()) {
 				setDialogDelete(seoul, null);
-
+				
+			} else if (checkBox1.isChecked() && seoul.exists()==false) {
+				setDialogDelete(busan, null);
+				
 			} else if (checkBox2.isChecked()) {
-				// setDialogDelete(busan, null);
+				setDialogDelete(busan, null);
 				Log.i("aa", "2222");
 			}
 
