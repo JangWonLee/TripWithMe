@@ -91,6 +91,11 @@ public class Bus {
 				minTime1 = minTime2;
 			
 		}
+		if(minTime2 == 9999)
+		{
+			shortest.pathCount = 9999;
+			return;
+		}
 		int stopNum = endStopNum;
 		int stopNumOfLine = 0;
 		int pathAry[] = new int[500];

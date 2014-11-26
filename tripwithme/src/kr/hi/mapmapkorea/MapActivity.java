@@ -37,7 +37,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -178,8 +180,6 @@ public class MapActivity extends Activity {
 		cursor = db.rawQuery("SELECT * FROM seoulgeoname ", null);
 
 		int recordCount = cursor.getCount();
-		Toast.makeText(this, "cursor count : " + recordCount,
-				Toast.LENGTH_SHORT).show();
 
 		for (int i = 0; i < cursor.getCount(); i++) {
 			cursor.moveToNext();
@@ -598,11 +598,6 @@ public class MapActivity extends Activity {
 				mapController.setCenter(geoPoint);
 				item = new OverlayItem(cursor.getString(1), " ", geoPoint);
 				geoSearchLocation.addItem(item);
-				String mes;
-				mes = "Select Item = " + cursor.getDouble(2) + "   "
-						+ cursor.getDouble(3);
-				Toast.makeText(MapActivity.this, mes, Toast.LENGTH_SHORT)
-						.show();
 
 				// destSearchlist.setVisibility(View.INVISIBLE);
 				// parent.setVisibility(View.INVISIBLE);
@@ -718,10 +713,6 @@ public class MapActivity extends Activity {
 			mapController.setCenter(geoPoint);
 			item = new OverlayItem(cursor.getString(1), " ", geoPoint);
 			geoSearchLocation.addItem(item);
-			String mes;
-			mes = "Select Item = " + cursor.getDouble(2) + "   "
-					+ cursor.getDouble(3);
-			Toast.makeText(MapActivity.this, mes, Toast.LENGTH_SHORT).show();
 			parent.setVisibility(View.INVISIBLE);
 		}
 	};
@@ -944,6 +935,32 @@ public class MapActivity extends Activity {
 		String busSql = "select * FROM busstop2 Where line_id = ? and busstop_id = ?";
 		String[] busArgs = { "", "" };
 		myPath.clearPath();
+		if(shortest.pathCount == 9999) {
+			AlertDialog.Builder dlg = new AlertDialog.Builder(MapActivity.this);
+			dlg.setTitle(" Sorry").setMessage("Can't find shortest path using Bus. \nPlease use subway.");
+			dlg.setPositiveButton("find Subway Way",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							findShortestSubwayPath(
+									departureButton
+											.getText()
+											.toString(),
+									arrivalButton.getText()
+											.toString());
+						}
+					});		
+			dlg.setNegativeButton("Cancel",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					});
+			dlg.show();
+			return;
+		}
+		
 		for (int i = 0; i < shortest.pathCount; i++) {
 
 			busArgs[1] = shortest.pathAry[i] + "";
@@ -966,7 +983,6 @@ public class MapActivity extends Activity {
 		}
 		mapView.getOverlays().add(myPath);
 		mapView.invalidate();
-
 		setDialogBrief(false);
 
 	}
@@ -974,7 +990,7 @@ public class MapActivity extends Activity {
 	private void setDialogTotal(final boolean findSubway) {
 		AlertDialog.Builder ab2 = new AlertDialog.Builder(MapActivity.this);
 		ab2.setTitle(" All Path").setMessage("Detarture : " + departureButton.getText() + "\n"
-				+ "Arrival : " + arrivalButton.getText() +  "\n" +
+				+ "Arrival : " + arrivalButton.getText() +  "\n\n" +
 				shortest.time + "\n\n\n\n" + "Path\n" + shortest.totalPath);
 		ab2.setPositiveButton("Brief Path",
 				new DialogInterface.OnClickListener() {
@@ -1031,7 +1047,7 @@ public class MapActivity extends Activity {
 	private void setDialogBrief(final boolean findSubway) {
 		AlertDialog.Builder ab = new AlertDialog.Builder(MapActivity.this);
 		ab.setTitle("Brief Path").setMessage("Detarture : " + departureButton.getText() + "\n"
-				+ "Arrival : " + arrivalButton.getText() +  "\n" +
+				+ "Arrival : " + arrivalButton.getText() +  "\n\n" +
 				shortest.time + "\n\n\n\n" + "Path\n" + shortest.briefPath);
 		ab.setPositiveButton("All Path", new DialogInterface.OnClickListener() {
 			@Override

@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/top"
         android:layout_width="fill_parent"
-        android:layout_height="40dip"
+        android:layout_height="40dip" 
         android:background="#ffd2a272" >
 
         <AutoCompleteTextView
